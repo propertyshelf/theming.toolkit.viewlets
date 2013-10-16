@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<layers>
-  <layer
-      name="toolkit.viewlets" 
-      interface="toolkit.viewlets.browser.interfaces.IToolkitViewlets"
-      />
-</layers>

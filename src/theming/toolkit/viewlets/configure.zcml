@@ -3,13 +3,13 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:plone="http://namespaces.plone.org/plone"
-    i18n_domain="toolkit.viewlets">
+    i18n_domain="theming.toolkit.viewlets">
 
   <genericsetup:registerProfile
       name="default"
-      title="toolkit.viewlets"
+      title="theming.toolkit.viewlets"
       directory="profiles/default"
-      description="Installs the toolkit.viewlets package"
+      description="Installs the theming.toolkit.viewlets package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
   <!-- -*- extra stuff goes here -*- -->

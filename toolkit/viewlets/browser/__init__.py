@@ -1,1 +1,0 @@
-"""Browser components for toolkit.viewlets"""

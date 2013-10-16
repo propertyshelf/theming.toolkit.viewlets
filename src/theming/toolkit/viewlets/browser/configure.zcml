@@ -1,5 +1,5 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="toolkit.viewlets">
+    i18n_domain="theming.toolkit.viewlets">
 </configure>
