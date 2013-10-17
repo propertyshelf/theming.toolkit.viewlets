@@ -1,0 +1,27 @@
+language: python
+python:
+  - 2.6
+  - 2.7
+env:
+  - PLONE_VERSION=4.1
+  - PLONE_VERSION=4.2
+  - PLONE_VERSION=4.3
+matrix:
+  exclude:
+    - python: 2.7
+      env: PLONE_VERSION=4.1
+    - python: 2.6
+      env: PLONE_VERSION=4.2
+    - python: 2.6
+      env: PLONE_VERSION=4.3
+install:
+  - mkdir -p buildout-cache/eggs
+  - mkdir -p buildout-cache/downloads
+  - python bootstrap.py -c travis-$PLONE_VERSION.x.cfg
+  - bin/buildout -N -t 5 -c travis-$PLONE_VERSION.x.cfg
+branches:
+  only:
+    - master
+script: bin/test
+notifications:
+  irc: irc.freenode.org#propertyshelf
