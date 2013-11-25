@@ -2,4 +2,41 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="theming.toolkit.viewlets">
+
+    <!-- Header Plugins. -->
+    <!-- ================ -->
+  <browser:viewlet
+      class=".header_plugins.HeaderPluginsViewlet"
+      for="*"
+      layer=".interfaces.IToolkitViewlets"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      name="theming.toolkit.viewlets.headerplugins"
+      permission="zope2.View"
+      template="templates/header_plugins.pt"
+      />
+
+  <browser:page
+      class=".header_plugins.HeaderPluginsConfiguration"
+      for=".header_plugins.IHeaderPlugins"
+      layer=".interfaces.IToolkitViewlets"
+      name="header-plugins-config"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      class=".header_plugins.HeaderPluginsStatus"
+      for="*"
+      layer=".interfaces.IToolkitViewlets"
+      name="header-plugins-status"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      class=".header_plugins.HeaderPluginsToggle"
+      for="*"
+      layer=".interfaces.IToolkitViewlets"
+      name="header-plugins-toggle"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        i18n:domain="theming.toolkit.viewlets">
+
+  <object name="object" meta_type="CMF Action Category">
+    
+    <!-- Recent Listings. -->
+    <!-- ================ -->
+    <object name="header-plugins-config" meta_type="CMF Action">
+      <property name="available_expr">object/@@header-plugins-status/active</property>
+      <property name="description" i18n:translate="">Edit Header Plugins</property>
+      <property name="icon_expr"></property>
+      <property name="i18n_domain">theming.toolkit.viewlets</property>
+      <property name="link_target"></property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="title" i18n:translate="">Edit Header Plugins</property>
+      <property name="url_expr">string:${object_url}/@@header-plugins-config</property>
+      <property name="visible">True</property>
+    </object>
+  </object>
+
+  <object name="object_buttons" meta_type="CMF Action Category">
+    <!-- Recent Listings. -->
+    <!-- ================ -->
+    <object name="header-plugins-activate" meta_type="CMF Action">
+      <property name="available_expr">object/@@header-plugins-status/can_activate</property>
+      <property name="description" i18n:translate="">Activate the Header Plugins viewlet.</property>
+      <property name="icon_expr"></property>
+      <property name="i18n_domain">theming.toolkit.viewlets</property>
+      <property name="link_target"></property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="title" i18n:translate="">Activate Header Plugins</property>
+      <property name="url_expr">string:${object_url}/@@header-plugins-toggle</property>
+      <property name="visible">True</property>
+    </object>
+    <object name="recent-listings-deactivate" meta_type="CMF Action">
+      <property name="available_expr">object/@@header-plugins-status/active</property>
+      <property name="description" i18n:translate="">Deactivate the Header Plugins viewlet.</property>
+      <property name="icon_expr"></property>
+      <property name="i18n_domain">theming.toolkit.viewlets</property>
+      <property name="link_target"></property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="title" i18n:translate="">Deactivate Header Plugins</property>
+      <property name="url_expr">string:${object_url}/@@header-plugins-toggle</property>
+      <property name="visible">True</property>
+    </object>
+  </object>
+
+</object>

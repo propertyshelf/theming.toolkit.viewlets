@@ -5,6 +5,11 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="theming.toolkit.viewlets">
 
+  <!-- Include package dependencies. -->
+  <!-- ============================= -->
+  <includeDependencies package="." />
+  <include package=".browser" />
+
   <genericsetup:registerProfile
       name="default"
       title="theming.toolkit.viewlets"
@@ -13,5 +18,9 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
   <!-- -*- extra stuff goes here -*- -->
+
+  <class class="Products.Archetypes.BaseObject.BaseObject">
+    <implements interface="theming.toolkit.viewlets.browser.header_plugins.IPossibleHeaderPlugins" />
+  </class>
   
 </configure>
