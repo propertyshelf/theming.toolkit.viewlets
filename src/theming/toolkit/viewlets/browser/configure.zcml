@@ -7,7 +7,7 @@
     <!-- ================ -->
   <browser:viewlet
       class=".header_plugins.HeaderPluginsViewlet"
-      for="*"
+      for=".header_plugins.IHeaderPlugins"
       layer=".interfaces.IToolkitViewlets"
       manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
       name="theming.toolkit.viewlets.headerplugins"

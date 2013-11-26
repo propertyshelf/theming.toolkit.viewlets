@@ -5,7 +5,14 @@
       lang="en"
       i18n:domain="theming.toolkit.viewlets"
       tal:omit-tag="">
-  <section id="header_plugin" class="toolkit viewlet">
-           My Viewlet
+  
+  <section class="site_title toolkit viewlet"
+      tal:condition="view/available">
+    <h1 class="toolkit viewlet title"
+      tal:condition="view/get_title"
+      tal:content='view/get_title |nothing'></h1>
+    <div class="toolkit viewlet plugin"
+      tal:condition="view/get_code"
+      tal:content='structure view/get_code'></div>
   </section>
 </html>

@@ -7,6 +7,8 @@ from plone.app.layout.navigation.interfaces import INavigationRoot
 #from plone.directives import form
 from plone.memoize.view import memoize
 
+from Products.CMFPlone import PloneMessageFactory as PMF
+
 from z3c.form import form,field, button
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
@@ -31,13 +33,28 @@ class HeaderPluginsViewlet(ViewletBase):
 
     @property
     def available(self):
-        return INavigationRoot.providedBy(self.context)
+        return IPossibleHeaderPlugins.providedBy(self.context) and \
+            IHeaderPlugins.providedBy(self.context)
 
     @property
     def config(self):
         """Get view configuration data from annotations."""
         annotations = IAnnotations(self.context)
         return annotations.get(CONFIGURATION_KEY, {})
+
+    @property
+    def get_code(self):
+        """Get Plugin Code"""
+        annotations = IAnnotations(self.context)
+        config = annotations.get(CONFIGURATION_KEY, {})
+        return config.get('plugin_code', u'')
+
+    @property
+    def get_title(self):
+        """Get Plugin Code"""
+        annotations = IAnnotations(self.context)
+        config = annotations.get(CONFIGURATION_KEY, {})
+        return config.get('viewlet_title', u'')
 
     def update(self):
         """Prepare view related data."""
@@ -55,12 +72,21 @@ class HeaderPluginsViewlet(ViewletBase):
 class IHeaderPluginsConfiguration(Interface):
     """Header Plugins Configuration Form."""
 
-    body_text = schema.TextLine(
+    viewlet_title = schema.TextLine(
         required=False,
         title=_(
-            u'Plugin Code',
-            default=u'Plugin Code',
+            u'Plugin Title',
+            default=u'Plugin Title',
         ),
+    )
+
+    plugin_code =schema.Text(
+        description=PMF(
+            u'help_plugin_code',
+            default=u'Please enter the Plugin Code.',
+        ),
+        required=False,
+        title=PMF(u'label_plugin_code', default=u'Plugin Code'),
     )
 
 
