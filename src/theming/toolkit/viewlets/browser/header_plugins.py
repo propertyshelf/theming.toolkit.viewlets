@@ -3,7 +3,7 @@
 
 #zope imports
 from plone.app.layout.viewlets.common import ViewletBase
-from plone.app.layout.navigation.interfaces import INavigationRoot
+#from plone.app.layout.navigation.interfaces import INavigationRoot
 #from plone.directives import form
 from plone.memoize.view import memoize
 
