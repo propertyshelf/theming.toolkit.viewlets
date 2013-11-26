@@ -2,12 +2,12 @@
 
 """Test Viewlets of theming.toolkit.viewlets"""
 
-from zope.interface import directlyProvides
+from zope.interface import alsoProvides
 
 from plone.app.layout.viewlets.tests.base import ViewletsTestCase
-from plone.app.layout.navigation.interfaces import INavigationRoot
+from theming.toolkit.viewlets.browser.header_plugins import (HeaderPluginsViewlet, \
+    IHeaderPlugins, IPossibleHeaderPlugins)
 
-from theming.toolkit.viewlets.browser.header_plugins import HeaderPluginsViewlet
 
 
 class TestToolkitViewlet(ViewletsTestCase):
@@ -19,6 +19,10 @@ class TestToolkitViewlet(ViewletsTestCase):
                                   title='Test default page')
         self.folder.test.unmarkCreationFlag()
         self.folder.setTitle(u"Folder")
+        alsoProvides(self.folder.test, IHeaderPlugins)
+        alsoProvides(self.folder.test, IPossibleHeaderPlugins)
+        self.folder.test.reindexObject(idxs=['object_provides', ])
+        
 
     def _invalidateRequestMemoizations(self):
         try:
@@ -32,11 +36,11 @@ class TestToolkitViewlet(ViewletsTestCase):
         self._invalidateRequestMemoizations()
         self.loginAsPortalOwner()
         self.app.REQUEST['ACTUAL_URL'] = self.folder.test.absolute_url()
-        directlyProvides(self.folder, INavigationRoot)
-        viewlet = HeaderPluginsViewlet(self.folder.test, self.app.REQUEST, None)
+        
+        viewlet = HeaderPluginsViewlet(self.folder, self.app.REQUEST, None)
         viewlet.update()
         self.assertEqual(viewlet.site_url, "http://nohost/plone")
         self.assertFalse(viewlet.available)
-        viewlet = HeaderPluginsViewlet(self.folder, self.app.REQUEST, None)
+        viewlet = HeaderPluginsViewlet(self.folder.test, self.app.REQUEST, None)
         viewlet.update()
         self.assertTrue(viewlet.available)
