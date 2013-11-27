@@ -6,8 +6,9 @@
     i18n_domain="theming.toolkit.viewlets">
 
   <!-- Include package dependencies. -->
-  <!-- ============================= -->
+  <!-- ============================= 
   <includeDependencies package="." />
+  -->
   <include package=".browser" />
 
   <genericsetup:registerProfile

@@ -9,6 +9,7 @@ from plone.app.testing import (
     PLONE_FIXTURE,
     applyProfile,
 )
+
 from zope.configuration import xmlconfig
 
 
@@ -17,15 +18,15 @@ class ToolkitViewlets(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE, )
 
     def setUpZope(self, app, configurationContext):
-        # Load ZCML for this package
-        import theming.toolkit.viewlets
+        # Load ZCML for this package       
+        import theming.toolkit.viewlets 
         xmlconfig.file('configure.zcml',
                        theming.toolkit.viewlets,
                        context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'theming.toolkit.viewlets:default')
-
+        
 
 TOOLKIT_VIEWLETS_FIXTURE = ToolkitViewlets()
 TOOLKIT_VIEWLETS_INTEGRATION_TESTING = IntegrationTesting(

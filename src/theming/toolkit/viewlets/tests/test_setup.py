@@ -19,6 +19,7 @@ class TestSetup(unittest.TestCase):
     """Setup Test Case for toolkit.color."""
     layer = TOOLKIT_VIEWLETS_INTEGRATION_TESTING
 
+
     def setUp(self):
         self.app = self.layer['app']
         self.portal = self.layer['portal']

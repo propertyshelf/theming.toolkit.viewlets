@@ -26,7 +26,6 @@ setup(name='theming.toolkit.viewlets',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'theming.toolkit.core',
           # -*- Extra requirements: -*-
       ],
       extras_require={
