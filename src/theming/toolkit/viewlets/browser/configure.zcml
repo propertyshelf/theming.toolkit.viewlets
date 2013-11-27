@@ -39,4 +39,24 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:viewlet
+      class=".viewlets.SocialHeaderViewlet"
+      for="*"
+      layer=".interfaces.IToolkitViewlets"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      name="theming.toolkit.viewlets.socialheader"
+      permission="zope2.View"
+      template="templates/socialheader.pt"
+      />
+
+  <browser:viewlet
+      class=".viewlets.TitleContactViewlet"
+      for="*"
+      layer=".interfaces.IToolkitViewlets"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      name="theming.toolkit.viewlets.title_contact"
+      permission="zope2.View"
+      template="templates/titlecontact.pt"
+      />
+
 </configure>
