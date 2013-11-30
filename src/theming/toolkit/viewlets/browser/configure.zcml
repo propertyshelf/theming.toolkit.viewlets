@@ -39,6 +39,44 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <!-- Collection Plugins. -->
+  <!-- ================ -->
+  <browser:viewlet
+      class=".collection_viewlets.HeaderCollectionViewlet"
+      for=".collection_viewlets.ICollectionViewlet"
+      layer=".interfaces.IToolkitViewlets"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      name="theming.toolkit.viewlets.header-collection"
+      permission="zope2.View"
+      template="templates/carousel_viewlet.pt"
+      />
+
+  <browser:page
+      class=".collection_viewlets.CollectionViewletConfiguration"
+      for=".collection_viewlets.ICollectionViewlet"
+      layer=".interfaces.IToolkitViewlets"
+      name="header-collection-config"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      class=".collection_viewlets.CollectionViewletStatus"
+      for="*"
+      layer=".interfaces.IToolkitViewlets"
+      name="header-collection-status"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      class=".collection_viewlets.CollectionViewletToggle"
+      for="*"
+      layer=".interfaces.IToolkitViewlets"
+      name="header-collection-toggle"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <!-- ================ -->
+
   <browser:viewlet
       class=".viewlets.SocialHeaderViewlet"
       for="*"

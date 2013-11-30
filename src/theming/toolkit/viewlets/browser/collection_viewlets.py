@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Editable Header Plugins"""
+"""Collection viewlets that render a carousel/slideshow"""
+
 
 #zope imports
 from plone.app.layout.viewlets.common import ViewletBase
-#from plone.app.layout.navigation.interfaces import INavigationRoot
-#from plone.directives import form
 from plone.memoize.view import memoize
 
-from Products.CMFPlone import PloneMessageFactory as PMF
+from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 
 from z3c.form import form,field, button
 from zope import schema
@@ -19,22 +18,25 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from theming.toolkit.viewlets.browser.interfaces import IToolkitBaseViewlets
 from theming.toolkit.viewlets.i18n import _
 
-CONFIGURATION_KEY = 'theming.toolkit.viewlets.headerplugins'
+CONFIGURATION_KEY = 'theming.toolkit.viewlets.collection'
 
-class IPossibleHeaderPlugins(Interface):
-    """Marker interface for possible HeaderPlugin viewlet."""
+class IPossibleCollectionViewlet(Interface):
+    """Marker interface for possible Header Collection viewlet."""
 
-class IHeaderPlugins(IToolkitBaseViewlets):
-    """Marker interface for HeaderPlugin viewlet."""
+class ICollectionViewlet(IToolkitBaseViewlets):
+    """Marker interface for Collection viewlet."""
 
 
-class HeaderPluginsViewlet(ViewletBase):
-    """Show Header plugins."""
+class HeaderCollectionViewlet(ViewletBase):
+    """Show Collection viewlet in header"""
 
     @property
     def available(self):
-        return IPossibleHeaderPlugins.providedBy(self.context) and \
-            IHeaderPlugins.providedBy(self.context)
+        
+        return IPossibleCollectionViewlet.providedBy(self.context) and \
+            not ICollectionViewlet.providedBy(self.context)
+            
+       # return IPossibleCollectionViewlet.providedBy(self.context)
 
     @property
     def config(self):
@@ -47,7 +49,7 @@ class HeaderPluginsViewlet(ViewletBase):
         """Get Plugin Code"""
         annotations = IAnnotations(self.context)
         config = annotations.get(CONFIGURATION_KEY, {})
-        return config.get('plugin_code', u'')
+        return config.get('viewlet_collection', u'')
 
     @property
     def get_title(self):
@@ -58,7 +60,7 @@ class HeaderPluginsViewlet(ViewletBase):
 
     def update(self):
         """Prepare view related data."""
-        super(HeaderPluginsViewlet, self).update()
+        super(HeaderCollectionViewlet, self).update()
 
     @memoize
     def view_url(self):
@@ -69,34 +71,38 @@ class HeaderPluginsViewlet(ViewletBase):
             return absoluteURL(self.context, self.request) + '/'
 
 
-class IHeaderPluginsConfiguration(Interface):
+class ICollectionViewletConfiguration(Interface):
     """Header Plugins Configuration Form."""
 
     viewlet_title = schema.TextLine(
         required=False,
         title=_(
-            u'Plugin Title',
-            default=u'Plugin Title',
+            u'Viewlet Title',
+            default=u'Viewlet Title',
         ),
     )
 
-    plugin_code =schema.Text(
-        description=PMF(
-            u'help_plugin_code',
-            default=u'Please enter the Plugin Code.',
+    viewlet_collection = schema.Choice(
+        description=_(
+            u'Find the Collection providing the content'
         ),
         required=False,
-        title=PMF(u'label_plugin_code', default=u'Plugin Code'),
+        source=SearchableTextSourceBinder({
+            'object_provides': 'plone.app.collection.interfaces.ICollection',
+        }, 
+        default_query='path:',
+        ),
+        title=_(u'Content Collection'),
     )
 
 
-class HeaderPluginsConfiguration(form.Form):
+class CollectionViewletConfiguration(form.Form):
     """HeaderPlugin Configuration Form."""
 
-    fields = field.Fields(IHeaderPluginsConfiguration)
-    label = _(u"edit 'HeaderPlugins'")
+    fields = field.Fields(ICollectionViewletConfiguration)
+    label = _(u"edit 'Header Carousel'")
     description = _(
-        u"Adjust the Header Plugins in this viewlet."
+        u"Adjust the Carousel in this viewlet."
     )
 
     def getContent(self):
@@ -118,8 +124,8 @@ class HeaderPluginsConfiguration(form.Form):
         self.request.response.redirect(absoluteURL(self.context, self.request))
 
 
-class HeaderPluginsStatus(object):
-    """Return activation/deactivation status of HeaderPlugins viewlet."""
+class CollectionViewletStatus(object):
+    """Return activation/deactivation status of HeaderCollection viewlet."""
 
     def __init__(self, context, request):
         self.context = context
@@ -127,15 +133,15 @@ class HeaderPluginsStatus(object):
 
     @property
     def can_activate(self):
-        return IPossibleHeaderPlugins.providedBy(self.context) and \
-            not IHeaderPlugins.providedBy(self.context)
+        return IPossibleCollectionViewlet.providedBy(self.context) and \
+            not ICollectionViewlet.providedBy(self.context)
 
     @property
     def active(self):
-        return IHeaderPlugins.providedBy(self.context)
+        return ICollectionViewlet.providedBy(self.context)
 
 
-class HeaderPluginsToggle(object):
+class CollectionViewletToggle(object):
     """Toggle HeaderPlugins viewlet for the current context."""
 
     def __init__(self, context, request):
@@ -145,19 +151,19 @@ class HeaderPluginsToggle(object):
     def __call__(self):
         msg_type = 'info'
 
-        if IHeaderPlugins.providedBy(self.context):
-            # Deactivate RecentListings viewlet.
-            noLongerProvides(self.context, IHeaderPlugins)
+        if ICollectionViewlet.providedBy(self.context):
+            # Deactivate.
+            noLongerProvides(self.context, ICollectionViewlet)
             self.context.reindexObject(idxs=['object_provides', ])
-            msg = _(u"'HeaderPlugins' viewlet deactivated.")
-        elif IPossibleHeaderPlugins.providedBy(self.context):
-            alsoProvides(self.context, IHeaderPlugins)
+            msg = _(u"Collection viewlet deactivated.")
+        elif IPossibleCollectionViewlet.providedBy(self.context):
+            alsoProvides(self.context, ICollectionViewlet)
             self.context.reindexObject(idxs=['object_provides', ])
-            msg = _(u"'HeaderPlugins' viewlet activated.")
+            msg = _(u"Collection viewlet activated.")
         else:
             msg = _(
-                u"The 'HeaderPlugins' viewlet does't work with this content "
-                u"type. Add 'IPossibleHeaderPlugins' to the provided "
+                u"The Collection viewlet does't work with this content "
+                u"type. Add 'IPossibleCollectionViewlet' to the provided "
                 u"interfaces to enable this feature."
             )
             msg_type = 'error'

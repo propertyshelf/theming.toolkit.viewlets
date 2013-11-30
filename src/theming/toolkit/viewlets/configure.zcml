@@ -22,6 +22,7 @@
 
   <class class="Products.Archetypes.BaseObject.BaseObject">
     <implements interface="theming.toolkit.viewlets.browser.header_plugins.IPossibleHeaderPlugins" />
+    <implements interface="theming.toolkit.viewlets.browser.collection_viewlets.IPossibleCollectionViewlet" />
   </class>
   
 </configure>
