@@ -27,6 +27,7 @@ setup(name='theming.toolkit.viewlets',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+          'theming.toolkit.core',
       ],
       extras_require={
              'test': ['plone.app.testing',]
