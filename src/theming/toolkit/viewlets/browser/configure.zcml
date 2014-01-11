@@ -40,7 +40,7 @@
       />
 
   <!-- Collection Plugins. -->
-  <!-- ================ -->
+  <!-- ================ 
   <browser:viewlet
       class=".collection_viewlets.HeaderCollectionViewlet"
       for=".collection_viewlets.ICollectionViewlet"
@@ -75,7 +75,7 @@
       permission="cmf.ModifyPortalContent"
       />
 
-  <!-- ================ -->
+ -->
 
   <browser:viewlet
       class=".viewlets.SocialHeaderViewlet"

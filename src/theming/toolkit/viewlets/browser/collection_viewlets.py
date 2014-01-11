@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 """Collection viewlets that render a carousel/slideshow"""
 
-
+from AccessControl import SecurityManagement
+from Products.ATContentTypes.permission import ChangeTopics
 #zope imports
+from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from plone.app.layout.viewlets.common import ViewletBase
+from plone.app.layout.globals.interfaces import IViewView
 from plone.memoize.view import memoize
 
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
+from Products.ATContentTypes.interface import IATTopic
 
 from z3c.form import form,field, button
 from zope import schema
@@ -17,6 +21,12 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 #local import
 from theming.toolkit.viewlets.browser.interfaces import IToolkitBaseViewlets
 from theming.toolkit.viewlets.i18n import _
+
+try:
+    from plone.app.collection.interfaces import ICollection
+except ImportError:
+    class ICollection(Interface):
+        pass
 
 CONFIGURATION_KEY = 'theming.toolkit.viewlets.collection'
 
@@ -35,8 +45,6 @@ class HeaderCollectionViewlet(ViewletBase):
         
         return IPossibleCollectionViewlet.providedBy(self.context) and \
             not ICollectionViewlet.providedBy(self.context)
-            
-       # return IPossibleCollectionViewlet.providedBy(self.context)
 
     @property
     def config(self):
@@ -47,9 +55,7 @@ class HeaderCollectionViewlet(ViewletBase):
     @property
     def get_code(self):
         """Get Plugin Code"""
-        annotations = IAnnotations(self.context)
-        config = annotations.get(CONFIGURATION_KEY, {})
-        return config.get('viewlet_collection', u'')
+        
 
     @property
     def get_title(self):
@@ -57,10 +63,58 @@ class HeaderCollectionViewlet(ViewletBase):
         annotations = IAnnotations(self.context)
         config = annotations.get(CONFIGURATION_KEY, {})
         return config.get('viewlet_title', u'')
+    
 
     def update(self):
-        """Prepare view related data."""
+        if IViewView.providedBy(self.__parent__):
+            alsoProvides(self, IViewView)
         super(HeaderCollectionViewlet, self).update()
+
+    def getProviders(self):
+        annotations = IAnnotations(self.context)
+        config = annotations.get(CONFIGURATION_KEY, {})
+        field = config.get('viewlet_collection', None)
+
+        if field is None:
+            return None
+        return field.get(self.context)
+
+    def results(self, provider):
+        results = []
+        if provider is not None:
+            # by default we assume that only Collections are addable
+            # as a carousel provider
+
+            # It doesn't make sense to show *all* objects from a collection
+            # - some of them might return hundreeds of objects
+            if ICollection.providedBy(provider):
+                res = provider.results(b_size=20)
+                return res
+            return provider.queryCatalog()[:7]
+        return results
+
+    def canSeeEditLink(self, provider):
+        smanager = SecurityManagement.getSecurityManager()
+        return smanager.checkPermission(ChangeTopics, provider)
+
+    def editCarouselLink(self, provider):
+        if provider is not None:
+            if ICollection.providedBy(provider):
+                return provider.absolute_url() + '/edit'
+            return provider.absolute_url() + '/criterion_edit_form'
+        return None
+
+    def get_tile(self, obj):
+        # note to myself
+        # When adapter is uesd this means we check whether obj has any special
+        # instructions about how to be handled in defined view or interface
+        # for multi adapter the same is true except more object than just the
+        # obj are check for instructions
+        #have to use traverse to make zpt security work
+        tile = obj.unrestrictedTraverse("carousel-view")
+        if tile is None:
+            return None
+        return tile()
 
     @memoize
     def view_url(self):
@@ -83,28 +137,27 @@ class ICollectionViewletConfiguration(Interface):
     )
 
     viewlet_collection = schema.Choice(
-        description=_(
-            u'Find the Collection providing the content'
-        ),
+        title=_(u"Target collection"),
+        description=_(u"Find the collection which provides the items to list"),
         required=False,
         source=SearchableTextSourceBinder({
-            'object_provides': 'plone.app.collection.interfaces.ICollection',
-        }, 
-        default_query='path:',
-        ),
-        title=_(u'Content Collection'),
-    )
+            'object_provides' : IATTopic.__identifier__},
+            default_query='path:')
+        )
 
 
 class CollectionViewletConfiguration(form.Form):
     """HeaderPlugin Configuration Form."""
 
     fields = field.Fields(ICollectionViewletConfiguration)
+    fields['viewlet_collection'].custom_widget = UberSelectionWidget
+    ignoreContext = True
+
     label = _(u"edit 'Header Carousel'")
     description = _(
         u"Adjust the Carousel in this viewlet."
     )
-
+        
     def getContent(self):
         annotations = IAnnotations(self.context)
         return annotations.get(CONFIGURATION_KEY,
