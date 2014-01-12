@@ -7,6 +7,7 @@ from zope.interface import alsoProvides
 from plone.app.layout.viewlets.tests.base import ViewletsTestCase
 from theming.toolkit.viewlets.browser.header_plugins import (HeaderPluginsViewlet, \
     IHeaderPlugins, IPossibleHeaderPlugins)
+from theming.toolkit.viewlets.browser.viewlets import NaviViewlet
 
 
 
@@ -42,5 +43,16 @@ class TestToolkitViewlet(ViewletsTestCase):
         self.assertEqual(viewlet.site_url, "http://nohost/plone")
         self.assertFalse(viewlet.available)
         viewlet = HeaderPluginsViewlet(self.folder.test, self.app.REQUEST, None)
+        viewlet.update()
+        self.assertTrue(viewlet.available)
+
+
+    def test_featuredNav_viewlet(self):
+        """Test for featured Navi Viewlet"""
+        self._invalidateRequestMemoizations()
+        self.loginAsPortalOwner()
+        self.app.REQUEST['ACTUAL_URL'] = self.folder.test.absolute_url()
+        #test featured navi
+        viewlet = NaviViewlet(self.folder.test, self.app.REQUEST, None)
         viewlet.update()
         self.assertTrue(viewlet.available)
