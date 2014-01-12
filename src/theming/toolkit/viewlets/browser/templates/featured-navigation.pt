@@ -9,9 +9,13 @@
     <ul id="featurenavi">
             <tal:tab repeat="tab view/getTabData">
               <li tal:attributes="class tab/class; id tab/id">
-                    <span
-                    tal:content="structure  tab/image | nothing" />
-                    <a tal:attributes="href tab/url" tal:content="tab/title" />
+                <div class="image">
+                  <a tal:content="structure  tab/image | nothing"
+                      tal:attributes="href tab/url"/>
+                </div>
+                <div class="text">
+                  <a tal:attributes="href tab/url" tal:content="tab/title" />
+                </div>
               </li>
             </tal:tab>
     </ul>

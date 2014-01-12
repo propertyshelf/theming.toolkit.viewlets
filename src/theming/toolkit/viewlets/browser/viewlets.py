@@ -113,7 +113,7 @@ class NaviViewlet(ViewletBase):
             link_data = self.getLinkData(t)
             data = {
                 "url": link_data['url'],
-                "class": "selected" if active else "normal",
+                "class": "navi-item selected" if active else "navi-item normal",
                 "title": t.Title,
                 "id": t.getId,
                 "image": link_data['image']
