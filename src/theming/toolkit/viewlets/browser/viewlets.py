@@ -66,6 +66,9 @@ class NaviViewlet(ViewletBase):
         """update: set context"""
         super(NaviViewlet, self).update()
 
+        registry = queryUtility(IRegistry)
+        self.registry_settings = registry.forInterface(IToolkitSettings, check=False)
+
         self.id = self.context.id
         self.context_state = getMultiAdapter((self.context, self.request),
                                              name=u'plone_context_state')
@@ -81,19 +84,24 @@ class NaviViewlet(ViewletBase):
 
     @property
     def available(self):
-
+        settings = self.registry_settings
+        if not getattr(settings, 'show_featuredNavigation', True):
+            return False
         return True
 
     def getTabSources(self):
-        """ List content items in the folder of this item.
-
-        """
+        """ List content items in the folder of this item."""
+        
+        settings = self.registry_settings
         navi_url = ''
         path = '/'.join([self.navigation_root_path, navi_url])
+        #get taglist from theming.toolkit.core setting 'featuredNavigation_taglist'
+        #('featured navigation', 'Featured Navigation' ) is default if something went wrong
+        subject = tuple(getattr(settings, 'featuredNavigation_taglist', ('featured navigation', 'Featured Navigation' )))
         foo = self.catalog( path={'query': path, 'depth': 2},
                             sort_on='getObjPositionInParent',
                             portal_type=['Document', 'Folder',],
-                            Subject=('featured navigation', 'Featured Navigation' )
+                            Subject=subject
                             )
 
         return foo
