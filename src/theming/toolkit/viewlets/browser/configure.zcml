@@ -97,4 +97,14 @@
       template="templates/titlecontact.pt"
       />
 
+  <browser:viewlet
+      class=".viewlets.NaviViewlet"
+      for="*"
+      layer=".interfaces.IToolkitViewlets"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      name="theming.toolkit.viewlets.featured_navi"
+      permission="zope2.View"
+      template="templates/featured-navigation.pt"
+      />
+
 </configure>

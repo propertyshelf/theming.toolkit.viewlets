@@ -1,0 +1,19 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      i18n:domain="plone"
+      tal:omit-tag="">
+  <div class="featurenavi featurenavi-viewlet" tal:condition="view/available">
+    <ul id="featurenavi">
+            <tal:tab repeat="tab view/getTabData">
+              <li tal:attributes="class tab/class; id tab/id">
+                    <span
+                    tal:content="structure  tab/image | nothing" />
+                    <a tal:attributes="href tab/url" tal:content="tab/title" />
+              </li>
+            </tal:tab>
+    </ul>
+</div>
+</html>
