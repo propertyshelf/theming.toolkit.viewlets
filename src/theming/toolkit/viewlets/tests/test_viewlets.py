@@ -10,7 +10,6 @@ from theming.toolkit.viewlets.browser.header_plugins import (HeaderPluginsViewle
 from theming.toolkit.viewlets.browser.viewlets import NaviViewlet
 
 
-
 class TestToolkitViewlet(ViewletsTestCase):
     """Test the content views viewlet.
     """
