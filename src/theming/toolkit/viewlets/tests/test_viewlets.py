@@ -7,7 +7,8 @@ from zope.interface import alsoProvides
 from plone.app.layout.viewlets.tests.base import ViewletsTestCase
 from theming.toolkit.viewlets.browser.header_plugins import (HeaderPluginsViewlet, \
     IHeaderPlugins, IPossibleHeaderPlugins)
-from theming.toolkit.viewlets.browser.viewlets import NaviViewlet
+from theming.toolkit.viewlets.browser.viewlets import (NaviViewlet, \
+    SocialHeaderViewlet, TitleContactViewlet)
 
 
 class TestToolkitViewlet(ViewletsTestCase):
@@ -46,7 +47,7 @@ class TestToolkitViewlet(ViewletsTestCase):
         self.assertTrue(viewlet.available)
 
 
-    def test_featuredNav_viewlet(self):
+    def test_static_viewlets(self):
         """Test for featured Navi Viewlet"""
         self._invalidateRequestMemoizations()
         self.loginAsPortalOwner()
@@ -54,4 +55,12 @@ class TestToolkitViewlet(ViewletsTestCase):
         #test featured navi
         viewlet = NaviViewlet(self.folder.test, self.app.REQUEST, None)
         viewlet.update()
-        self.assertTrue(viewlet.available)
+        self.assertEqual(viewlet.viewletname, 'featurednavigation')
+        #test socialheader
+        viewlet = SocialHeaderViewlet(self.folder.test, self.app.REQUEST, None)
+        viewlet.update()
+        self.assertEqual(viewlet.viewletname, 'socialheader')
+        #test socialheader
+        viewlet = TitleContactViewlet(self.folder.test, self.app.REQUEST, None)
+        viewlet.update()
+        self.assertEqual(viewlet.viewletname, 'titlecontact')

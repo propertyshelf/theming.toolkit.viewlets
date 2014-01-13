@@ -18,6 +18,7 @@ class SocialHeaderViewlet(ViewletBase):
         super(SocialHeaderViewlet, self).update()
         registry = queryUtility(IRegistry)
         self.registry_settings = registry.forInterface(IToolkitSettings, check=False)
+        self.viewletname = 'socialheader'
         
     @property
     def available(self):
@@ -42,6 +43,7 @@ class TitleContactViewlet(ViewletBase):
         registry = queryUtility(IRegistry)
         self.registry_settings = registry.forInterface(IToolkitSettings, check=False)
         self.site_title = self.portal_state.portal_title()
+        self.viewletname = 'titlecontact'
 
     @property
     def available(self):
@@ -76,6 +78,8 @@ class NaviViewlet(ViewletBase):
                                             name=u'plone_portal_state')
         self.navigation_root_path = self.portal_state.navigation_root_path()
         self.lang = self.portal_state.language()
+
+        self.viewletname = 'featurednavigation'
 
     @property
     def catalog(self):
