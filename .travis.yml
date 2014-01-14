@@ -16,7 +16,7 @@ matrix:
       env: PLONE_VERSION=4.3
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq python2.6-tk python-gdbm
+  - sudo apt-get install -qq python2.6-tk python2.6-gdbm
 install:
   - mkdir -p buildout-cache/eggs
   - mkdir -p buildout-cache/downloads
