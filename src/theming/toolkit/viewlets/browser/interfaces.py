@@ -12,3 +12,6 @@ class IToolkitViewlets(IDefaultPloneLayer):
 
 class IToolkitBaseViewlets(Interface):
     """Marker interface for all toolkit viewlets"""
+
+class IToolkitFeaturedListingSlider(Interface):
+    """Marker interface Featured Listing Slider contents"""

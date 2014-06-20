@@ -37,7 +37,7 @@ class ICollectionViewlet(IToolkitBaseViewlets):
     """Marker interface for Collection viewlet."""
 
 
-class HeaderCollectionViewlet(ViewletBase):
+class ListingCollectionViewlet(ViewletBase):
     """Show Collection viewlet in header"""
 
     @property
@@ -68,7 +68,7 @@ class HeaderCollectionViewlet(ViewletBase):
     def update(self):
         if IViewView.providedBy(self.__parent__):
             alsoProvides(self, IViewView)
-        super(HeaderCollectionViewlet, self).update()
+        super(ListingCollectionViewlet, self).update()
 
     def getProviders(self):
         annotations = IAnnotations(self.context)
@@ -88,21 +88,12 @@ class HeaderCollectionViewlet(ViewletBase):
             # It doesn't make sense to show *all* objects from a collection
             # - some of them might return hundreeds of objects
             if ICollection.providedBy(provider):
-                res = provider.results(b_size=20)
+                res = provider.results()
                 return res
-            return provider.queryCatalog()[:7]
+            return provider.queryCatalog()
         return results
 
-    def canSeeEditLink(self, provider):
-        smanager = SecurityManagement.getSecurityManager()
-        return smanager.checkPermission(ChangeTopics, provider)
-
-    def editCarouselLink(self, provider):
-        if provider is not None:
-            if ICollection.providedBy(provider):
-                return provider.absolute_url() + '/edit'
-            return provider.absolute_url() + '/criterion_edit_form'
-        return None
+    
 
     def get_tile(self, obj):
         # note to myself

@@ -40,13 +40,13 @@
       />
 
   <!-- Collection Plugins. -->
-  <!-- ================ 
+  <!-- ================ -->
   <browser:viewlet
-      class=".collection_viewlets.HeaderCollectionViewlet"
+      class=".collection_viewlets.ListingCollectionViewlet"
       for=".collection_viewlets.ICollectionViewlet"
       layer=".interfaces.IToolkitViewlets"
-      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
-      name="theming.toolkit.viewlets.header-collection"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContentBody"
+      name="theming.toolkit.viewlets.listing-collection"
       permission="zope2.View"
       template="templates/carousel_viewlet.pt"
       />
@@ -55,7 +55,7 @@
       class=".collection_viewlets.CollectionViewletConfiguration"
       for=".collection_viewlets.ICollectionViewlet"
       layer=".interfaces.IToolkitViewlets"
-      name="header-collection-config"
+      name="listing-collection-config"
       permission="cmf.ModifyPortalContent"
       />
 
@@ -63,7 +63,7 @@
       class=".collection_viewlets.CollectionViewletStatus"
       for="*"
       layer=".interfaces.IToolkitViewlets"
-      name="header-collection-status"
+      name="listing-collection-status"
       permission="cmf.ModifyPortalContent"
       />
 
@@ -71,11 +71,11 @@
       class=".collection_viewlets.CollectionViewletToggle"
       for="*"
       layer=".interfaces.IToolkitViewlets"
-      name="header-collection-toggle"
+      name="listing-collection-toggle"
       permission="cmf.ModifyPortalContent"
       />
 
- -->
+ 
 
   <browser:viewlet
       class=".viewlets.SocialHeaderViewlet"
