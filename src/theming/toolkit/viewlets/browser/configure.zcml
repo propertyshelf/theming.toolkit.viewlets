@@ -42,11 +42,11 @@
   <!-- Collection Plugins. -->
   <!-- ================ -->
   <browser:viewlet
-      class=".collection_viewlets.ListingCollectionViewlet"
+      class=".collection_viewlets.FeaturedListingCollectionViewlet"
       for=".collection_viewlets.ICollectionViewlet"
       layer=".interfaces.IToolkitViewlets"
       manager="plone.app.layout.viewlets.interfaces.IAboveContentBody"
-      name="theming.toolkit.viewlets.listing-collection"
+      name="theming.toolkit.viewlets.featuredlisting-collection-above"
       permission="zope2.View"
       template="templates/carousel_viewlet.pt"
       />
@@ -55,7 +55,7 @@
       class=".collection_viewlets.CollectionViewletConfiguration"
       for=".collection_viewlets.ICollectionViewlet"
       layer=".interfaces.IToolkitViewlets"
-      name="listing-collection-config"
+      name="featuredlisting-collection-config-above"
       permission="cmf.ModifyPortalContent"
       />
 
@@ -63,7 +63,7 @@
       class=".collection_viewlets.CollectionViewletStatus"
       for="*"
       layer=".interfaces.IToolkitViewlets"
-      name="listing-collection-status"
+      name="featuredlisting-collection-status-above"
       permission="cmf.ModifyPortalContent"
       />
 
@@ -71,7 +71,7 @@
       class=".collection_viewlets.CollectionViewletToggle"
       for="*"
       layer=".interfaces.IToolkitViewlets"
-      name="listing-collection-toggle"
+      name="featuredlisting-collection-toggle-above"
       permission="cmf.ModifyPortalContent"
       />
 

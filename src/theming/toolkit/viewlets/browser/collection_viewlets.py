@@ -37,7 +37,7 @@ class ICollectionViewlet(IToolkitBaseViewlets):
     """Marker interface for Collection viewlet."""
 
 
-class ListingCollectionViewlet(ViewletBase):
+class FeaturedListingCollectionViewlet(ViewletBase):
     """Show Collection viewlet in header"""
 
     @property
@@ -68,7 +68,7 @@ class ListingCollectionViewlet(ViewletBase):
     def update(self):
         if IViewView.providedBy(self.__parent__):
             alsoProvides(self, IViewView)
-        super(ListingCollectionViewlet, self).update()
+        super(FeaturedListingCollectionViewlet, self).update()
 
     def getProviders(self):
         annotations = IAnnotations(self.context)
@@ -126,7 +126,7 @@ class ICollectionViewletConfiguration(Interface):
             default=u'Viewlet Title',
         ),
     )
-
+    """
     viewlet_collection = schema.Choice(
         title=_(u"Target collection"),
         description=_(u"Find the collection which provides the items to list"),
@@ -135,7 +135,14 @@ class ICollectionViewletConfiguration(Interface):
             'object_provides' : IATTopic.__identifier__},
             default_query='path:')
         )
-
+    """
+    viewlet_collection = schema.TextLine(
+        required=False,
+        title=_(
+            u'Target Collection',
+            default=u'Search target collection ...',
+        ),
+    )
 
 class CollectionViewletConfiguration(form.Form):
     """HeaderPlugin Configuration Form."""
@@ -144,7 +151,7 @@ class CollectionViewletConfiguration(form.Form):
     fields['viewlet_collection'].custom_widget = UberSelectionWidget
     ignoreContext = True
 
-    label = _(u"edit 'Header Carousel'")
+    label = _(u"edit 'FeaturedListing Carousel'")
     description = _(
         u"Adjust the Carousel in this viewlet."
     )

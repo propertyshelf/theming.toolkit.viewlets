@@ -5,20 +5,15 @@
       lang="en"
       i18n:domain="theming.toolkit.viewlets"
       tal:omit-tag="">
-<div class="carouselWrapper">carousel?
+<div class="carouselWrapper">
+  <b>Featured Listing Viewlet active</b>
 
      <tal:carousel repeat="provider view/getProviders" tal:condition="view/getProviders|nothing">
         <div class="carousel"
              tal:attributes="class python:repeat['provider'].end and 'carousel lastCarousel' or 'carousel'"
              tal:condition="python: view.results(provider)">
 
-            <div class="toolBar" tal:condition="python:view.canSeeEditLink(provider)">
-                <!-- Wrapper for fullscreen switcher -->
-                <a href="#" tal:attributes="href python:view.editCarouselLink(provider)"
-                   title="Edit carousel's results"
-                   i18n:attributes="title"
-                   i18n:translate="label_edit_carousel">Edit Carousel</a>
-            </div>
+            
 
             <!-- "previous page" action -->
             <a class="prev browse"
