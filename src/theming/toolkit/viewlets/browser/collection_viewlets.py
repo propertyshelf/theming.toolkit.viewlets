@@ -3,16 +3,19 @@
 
 from plone.app.layout.viewlets.common import ViewletBase
 from plone.memoize.view import memoize
+from plone.registry.interfaces import IRegistry
 
 from Products.CMFPlone import PloneMessageFactory as PMF
 
 from z3c.form import form,field, button
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
+from zope.component import queryUtility
 from zope.interface import Interface, alsoProvides, noLongerProvides
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 #local import
+from theming.toolkit.core.interfaces import IToolkitSettings
 from theming.toolkit.viewlets.browser.interfaces import IToolkitBaseViewlets
 from theming.toolkit.viewlets.i18n import _
 
@@ -27,7 +30,7 @@ CONFIGURATION_KEY_ABOVE = 'theming.toolkit.viewlets.featuredlisting.above'
 CONFIGURATION_KEY_BELOW = 'theming.toolkit.viewlets.featuredlisting.below'
 
 class IPossibleCollectionViewlet(Interface):
-    """Marker interface for possible Header Collection viewlet."""
+    """Marker interface for possible Collection viewlet."""
 
 class ICollectionViewlet(IToolkitBaseViewlets):
     """Marker interface for Collection viewlet."""
@@ -51,12 +54,16 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
     @property
     def get_code(self):
-        """Get Plugin Code"""
+        """Get Slider JS Code"""
+        annotations = IAnnotations(self.context)
+        key = self.getConfigurationKey
+        config = annotations.get(key, {})
+        return config.get('featuredListingSliderJS', u'')
         
 
     @property
     def get_title(self):
-        """Get Plugin Code"""
+        """Get Viewlet title"""
         annotations = IAnnotations(self.context)
         key = self.getConfigurationKey
         config = annotations.get(key, {})
@@ -101,11 +108,6 @@ class FeaturedListingCollectionViewlet(ViewletBase):
     def results(self, provider):
         results = []
         if provider is not None:
-            # by default we assume that only Collections are addable
-            # as a carousel provider
-
-            # It doesn't make sense to show *all* objects from a collection
-            # - some of them might return hundreeds of objects
             if ICollection.providedBy(provider):
                 res = provider.results()
                 return res
@@ -115,12 +117,6 @@ class FeaturedListingCollectionViewlet(ViewletBase):
     
 
     def get_tile(self, obj):
-        # note to myself
-        # When adapter is uesd this means we check whether obj has any special
-        # instructions about how to be handled in defined view or interface
-        # for multi adapter the same is true except more object than just the
-        # obj are check for instructions
-        #have to use traverse to make zpt security work
         tile = obj.unrestrictedTraverse("carousel-view")
         if tile is None:
             return None
@@ -136,7 +132,7 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
 
 class ICollectionViewletConfiguration(Interface):
-    """Header Plugins Configuration Form."""
+    """FLS Configuration Form."""
 
     viewlet_title = schema.TextLine(
         required=False,
@@ -178,7 +174,7 @@ class ICollectionViewletConfiguration(Interface):
         required=False,
         title=_(
             u"label_FLS_duration",
-            default=u"Slider Animation featuredListingSlider_duration",
+            default=u"Slider Animation Duration",
         )      
     )
 
@@ -225,7 +221,7 @@ class CollectionViewletConfiguration(form.Form):
     fields = field.Fields(ICollectionViewletConfiguration)
     ignoreContext = False
 
-    label = _(u"Configure your MLS FeaturedListingSlider'")
+    label = _(u"Configure your MLS FeaturedListingSlider")
     description = _(
         u"Adjust the slider settings."
     )
@@ -241,13 +237,38 @@ class CollectionViewletConfiguration(form.Form):
             return CONFIGURATION_KEY_BELOW
         else:
             return CONFIGURATION_KEY
+    
+    @property
+    def getGlobalDefaults(self):
+        """Get the default values from theming.toolkit.core setting"""
+        registry = queryUtility(IRegistry)
+        global_defaults = registry.forInterface(IToolkitSettings, check=False)
+        fls_fields =['featuredListingSlider_ItemList', 'featuredListingSlider_Limit', 'featuredListingSlider_offset', 'featuredListingSliderJS']
+        fls_local_defaults = {}
+
+        for n in fls_fields:
+            try:
+                fls_local_defaults[n] = getattr(global_defaults, n, None)
+            except:
+                """if a field raises an error -> ignore field"""
+
+        return fls_local_defaults
         
         
     def getContent(self):
         annotations = IAnnotations(self.context)
         key = self.getConfigurationKey
-        return annotations.get(key,
+        fls_context = annotations.get(key,
                                annotations.setdefault(key, {}))
+        defaults = self.getGlobalDefaults
+
+        # set some default values from the global navigation
+        # featuredListingSliderJS
+        for k in defaults:
+            if fls_context.get(k, None)==None:
+                fls_context[k] = defaults[k]
+
+        return fls_context
 
     @button.buttonAndHandler(_(u'Save'))
     def handle_save(self, action):
