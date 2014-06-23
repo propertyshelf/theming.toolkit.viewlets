@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 """Collection viewlets that render a carousel/slideshow"""
 
-from AccessControl import SecurityManagement
-from Products.ATContentTypes.permission import ChangeTopics
-#zope imports
-from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from plone.app.layout.viewlets.common import ViewletBase
-from plone.app.layout.globals.interfaces import IViewView
 from plone.memoize.view import memoize
 
-from plone.app.vocabularies.catalog import SearchableTextSourceBinder
-from Products.ATContentTypes.interface import IATTopic
+from Products.CMFPlone import PloneMessageFactory as PMF
 
 from z3c.form import form,field, button
 from zope import schema
@@ -28,7 +22,9 @@ except ImportError:
     class ICollection(Interface):
         pass
 
-CONFIGURATION_KEY = 'theming.toolkit.viewlets.collection'
+CONFIGURATION_KEY       = 'theming.toolkit.viewlets.collection'
+CONFIGURATION_KEY_ABOVE = 'theming.toolkit.viewlets.featuredlisting.above'
+CONFIGURATION_KEY_BELOW = 'theming.toolkit.viewlets.featuredlisting.below'
 
 class IPossibleCollectionViewlet(Interface):
     """Marker interface for possible Header Collection viewlet."""
@@ -50,7 +46,8 @@ class FeaturedListingCollectionViewlet(ViewletBase):
     def config(self):
         """Get view configuration data from annotations."""
         annotations = IAnnotations(self.context)
-        return annotations.get(CONFIGURATION_KEY, {})
+        key = self.getConfigurationKey
+        return annotations.get(key, {})
 
     @property
     def get_code(self):
@@ -61,23 +58,45 @@ class FeaturedListingCollectionViewlet(ViewletBase):
     def get_title(self):
         """Get Plugin Code"""
         annotations = IAnnotations(self.context)
-        config = annotations.get(CONFIGURATION_KEY, {})
+        key = self.getConfigurationKey
+        config = annotations.get(key, {})
         return config.get('viewlet_title', u'')
+
+    @property
+    def getConfigurationKey(self):
+        """get Config depending on viewlet.manager"""
+
+        manager_name = self.manager.__name__
+        if manager_name == u'plone.abovecontentbody':
+            return CONFIGURATION_KEY_ABOVE
+        elif manager_name == u'plone.belowcontentbody':
+            return CONFIGURATION_KEY_BELOW
+        else:
+            return CONFIGURATION_KEY
     
 
     def update(self):
+        """
         if IViewView.providedBy(self.__parent__):
             alsoProvides(self, IViewView)
+        """
         super(FeaturedListingCollectionViewlet, self).update()
 
-    def getProviders(self):
-        annotations = IAnnotations(self.context)
-        config = annotations.get(CONFIGURATION_KEY, {})
-        field = config.get('viewlet_collection', None)
 
+    def getProviders(self):
+        """Get Listing Provider"""
+        annotations = IAnnotations(self.context)
+        key = self.getConfigurationKey
+        config = annotations.get(key, {})
+        field = config.get('featuredListingSlider_ItemList', None)
+        
         if field is None:
             return None
-        return field.get(self.context)
+
+        try:
+            return field.get(self.context)
+        except:
+            return None
 
     def results(self, provider):
         results = []
@@ -126,47 +145,117 @@ class ICollectionViewletConfiguration(Interface):
             default=u'Viewlet Title',
         ),
     )
-    """
-    viewlet_collection = schema.Choice(
-        title=_(u"Target collection"),
-        description=_(u"Find the collection which provides the items to list"),
-        required=False,
-        source=SearchableTextSourceBinder({
-            'object_provides' : IATTopic.__identifier__},
-            default_query='path:')
-        )
-    """
-    viewlet_collection = schema.TextLine(
+ 
+    featuredListingSlider_ItemList =schema.TextLine(
+        default=u"",
         required=False,
         title=_(
-            u'Target Collection',
-            default=u'Search target collection ...',
+            u"label_FLS_offset",
+            default=u"Add a list of Listings",
+        )      
+    )
+
+    use_custom_config = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_use_custom_config",
+            default=u"Use local Slider Customization",
         ),
+    )
+
+    featuredListingSlider_effect =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_FLS_effect",
+            default=u"Slider Animation Effect",
+        )      
+    )
+
+    featuredListingSlider_duration =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_FLS_duration",
+            default=u"Slider Animation featuredListingSlider_duration",
+        )      
+    )
+
+    featuredListingSlider_Limit =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_FLS_limit",
+            default=u"Limit the amount of shown listings ",
+        )      
+    )
+
+    featuredListingSlider_offset =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_FLS_offset",
+            default=u"Set a offset for the Listing Items in the List",
+        )      
+    )
+
+    use_custom_js = schema.Bool(
+        default=False,
+        required=False,
+        title=_(
+            u"label_use_custom_js",
+            default=u"Use local Slider Javascript",
+        ),
+    )
+
+    featuredListingSliderJS =schema.Text(
+        default=u"",
+        description=PMF(
+            u'help_FLS_code',
+            default=u'The custom JavaScript code for initialising the FeaturedListingSlider',
+        ),
+        required=False,
+        title=PMF(u'label_featuredListingSliderJS', default=u'Custom JS to start'),
     )
 
 class CollectionViewletConfiguration(form.Form):
     """HeaderPlugin Configuration Form."""
 
     fields = field.Fields(ICollectionViewletConfiguration)
-    fields['viewlet_collection'].custom_widget = UberSelectionWidget
-    ignoreContext = True
+    ignoreContext = False
 
-    label = _(u"edit 'FeaturedListing Carousel'")
+    label = _(u"Configure your MLS FeaturedListingSlider'")
     description = _(
-        u"Adjust the Carousel in this viewlet."
+        u"Adjust the slider settings."
     )
+
+    @property
+    def getConfigurationKey(self):
+        """get Config depending on the form name"""
+
+        name = self.__name__
+        if name == 'featuredlisting-collection-config-above':
+            return CONFIGURATION_KEY_ABOVE
+        elif name == 'featuredlisting-collection-config-below':
+            return CONFIGURATION_KEY_BELOW
+        else:
+            return CONFIGURATION_KEY
+        
         
     def getContent(self):
         annotations = IAnnotations(self.context)
-        return annotations.get(CONFIGURATION_KEY,
-                               annotations.setdefault(CONFIGURATION_KEY, {}))
+        key = self.getConfigurationKey
+        return annotations.get(key,
+                               annotations.setdefault(key, {}))
 
     @button.buttonAndHandler(_(u'Save'))
     def handle_save(self, action):
         data, errors = self.extractData()
         if not errors:
             annotations = IAnnotations(self.context)
-            annotations[CONFIGURATION_KEY] = data
+            key = self.getConfigurationKey
+            annotations[key] = data
             self.request.response.redirect(absoluteURL(self.context,
                                                        self.request))
 
