@@ -102,19 +102,28 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
         try:
             return field.get(self.context)
-        except:
+        except Exception, e:
+            print e
             return None
 
     def results(self, provider):
-        results = []
-        if provider is not None:
-            if ICollection.providedBy(provider):
-                res = provider.results()
-                return res
-            return provider.queryCatalog()
-        return results
+        """
+            try to return a resultset of items
+            different data provider are intended
+            we try until we find a resultset 
 
-    
+        """
+        if provider is None:
+            return None
+        try:
+            return provider.results()
+        except Exception, e:
+            """Don't have .results()"""
+        try:
+            return provider.queryCatalog()
+        except Exception, e:
+            """Don't have .queryCatalog()"""
+        return []
 
     def get_tile(self, obj):
         tile = obj.unrestrictedTraverse("carousel-view")
@@ -262,7 +271,7 @@ class CollectionViewletConfiguration(form.Form):
                                annotations.setdefault(key, {}))
         defaults = self.getGlobalDefaults
 
-        # set some default values from the global navigation
+        # set some default values from the global config
         # featuredListingSliderJS
         for k in defaults:
             if fls_context.get(k, None)==None:
