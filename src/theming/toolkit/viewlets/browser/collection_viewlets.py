@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 """Collection viewlets that render a carousel/slideshow"""
 
+from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from plone.app.layout.viewlets.common import ViewletBase
+from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.memoize.view import memoize
 from plone.registry.interfaces import IRegistry
 
 from Products.CMFPlone import PloneMessageFactory as PMF
+from Products.CMFCore.utils import getToolByName
 
 from z3c.form import form,field, button
 from zope import schema
@@ -97,9 +100,6 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         config = annotations.get(key, {})
         field = config.get('featuredListingSlider_ItemList', None)
         
-        if field is None:
-            return None
-
         try:
             return field.get(self.context)
         except Exception, e:
@@ -151,14 +151,23 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
  
-    featuredListingSlider_ItemList =schema.TextLine(
-        default=u"",
+    featuredListingSlider_ItemList = schema.TextLine(
         required=False,
         title=_(
-            u"label_FLS_offset",
-            default=u"Add a list of Listings",
-        )      
+            u'Item List to show',
+            default=u'FeaturedListingSlider Item List',
+        ),
     )
+    """
+    featuredListingSlider_ItemList = schema.Choice(
+        description=_(
+            u'Find the search page which will be used to show the results.'
+        ),
+        required=False,
+        source=SearchableTextSourceBinder({'is_folderish' : True}, default_query='path:../'),
+        title=_(u'Item List to show'),
+    )
+    """
 
     use_custom_config = schema.Bool(
         default=True,
@@ -210,7 +219,7 @@ class ICollectionViewletConfiguration(Interface):
         required=False,
         title=_(
             u"label_use_custom_js",
-            default=u"Use local Slider Javascript",
+            default=u"Show local Slider Javascript",
         ),
     )
 
@@ -228,12 +237,24 @@ class CollectionViewletConfiguration(form.Form):
     """HeaderPlugin Configuration Form."""
 
     fields = field.Fields(ICollectionViewletConfiguration)
+    fields['featuredListingSlider_ItemList'].custom_widget = UberSelectionWidget
+
     ignoreContext = False
 
     label = _(u"Configure your MLS FeaturedListingSlider")
     description = _(
         u"Adjust the slider settings."
     )
+
+    def __init__(self, context, request):
+        """Customized form constructor"""
+        super(CollectionViewletConfiguration, self).__init__(context, request)
+        self.context = context
+        self.request = request
+        self.root = getToolByName(self.context, 'portal_url').getPortalObject()
+
+    def updateWidgets(self):
+        super(CollectionViewletConfiguration, self).updateWidgets()
 
     @property
     def getConfigurationKey(self):
