@@ -3,12 +3,10 @@
 
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from plone.app.layout.viewlets.common import ViewletBase
-from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.memoize.view import memoize
 from plone.registry.interfaces import IRegistry
 
 from Products.CMFPlone import PloneMessageFactory as PMF
-from Products.CMFCore.utils import getToolByName
 
 from z3c.form import form,field, button
 from zope import schema
@@ -150,7 +148,7 @@ class ICollectionViewletConfiguration(Interface):
             default=u'Viewlet Title',
         ),
     )
- 
+    
     featuredListingSlider_ItemList = schema.TextLine(
         required=False,
         title=_(
@@ -158,13 +156,14 @@ class ICollectionViewletConfiguration(Interface):
             default=u'FeaturedListingSlider Item List',
         ),
     )
+    
     """
     featuredListingSlider_ItemList = schema.Choice(
         description=_(
             u'Find the search page which will be used to show the results.'
         ),
         required=False,
-        source=SearchableTextSourceBinder({'is_folderish' : True}, default_query='path:../'),
+        source=ToolkitSearchableTextSourceBinder({'is_folderish' : True}, default_query='path:'),
         title=_(u'Item List to show'),
     )
     """
@@ -251,7 +250,6 @@ class CollectionViewletConfiguration(form.Form):
         super(CollectionViewletConfiguration, self).__init__(context, request)
         self.context = context
         self.request = request
-        self.root = getToolByName(self.context, 'portal_url').getPortalObject()
 
     def updateWidgets(self):
         super(CollectionViewletConfiguration, self).updateWidgets()
