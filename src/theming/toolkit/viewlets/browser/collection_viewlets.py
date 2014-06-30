@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Collection viewlets that render a carousel/slideshow"""
 
-from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
+import copy
+
 from plone.app.layout.viewlets.common import ViewletBase
 from plone.memoize.view import memoize
 from plone.registry.interfaces import IRegistry
@@ -12,8 +13,16 @@ from z3c.form import form,field, button
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryUtility
+from zope.component.hooks import getSite
 from zope.interface import Interface, alsoProvides, noLongerProvides
 from zope.traversing.browser.absoluteurl import absoluteURL
+
+#plone.mls.listing imports
+from plone.mls.listing import api
+from plone.mls.listing.browser import (
+    listing_collection,
+    recent_listings,
+)
 
 #local import
 from theming.toolkit.core.interfaces import IToolkitSettings
@@ -29,6 +38,8 @@ except ImportError:
 CONFIGURATION_KEY       = 'theming.toolkit.viewlets.collection'
 CONFIGURATION_KEY_ABOVE = 'theming.toolkit.viewlets.featuredlisting.above'
 CONFIGURATION_KEY_BELOW = 'theming.toolkit.viewlets.featuredlisting.below'
+
+AVAILABLE_FLS_DEFAULTS = ['featuredListingSlider_ItemList', 'featuredListingSlider_Limit', 'featuredListingSlider_offset', 'featuredListingSliderJS']
 
 class IPossibleCollectionViewlet(Interface):
     """Marker interface for possible Collection viewlet."""
@@ -46,29 +57,91 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         return IPossibleCollectionViewlet.providedBy(self.context) and \
             not ICollectionViewlet.providedBy(self.context)
 
+    def update(self):
+        super(FeaturedListingCollectionViewlet, self).update()
+
     @property
-    def config(self):
+    def local_config(self):
         """Get view configuration data from annotations."""
         annotations = IAnnotations(self.context)
         key = self.getConfigurationKey
         return annotations.get(key, {})
 
+    def get_config(self, obj):
+        """Get config for listing object"""
+        key = self.get_mls_config_key(obj)
+        annotations = IAnnotations(obj)
+        try:          
+            return annotations.get(key, {})
+        except Exception:
+            return False
+
+
+    def get_mls_config_key(self, obj):
+        """Check if the obj have mls collections.
+            if so, return config key for annotations
+            if not, reurn False
+        """
+        if listing_collection.IListingCollection.providedBy(obj):
+            return listing_collection.CONFIGURATION_KEY
+        elif recent_listings.IRecentListings.providedBy(obj):
+            return recent_listings.CONFIGURATION_KEY
+        else:
+            return False
+
+    @property
+    def GlobalDefaults(self):
+        """Get the default values from theming.toolkit.core settings"""
+        registry = queryUtility(IRegistry)
+        global_defaults = registry.forInterface(IToolkitSettings, check=False)
+
+        return global_defaults
+        
+
+    @property
+    def Settings(self):
+        """Return the merged local & global settings"""
+        global_defaults = self.GlobalDefaults
+        local_settings = self.local_config
+
+        for n in local_settings:
+            if local_settings[n] is None:
+                try:
+                    local_settings[n] = global_defaults[n]
+                except Exception:
+                    """keys for config in theming.toolkit.core & theming.toolkit.viewlets?"""
+
+        return local_settings
+
     @property
     def get_code(self):
         """Get Slider JS Code"""
-        annotations = IAnnotations(self.context)
-        key = self.getConfigurationKey
-        config = annotations.get(key, {})
-        return config.get('featuredListingSliderJS', u'')
+        settings = self.Settings
+        return settings.get('featuredListingSliderJS', None)
         
 
     @property
     def get_title(self):
         """Get Viewlet title"""
-        annotations = IAnnotations(self.context)
-        key = self.getConfigurationKey
-        config = annotations.get(key, {})
-        return config.get('viewlet_title', u'')
+        settings = self.Settings
+        return settings.get('viewlet_title', False)
+
+    @property
+    def ItemsLimit(self):
+        """Get the limit parameter for Listing collection"""
+        settings = self.Settings
+        default = 20
+        limit= settings.get('featuredListingSlider_Limit', None)
+        if limit is None:
+            """no limit set in the settings"""
+            return default
+        else:
+            try:
+                return int(limit)
+            except Exception:
+                msg = _(u"Your Limit setting caused an error. Please check the input.")
+                self.context.plone_utils.addPortalMessage(msg, 'error')
+
 
     @property
     def getConfigurationKey(self):
@@ -81,47 +154,101 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             return CONFIGURATION_KEY_BELOW
         else:
             return CONFIGURATION_KEY
-    
 
-    def update(self):
-        """
-        if IViewView.providedBy(self.__parent__):
-            alsoProvides(self, IViewView)
-        """
-        super(FeaturedListingCollectionViewlet, self).update()
+    @property
+    def ItemProvider(self):
+        """the object providing Items to show & slide"""
+        annotations = IAnnotations(self.context)
+        key = self.getConfigurationKey
+        config = annotations.get(key, {})       
+        provider_url = config.get('featuredListingSlider_ItemList', None)
 
+        try:
+            portal = getSite()
+            return portal.restrictedTraverse(provider_url.encode('ascii','ignore'))
+
+        except Exception:
+            return None
+
+    @property
+    def ProviderUrl(self):
+        """delivers the absolute URL to the Item provider"""
+        try:
+            return self.ItemProvider.absolute_url()
+        except Exception:
+            return False
 
     def getProviders(self):
         """Get Listing Provider"""
-        annotations = IAnnotations(self.context)
-        key = self.getConfigurationKey
-        config = annotations.get(key, {})
-        field = config.get('featuredListingSlider_ItemList', None)
-        
-        try:
-            return field.get(self.context)
-        except Exception, e:
-            print e
-            return None
+        return self.ItemProvider
 
-    def results(self, provider):
+
+    def results(self):
         """
             try to return a resultset of items
             different data provider are intended
             we try until we find a resultset 
 
         """
+        provider = self.ItemProvider
+        
         if provider is None:
+            """No ItemProvider found"""
             return None
+
+        try:
+            """First Check if we get results from MLS Listing Collections"""
+            results= self._mls_results(provider)
+
+            if results is not None:
+                return results
+        except Exception:
+            """no MLS results found"""
+            msg = _(u"No MLS results found. Please check the configuration")
+            self.context.plone_utils.addPortalMessage(msg, 'error')
+
         try:
             return provider.results()
-        except Exception, e:
+        except Exception:
             """Don't have .results()"""
         try:
             return provider.queryCatalog()
-        except Exception, e:
+        except Exception:
             """Don't have .queryCatalog()"""
-        return []
+        return None
+
+    def _mls_results(self, obj):
+        items = []
+
+        if obj is None or not obj:
+            return None
+
+        if not self.get_mls_config_key(obj):
+            """Don't have a MLS Collection"""
+            return None
+
+        config = copy.copy(self.get_config(obj))
+        portal_state = obj.unrestrictedTraverse('@@plone_portal_state')
+        limit = self.ItemsLimit
+        params = {
+                'limit': limit,
+                'offset': 0,
+                'lang': portal_state.language(),
+            }
+
+        config.update(params)
+
+        try:
+            items = api.search(
+                params=api.prepare_search_params(config),
+                batching=False,
+                context=obj,
+            )
+            return items
+        except Exception:
+            return None
+
+        
 
     def get_tile(self, obj):
         tile = obj.unrestrictedTraverse("carousel-view")
@@ -236,8 +363,6 @@ class CollectionViewletConfiguration(form.Form):
     """HeaderPlugin Configuration Form."""
 
     fields = field.Fields(ICollectionViewletConfiguration)
-    fields['featuredListingSlider_ItemList'].custom_widget = UberSelectionWidget
-
     ignoreContext = False
 
     label = _(u"Configure your MLS FeaturedListingSlider")
@@ -271,7 +396,7 @@ class CollectionViewletConfiguration(form.Form):
         """Get the default values from theming.toolkit.core setting"""
         registry = queryUtility(IRegistry)
         global_defaults = registry.forInterface(IToolkitSettings, check=False)
-        fls_fields =['featuredListingSlider_ItemList', 'featuredListingSlider_Limit', 'featuredListingSlider_offset', 'featuredListingSliderJS']
+        fls_fields =AVAILABLE_FLS_DEFAULTS
         fls_local_defaults = {}
 
         for n in fls_fields:
