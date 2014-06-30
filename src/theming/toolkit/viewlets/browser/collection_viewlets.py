@@ -142,6 +142,21 @@ class FeaturedListingCollectionViewlet(ViewletBase):
                 msg = _(u"Your Limit setting caused an error. Please check the input.")
                 self.context.plone_utils.addPortalMessage(msg, 'error')
 
+    @property
+    def ItemsOffset(self):
+        """Get the offset parameter for Listing collection"""
+        settings = self.Settings
+        default = 0
+        offset= settings.get('featuredListingSlider_offset', None)
+        if offset is None:
+            """no limit set in the settings"""
+            return default
+        else:
+            try:
+                return int(offset)
+            except Exception:
+                msg = _(u"Your Offset setting caused an error. Please check the input.")
+                self.context.plone_utils.addPortalMessage(msg, 'error')
 
     @property
     def getConfigurationKey(self):
@@ -229,10 +244,10 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
         config = copy.copy(self.get_config(obj))
         portal_state = obj.unrestrictedTraverse('@@plone_portal_state')
-        limit = self.ItemsLimit
+        
         params = {
-                'limit': limit,
-                'offset': 0,
+                'limit': self.ItemsLimit,
+                'offset': self.ItemsOffset,
                 'lang': portal_state.language(),
             }
 
