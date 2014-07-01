@@ -218,6 +218,7 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
             if results is not None:
                 return results
+
         except Exception:
             """no MLS results found"""
             msg = _(u"No MLS results found. Please check the configuration")
@@ -225,17 +226,19 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
         try:
             return provider.results()
-        except Exception:
+        except Exception, e:
             """Don't have .results()"""
+            print e
         try:
             return provider.queryCatalog()
-        except Exception:
+        except Exception, e:
             """Don't have .queryCatalog()"""
+            print e
         return None
 
     def _mls_results(self, obj):
         items = []
-
+        
         if obj is None or not obj:
             return None
 
@@ -260,11 +263,11 @@ class FeaturedListingCollectionViewlet(ViewletBase):
                 batching=False,
                 context=obj,
             )
-        except Exception:
+        except Exception, e:
+            print e
             return None
 
         items = self._resizeImages(items)
-
         return items
 
     def _resizeImages(self, data):
@@ -282,10 +285,15 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             """Loop through all listings"""
             iurl = item.get('lead_image', None)
 
+            if iurl is not None:
+                """Normalize the MLS imagesize with marker"""
+                for s in MLS_IMAGE_SIZES:
+                    iurl = iurl.replace(s, 'FLSSIZE')
+
             try:
                 """replace the original url with a new to a bigger image"""
                 if iurl is not None:        
-                    data[index]['lead_image'] = iurl.replace('img_thumb', 'img_' + isize)
+                    data[index]['lead_image'] = iurl.replace('FLSSIZE', isize)
 
             except Exception, e:
                 """something wrong with the url?"""
