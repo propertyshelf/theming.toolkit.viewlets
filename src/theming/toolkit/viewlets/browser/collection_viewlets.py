@@ -260,11 +260,38 @@ class FeaturedListingCollectionViewlet(ViewletBase):
                 batching=False,
                 context=obj,
             )
-            return items
         except Exception:
             return None
 
-        
+        items = self._resizeImages(items)
+
+        return items
+
+    def _resizeImages(self, data):
+        """get config and set new image size"""
+        isize = self.Settings.get('featuredListingSlider_ImageSize', None)
+
+        if isize is None:
+            """No Image Size defined -> return original data"""
+            return data
+        if isize not in MLS_IMAGE_SIZES:
+            """config input manipulated?"""
+            return data
+       
+        for index, item in enumerate(data):
+            """Loop through all listings"""
+            iurl = item.get('lead_image', None)
+
+            try:
+                """replace the original url with a new to a bigger image"""
+                if iurl is not None:        
+                    data[index]['lead_image'] = iurl.replace('img_thumb', 'img_' + isize)
+
+            except Exception, e:
+                """something wrong with the url?"""
+                print e
+
+        return data
 
     def get_tile(self, obj):
         tile = obj.unrestrictedTraverse("carousel-view")
