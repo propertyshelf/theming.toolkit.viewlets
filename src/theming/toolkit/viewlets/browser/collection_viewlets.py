@@ -40,6 +40,7 @@ CONFIGURATION_KEY_ABOVE = 'theming.toolkit.viewlets.featuredlisting.above'
 CONFIGURATION_KEY_BELOW = 'theming.toolkit.viewlets.featuredlisting.below'
 
 AVAILABLE_FLS_DEFAULTS = ['featuredListingSlider_ItemList', 'featuredListingSlider_Limit', 'featuredListingSlider_offset', 'featuredListingSliderJS']
+MLS_IMAGE_SIZES = ['thumb', 'mini', 'preview', 'large']
 
 class IPossibleCollectionViewlet(Interface):
     """Marker interface for possible Collection viewlet."""
@@ -244,7 +245,7 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
         config = copy.copy(self.get_config(obj))
         portal_state = obj.unrestrictedTraverse('@@plone_portal_state')
-        
+
         params = {
                 'limit': self.ItemsLimit,
                 'offset': self.ItemsOffset,
@@ -353,6 +354,15 @@ class ICollectionViewletConfiguration(Interface):
             u"label_FLS_offset",
             default=u"Set a offset for the Listing Items in the List",
         )      
+    )
+
+    featuredListingSlider_ImageSize = schema.Choice(
+        description=_(
+            u'Choose the image size of the slider'
+        ),
+        required=False,
+        title=_(u'Slider Image size'),
+        values= MLS_IMAGE_SIZES
     )
 
     use_custom_js = schema.Bool(
