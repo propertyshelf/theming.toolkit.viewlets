@@ -54,56 +54,57 @@
               </tal:image>
 
               <div class="item price"
-                  tal:define="item listing/price | nothing">
-                <h5 class="item-heading" tal:content="item/label">[Label]</h5>
+                  tal:define="item listing/price|nothing"
+                  tal:condition="item">
+                <h5 class="item-heading" tal:content="item/label" tal:condition="item">[Label]</h5>
                 <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
               </div>
 
               <div class="item beds_baths"
-                  tal:define="item listing/beds_baths | nothing">
+                  tal:define="item listing/beds_baths|nothing" tal:condition="item">
                 <h5 class="item-heading" tal:content="item/label">[Label]</h5>
                 <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
               </div>
 
               <div class="item location"
-                  tal:define="item listing/location | nothing">
+                  tal:define="item listing/location|nothing" tal:condition="item">
                 <h5 class="item-heading" tal:content="item/label">[Label]</h5>
                 <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
               </div>
 
               <div class="item lot_size"
-                  tal:define="item listing/lot_size | nothing">
+                  tal:define="item listing/lot_size|nothing" tal:condition="item">
                 <h5 class="item-heading" tal:content="item/label">[Label]</h5>
                 <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="structure item/value">[Value]</a></p>
               </div>
 
               <div class="item workflow_status"
-                  tal:define="item listing/workflow_status | nothing">
+                  tal:define="item listing/workflow_status|nothing" tal:condition="item">
                 <h5 class="item-heading" tal:content="item/label">[Label]</h5>
                 <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
               </div>
 
               <div class="item listing_type"
-                  tal:define="item listing/listing_type | nothing">
+                  tal:define="item listing/listing_type|nothing" tal:condition="item">
                 <h5 class="item-heading" tal:content="item/label">[Label]</h5>
                 <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
               </div>
 
               <div class="item object_type"
-                  tal:define="item listing/object_type | nothing">
+                  tal:define="item listing/object_type|nothing" tal:condition="item">
                 <h5 class="item-heading" tal:content="item/label">[Label]</h5>
                 <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
               </div>
 
 
               <div class="item location_type"
-                  tal:define="item listing/location_type | nothing">
+                  tal:define="item listing/location_type|nothing" tal:condition="item">
                 <h5 class="item-heading" tal:content="item/label">[Label]</h5>
                 <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
               </div>
 
               <div class="item view_type"
-                  tal:define="item listing/view_type | nothing">
+                  tal:define="item listing/view_type|nothing" tal:condition="item">
                 <h5 class="item-heading" tal:content="item/label">[Label]</h5>
                 <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
               </div>
