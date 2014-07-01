@@ -120,7 +120,6 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         settings = self.Settings
         return settings.get('featuredListingSliderJS', None)
         
-
     @property
     def get_title(self):
         """Get Viewlet title"""
