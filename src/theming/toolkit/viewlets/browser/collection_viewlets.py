@@ -317,6 +317,30 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         else:
             return absoluteURL(self.context, self.request) + '/'
 
+    @property
+    def StageHeight(self):
+        """Return the height of the Slider Stage"""
+        settings = self.Settings
+        return settings.get('featuredListingSlider_height', None)
+
+    @property
+    def StageWidth(self):
+        """Return the height of the Slider Stage"""
+        settings = self.Settings
+        return settings.get('featuredListingSlider_width', None)
+
+    @property
+    def StageCss(self):
+        """Return a css string for the slider stage"""
+        css_string='overflow: hidden; cursor: move; position: relative;'
+        if self.StageHeight is not None:
+            css_string+=' height:'+self.StageHeight+';'
+
+        if self.StageWidth is not None:
+            css_string+=' width:'+self.StageWidth+';'
+
+        return css_string
+
 
 class ICollectionViewletConfiguration(Interface):
     """FLS Configuration Form."""
@@ -335,6 +359,54 @@ class ICollectionViewletConfiguration(Interface):
             u'Item List to show',
             default=u'FeaturedListingSlider Item List',
         ),
+    )
+
+    featuredListingSlider_Limit =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_FLS_limit",
+            default=u"Limit the amount of shown listings ",
+        )      
+    )
+
+    featuredListingSlider_offset =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_FLS_offset",
+            default=u"Set a offset for the Listing Items in the List",
+        )      
+    )
+
+    featuredListingSlider_ImageSize = schema.Choice(
+        description=_(
+            u'Choose the size of the image in the slider'
+        ),
+        required=False,
+        title=_(u'Slider Image size'),
+        values= MLS_IMAGE_SIZES
+    )
+
+    featuredListingSlider_height =schema.TextLine(
+        default=u"350px",
+        required=True,
+        title=_(
+            u"label_FLS_height",
+            default=u"Carousel Stage Height",
+        )    ,
+        description=_(
+            u'Set the height of the slider stage box (default:350px). The value can be entered with as css compatible unit (px, %, em, ...).'
+        ),  
+    )
+    featuredListingSlider_width =schema.TextLine(
+        default=u"100%",
+        required=True,
+        title=_(
+            u"label_FLS_width",
+            default=u"Carousel Stage Width",
+        ),
+        description=_(u'Set the width of the slider stage box (default:100%). The value can be entered with as css compatible unit (px, %, em, ...).'),  
     )
     
     """
@@ -373,33 +445,6 @@ class ICollectionViewletConfiguration(Interface):
             u"label_FLS_duration",
             default=u"Slider Animation Duration",
         )      
-    )
-
-    featuredListingSlider_Limit =schema.TextLine(
-        default=u"",
-        required=False,
-        title=_(
-            u"label_FLS_limit",
-            default=u"Limit the amount of shown listings ",
-        )      
-    )
-
-    featuredListingSlider_offset =schema.TextLine(
-        default=u"",
-        required=False,
-        title=_(
-            u"label_FLS_offset",
-            default=u"Set a offset for the Listing Items in the List",
-        )      
-    )
-
-    featuredListingSlider_ImageSize = schema.Choice(
-        description=_(
-            u'Choose the image size of the slider'
-        ),
-        required=False,
-        title=_(u'Slider Image size'),
-        values= MLS_IMAGE_SIZES
     )
 
     use_custom_js = schema.Bool(
