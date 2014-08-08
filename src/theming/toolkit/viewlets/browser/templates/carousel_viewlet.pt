@@ -14,6 +14,8 @@
     <div class="fls-script" id="fls-script-top">
       
           <script type="text/javascript" src="++resource++theming.toolkit.viewlets/jssor.slider.mini.js"></script>
+          <script type="text/javascript" src="++resource++theming.toolkit.viewlets/fls_integration.js"></script>
+   
       <!--
       <script type="text/javascript" src="++resource++theming.toolkit.viewlets/jssor.core.js"></script>
       <script type="text/javascript" src="++resource++theming.toolkit.viewlets/jssor.utils.js"></script>
@@ -21,25 +23,20 @@
     -->
       <div class="sliderscript" tal:content="structure view/get_code|nothing"/>
     </div>
-  <!--
-  <div class="development">
-    <b>Featured Listing Viewlet active</b>
-    <tal:collection   tal:condition="results|nothing">
-      <div><b><i>Results found</i></b></div>
-      <div tal:content="structure results"/>
-    </tal:collection>      
-  </div>
--->
 
-<div class="fls-wrapper" id="fls-top-wrapper">
-  <div class="featured_listing_collection" id="slider1_container" style="height:6000px;">
+<div class="fls-wrapper" id="fls-top-wrapper"
+    tal:define="stageCSS view/StageCss;"
+  >
+  <div class="featured_listing_collection" id="slider1_container" 
+    tal:attributes="style string:${stageCSS};">
       <tal:results
           tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;
                       wraplink python:True;">
         <div tal:condition="not:results">
           <p i18n:translate="">The collection doesn't have any results.</p>
         </div>
-      <div u="slides" class="fls-slides" style="cursor: move; position: relative; overflow: hidden; width: 600px; height: 600px;"> <name />
+      <div u="slides" class="fls-slides"
+        tal:attributes="style string:${stageCSS};">
         <div class="collection-item visualIEFloatFix"
              tal:repeat="listing results">
           <tal:items
@@ -53,9 +50,10 @@
                   <a  u="image"
                       tal:attributes="href listing_url;
                                       title listing_title">
-                    <img src="" alt=""
+                    <img style="width:auto !important; height:auto !important;"
                       tal:condition="image"
-                      tal:attributes="src image" />
+                      tal:attributes="src image;
+                                      alt listing_title" />
                     <img
                       tal:condition="not:image" alt="" title=""
                       src="++resource++plone.mls.listing.images/no-image.png" />
