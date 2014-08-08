@@ -217,6 +217,9 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
             if results is not None:
                 return results
+            else:
+                msg = _(u"No MLS results found. Please check the configuration")
+                self.context.plone_utils.addPortalMessage(msg, 'error')
 
         except Exception:
             """no MLS results found"""
