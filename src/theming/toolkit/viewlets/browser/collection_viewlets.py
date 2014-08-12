@@ -116,9 +116,20 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
     @property
     def get_code(self):
-        """Get Slider JS Code"""
+        """Get Slider JS Code depending on its settings"""
+
         settings = self.Settings
-        return settings.get('featuredListingSliderJS', None)
+        script_mode = settings.get('use_custom_js', None)
+        if script_mode is True:
+            return settings.get('featuredListingSliderJS', None)
+        else:
+            return settings.get('genericJS', None)
+
+    @property
+    def get_css(self):
+        """Get custom css"""
+        settings = self.Settings
+        return settings.get('featuredListingSliderCSS', None)
         
     @property
     def get_title(self):
@@ -408,17 +419,6 @@ class ICollectionViewletConfiguration(Interface):
         ),
         description=_(u'Set the width of the slider stage box (default:100%). The value can be entered with as css compatible unit (px, %, em, ...).'),  
     )
-    
-    """
-    featuredListingSlider_ItemList = schema.Choice(
-        description=_(
-            u'Find the search page which will be used to show the results.'
-        ),
-        required=False,
-        source=ToolkitSearchableTextSourceBinder({'is_folderish' : True}, default_query='path:'),
-        title=_(u'Item List to show'),
-    )
-    """
 
     use_custom_config = schema.Bool(
         default=True,
@@ -426,6 +426,15 @@ class ICollectionViewletConfiguration(Interface):
         title=_(
             u"label_use_custom_config",
             default=u"Use local Slider Customization",
+        ),
+    )
+
+    FLS_autoplay = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_autoplay",
+            default=u"Activate Autoplay on this Slider",
         ),
     )
 
@@ -464,6 +473,26 @@ class ICollectionViewletConfiguration(Interface):
         ),
         required=False,
         title=PMF(u'label_featuredListingSliderJS', default=u'Custom JS to start'),
+    )
+
+    featuredListingSliderCSS =schema.Text(
+        default=u"",
+        description=PMF(
+            u'help_FLS_css',
+            default=u'Custom CSS this carousel',
+        ),
+        required=False,
+        title=PMF(u'label_featuredListingSliderCSS', default=u'Custom CSS styles'),
+    )
+
+    genericJS =schema.Text(
+        default=u"",
+        description=PMF(
+            u'help_FLS_genJS',
+            default=u'This Javascript Code is auto-generated from the settings',
+        ),
+        required=False,
+        title=PMF(u'label__FLS_genJS', default=u'Generated Slider code'),
     )
 
 class CollectionViewletConfiguration(form.Form):
@@ -530,10 +559,113 @@ class CollectionViewletConfiguration(form.Form):
 
         return fls_context
 
+    @property
+    def generatedSliderScript(self):
+        """generates the SliderScript from the configuration"""
+        #dict contains the position-related css classes of the FLS
+        stage = self.getStageNames
+        if stage is None:
+            # we can not initiate the Slider when we don't know where it is
+            return None
+
+        generalOptions = self.__generalSliderOptions
+        sliderOptions = self.__configuredOptions
+        initiate_code = self.__FLSInitCode
+
+        #build the FLS Script
+        if generalOptions is not None and sliderOptions is not None and initiate_code is not None:
+            genericScript="<script>$(window).load(function($) { %s %s %s });</script>"%(generalOptions, sliderOptions, initiate_code)
+            return genericScript
+        else:
+            print "Error in FLS Script generation"
+            print generalOptions
+            print sliderOptions
+            print initiate_code
+            return None
+
+
+    @property
+    def getStageNames(self):
+        """Delivers a dict containing the ids for the slider stage"""
+        key = self.getConfigurationKey
+        stage_dict= {}
+
+        if key==CONFIGURATION_KEY_ABOVE:
+            #top slider
+            stage_dict['wrapper']='#fls-top-wrapper'
+            stage_dict['slides']='#fls-top-wrapper .fls-slides'
+            stage_dict['stageid']='#slider1_container'
+            stage_dict['id']='slider1_container'
+            stage_dict['js_name']='jssor_slider_top'
+
+            return stage_dict
+
+        elif key==CONFIGURATION_KEY_BELOW:
+            #bottom slider
+            stage_dict['wrapper']='#fls-bottom-wrapper'
+            stage_dict['slides']='#fls-bottom-wrapper .fls-slides'
+            stage_dict['stageid']='#slider2_container'
+            stage_dict['id']='slider2_container'
+            stage_dict['js_name']='jssor_slider_bottom'
+
+            return stage_dict
+
+        elif key == CONFIGURATION_KEY:
+            #no FLS?
+            return None
+        else:
+            return None
+
+    @property
+    def __generalSliderOptions(self):
+        """returns a string with the genaeral Slider options"""
+        # e,pty for now
+        script=''
+        return script
+
+    @property
+    def __configuredOptions(self):
+        """returns a string with the options from the configuration"""
+        #check for autoplay
+        autoplay="$AutoPlay: true"
+        #bind everything together in a javascript array
+        options ="var options={%s};"%(autoplay)
+        return options
+
+    @property    
+    def __FLSInitCode(self):
+        """return string with the initiation code"""
+        stage_dict = self.getStageNames;
+
+        if stage_dict is None:
+            return None
+        else:
+            script="try{";
+            #do the resizing
+            script += " resize2pixel('%s');"%(stage_dict['wrapper'])
+            script += " resize2pixel('%s');"%(stage_dict['slides'])
+            script += " resize2pixel('%s');"%(stage_dict['stageid'])
+            
+            #define the slider
+            script += " var %s = new $JssorSlider$('%s', options);"%(stage_dict['js_name'], stage_dict['id'])
+            #catch JS Errors
+            script +=" } catch(error){console.log(err);}"
+
+            return script
+
+
+
     @button.buttonAndHandler(_(u'Save'))
     def handle_save(self, action):
         data, errors = self.extractData()
         if not errors:
+            try:
+                data['genericJS']= self.generatedSliderScript
+            except(Exception):
+                self.context.plone_utils.addPortalMessage("There was a problem with the script generation", 'warning')
+                self.context.plone_utils.addPortalMessage(Exception.message(), 'error')
+               
+
             annotations = IAnnotations(self.context)
             key = self.getConfigurationKey
             annotations[key] = data

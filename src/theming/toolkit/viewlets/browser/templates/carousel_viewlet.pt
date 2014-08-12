@@ -13,15 +13,11 @@
   <!-- include gallery JS -->
     <div class="fls-script" id="fls-script-top">
       
-          <script type="text/javascript" src="++resource++theming.toolkit.viewlets/jssor.slider.mini.js"></script>
-          <script type="text/javascript" src="++resource++theming.toolkit.viewlets/fls_integration.js"></script>
+          <script type="text/javascript" src="++resource++theming.toolkit.viewlets/jssor.slider.mini.js" />
+          <script type="text/javascript" src="++resource++theming.toolkit.viewlets/fls_integration.js" />
    
-      <!--
-      <script type="text/javascript" src="++resource++theming.toolkit.viewlets/jssor.core.js"></script>
-      <script type="text/javascript" src="++resource++theming.toolkit.viewlets/jssor.utils.js"></script>
-      <script type="text/javascript" src="++resource++theming.toolkit.viewlets/jssor.slider.js"></script>
-    -->
       <div class="sliderscript" tal:content="structure view/get_code|nothing"/>
+      <div class="slidercss" tal:content="structure view/get_css|nothing"/>
     </div>
 
 <div class="fls-wrapper" id="fls-top-wrapper"
@@ -48,9 +44,10 @@
               <tal:image
                   tal:define="image listing/lead_image | nothing">
                   <a  u="image"
+                      style="width:auto!important; height:auto!important;"
                       tal:attributes="href listing_url;
                                       title listing_title">
-                    <img style="width:auto !important; height:auto !important;"
+                    <img style="width:auto!important; height:auto!important;"
                       tal:condition="image"
                       tal:attributes="src image;
                                       alt listing_title" />
