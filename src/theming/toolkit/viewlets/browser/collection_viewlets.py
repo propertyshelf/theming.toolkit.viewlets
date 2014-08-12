@@ -430,6 +430,61 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
 
+    FLS_AutoPlayInterval = schema.TextLine(
+        default=u"6000",
+        description=_(u'Interval (in milliseconds) to go for next slide since the previous stopped if the slider is auto playing'),  
+        required=True,
+        title=_(
+            u"label_FLS_AutoPlayInterval",
+            default=u"Auto Play Interval",
+        ),
+    )
+
+    FLS_AutoPlaySteps = schema.Choice(
+        default=u"1",
+        description=_(u'Steps to go for each navigation request (this options applys only when slideshow disabled).'),  
+        required=True,
+        title=_(
+            u"label_FLS_AutoPlaySteps",
+            default=u"Auto Play Steps",
+        ),
+        values= ["1", "2","3", "4", "5"]
+    )
+
+    FLS_PauseOnHover= schema.Choice(
+        default=u"3",
+        description=_(u'Whether to pause when mouse over if a slider is auto playing, (0): no pause, (1): pause for desktop, (2): pause for touch device, (3): pause for desktop and touch device'),  
+        required=True,
+        title=_(
+            u"label_FLS_PauseOnHover",
+            default=u"Pause on Hover",
+        ),
+        values= ["0", "1", "2","3"]
+    )
+
+    FLS_FillMode = schema.Choice(
+        default=u"5",
+        description=_(u'The way to fill image in slide, (0): stretch, (1): contain (keep aspect ratio and put all inside slide), (2): cover (keep aspect ratio and cover whole slide), (4): actual size, (5): contain for large image, actual size for small image'),  
+        required=True,
+        title=_(
+            u"label_FLS_FillMode",
+            default=u"Image filling Mode",
+        ),
+        values= ["0", "1", "2", "4", "5"]
+    )
+
+    FLS_Loop =schema.Choice(
+        default=u"1",
+        required=True,
+        title=_(
+            u"label_FLS_Loop",
+            default=u"Slider Loop Behaviour",
+        ),
+        description=_(u'Enable loop(circular) of carousel or not, 0: stop, 1: loop, 2 rewind'),
+        values= ["0", "1", "2"]
+    )
+
+
     featuredListingSlider_effect =schema.TextLine(
         default=u"",
         required=False,
@@ -439,14 +494,7 @@ class ICollectionViewletConfiguration(Interface):
         )      
     )
 
-    featuredListingSlider_duration =schema.TextLine(
-        default=u"",
-        required=False,
-        title=_(
-            u"label_FLS_duration",
-            default=u"Slider Animation Duration",
-        )      
-    )
+   
 
     use_custom_js = schema.Bool(
         default=False,
@@ -612,6 +660,9 @@ class CollectionViewletConfiguration(form.Form):
         bool_ap = data.get('FLS_autoplay', True)
         if bool_ap is True:
             autoplay="$AutoPlay: true, "
+            # get the other AutoPlay options
+            autoplay += "$AutoPlaySteps: %s, "%(data.get('FLS_AutoPlaySteps', u'1'))
+            autoplay += "$AutoPlayInterval: %s,"%(data.get('FLS_AutoPlayInterval', u'6000'))
         else:
             autoplay="$AutoPlay: false, "
         #bind everything together in a javascript array
