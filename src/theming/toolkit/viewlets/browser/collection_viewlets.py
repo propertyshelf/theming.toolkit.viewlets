@@ -420,14 +420,6 @@ class ICollectionViewletConfiguration(Interface):
         description=_(u'Set the width of the slider stage box (default:100%). The value can be entered with as css compatible unit (px, %, em, ...).'),  
     )
 
-    use_custom_config = schema.Bool(
-        default=True,
-        required=False,
-        title=_(
-            u"label_use_custom_config",
-            default=u"Use local Slider Customization",
-        ),
-    )
 
     FLS_autoplay = schema.Bool(
         default=True,
@@ -559,28 +551,18 @@ class CollectionViewletConfiguration(form.Form):
 
         return fls_context
 
-    @property
-    def generatedSliderScript(self):
+    def generatedSliderScript(self, data):
         """generates the SliderScript from the configuration"""
-        #dict contains the position-related css classes of the FLS
-        stage = self.getStageNames
-        if stage is None:
-            # we can not initiate the Slider when we don't know where it is
-            return None
 
         generalOptions = self.__generalSliderOptions
-        sliderOptions = self.__configuredOptions
+        sliderOptions = self.__configuredOptions(data)
         initiate_code = self.__FLSInitCode
 
         #build the FLS Script
         if generalOptions is not None and sliderOptions is not None and initiate_code is not None:
-            genericScript="<script>$(window).load(function($) { %s %s %s });</script>"%(generalOptions, sliderOptions, initiate_code)
+            genericScript="<script type='text/javascript'>$(window).load(function($) { %s %s %s });</script>"%(generalOptions, sliderOptions, initiate_code)
             return genericScript
         else:
-            print "Error in FLS Script generation"
-            print generalOptions
-            print sliderOptions
-            print initiate_code
             return None
 
 
@@ -619,15 +601,19 @@ class CollectionViewletConfiguration(form.Form):
     @property
     def __generalSliderOptions(self):
         """returns a string with the genaeral Slider options"""
-        # e,pty for now
+        # empty for now, with extended Config useful
         script=''
         return script
 
-    @property
-    def __configuredOptions(self):
+    def __configuredOptions(self, data):
         """returns a string with the options from the configuration"""
         #check for autoplay
-        autoplay="$AutoPlay: true"
+
+        bool_ap = data.get('FLS_autoplay', True)
+        if bool_ap is True:
+            autoplay="$AutoPlay: true, "
+        else:
+            autoplay="$AutoPlay: false, "
         #bind everything together in a javascript array
         options ="var options={%s};"%(autoplay)
         return options
@@ -660,12 +646,10 @@ class CollectionViewletConfiguration(form.Form):
         data, errors = self.extractData()
         if not errors:
             try:
-                data['genericJS']= self.generatedSliderScript
+                data['genericJS']= self.generatedSliderScript(data)
             except(Exception):
                 self.context.plone_utils.addPortalMessage("There was a problem with the script generation", 'warning')
-                self.context.plone_utils.addPortalMessage(Exception.message(), 'error')
                
-
             annotations = IAnnotations(self.context)
             key = self.getConfigurationKey
             annotations[key] = data
