@@ -359,11 +359,23 @@ class ICollectionViewletConfiguration(Interface):
     viewlet_title = schema.TextLine(
         required=False,
         title=_(
-            u'Viewlet Title',
-            default=u'Viewlet Title',
+            u'Carousel Title',
+            default=u'Featured Listings',
         ),
     )
-    
+
+    isMLSListingSlider = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_isFLS",
+            default=u"Is a MLS Listing Slider?",
+        ),
+        description=_(
+            u'To ensure the Slider shows the correct content please check this checkbox if you want to show Listings from your MLS. If the checkbox is not active, the Slider will try to find internal Plone content as Slides'
+        ),
+    )
+
     featuredListingSlider_ItemList = schema.TextLine(
         required=True,
         title=_(
@@ -372,6 +384,7 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
 
+   
     featuredListingSlider_Limit =schema.TextLine(
         default=u"",
         required=False,
@@ -410,6 +423,7 @@ class ICollectionViewletConfiguration(Interface):
             u'Set the height of the slider stage box (default:350px). The value can be entered with as css compatible unit (px, %, em, ...).'
         ),  
     )
+
     featuredListingSlider_width =schema.TextLine(
         default=u"100%",
         required=True,
@@ -420,6 +434,17 @@ class ICollectionViewletConfiguration(Interface):
         description=_(u'Set the width of the slider stage box (default:100%). The value can be entered with as css compatible unit (px, %, em, ...).'),  
     )
 
+    FLS_SlideDuration = schema.TextLine(
+        default=u"500",
+        required=False,
+        title=_(
+            u"label_FLS_SlideDuration",
+            default=u"Slide Duration",
+        )    ,
+        description=_(
+            u'Specifies default duration for right to left animation in milliseconds'
+        ),  
+    )
 
     FLS_autoplay = schema.Bool(
         default=True,
@@ -462,17 +487,6 @@ class ICollectionViewletConfiguration(Interface):
         values= ["0", "1", "2","3"]
     )
 
-    FLS_DisplayPieces = schema.Choice(
-        default=u"1",
-        description=_(u'Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1)'),  
-        required=False,
-        title=_(
-            u"label_FLS_DisplayPieces",
-            default=u"Display Pieces",
-        ),
-        values= ["1", "2", "4", "5","6","7", "8", "9", "10"]
-    )
-
     FLS_FillMode = schema.Choice(
         default=u"5",
         description=_(u'The way to fill image in slide, (0): stretch, (1): contain (keep aspect ratio and put all inside slide), (2): cover (keep aspect ratio and cover whole slide), (4): actual size, (5): contain for large image, actual size for small image'),  
@@ -495,6 +509,15 @@ class ICollectionViewletConfiguration(Interface):
         values= ["0", "1", "2"]
     )
 
+    FLS_ArrowKeyNavigation = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_ArrowKeyNavigation",
+            default=u"Allows keyboard (arrow key) navigation or not",
+        ),
+    )
+
 
     featuredListingSlider_effect =schema.TextLine(
         default=u"",
@@ -505,7 +528,53 @@ class ICollectionViewletConfiguration(Interface):
         )      
     )
 
-   
+    # options for (single) Slide inside SlidesContainer
+    FLS_DisplayPieces = schema.Choice(
+        default=u"1",
+        description=_(u'Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1)'),  
+        required=False,
+        title=_(
+            u"label_FLS_DisplayPieces",
+            default=u"Display Pieces",
+        ),
+        values= ["1", "2", "3", "4", "5","6","7", "8", "9", "10"]
+    )
+
+    FLS_SlideWidth = schema.TextLine(
+        description=_(u'Width of every slide in pixels, default value is width of "slides" container'),  
+        required=False,
+        title=_(
+            u"label_FLS_SlideWidth",
+            default=u"Width of a single slide (in px)",
+        ),
+    )
+
+    FLS_SlideHeight = schema.TextLine(
+        description=_(u"Height of every slide in pixels, default value is height of 'slides' container"),  
+        required=False,
+        title=_(
+            u"label_FLS_SlideHeight",
+            default=u"height of a single slide (in px)",
+        ),
+    )
+
+    FLS_SlideSpacing = schema.TextLine(
+        description=_(u'Space between each slide in pixels'),  
+        required=False,
+        title=_(
+            u"label_FLS_SlideSpacing",
+            default=u"Space betwee single slides (in px)",
+        ),
+    )
+
+    FLS_ParkingPosition = schema.TextLine(
+        description=_(u'The offset position to park slide (this options applys only when slideshow disabled)'),  
+        required=False,
+        title=_(
+            u"label_FLS_ParkingPosition",
+            default=u"Slide Parking Position ",
+        ),
+    )
 
     use_custom_js = schema.Bool(
         default=False,
@@ -679,13 +748,34 @@ class CollectionViewletConfiguration(form.Form):
         else:
             autoplay="$AutoPlay: false, "
         #general Slider behavior
-        sliderbehavior  = "$FillMode: %s, "%(data.get('FLS_FillMode', u'5'))
+        sliderbehavior  = "$SlideDuration: %s, "%(data.get('FLS_SlideDuration', u'500'))
+        sliderbehavior += "$FillMode: %s, "%(data.get('FLS_FillMode', u'5'))
         sliderbehavior += "$Loop: %s, "%(data.get('FLS_Loop', u'1'))
         sliderbehavior += "$DisplayPieces: %s, "%(data.get('FLS_DisplayPieces', u'1'))
-
+        # "translate" python bool to JS code
+        if data.get('FLS_ArrowKeyNavigation', True):
+            akn="true"
+        else:
+            akn="false"
+        sliderbehavior += "$ArrowKeyNavigation: %s, "%(akn)
 
         #slide options
         slideoptions = ""
+        slideheight = data.get('FLS_SlideHeight', None)
+        if slideheight is not None:
+            slideoptions += "$SlideHeight: %s, "%(slideheight)
+
+        slidewidth = data.get('FLS_SlideWidth', None)
+        if slidewidth is not None:
+            slideoptions += "$SlideWidth: %s, "%(slidewidth)
+
+        slidespacing = data.get('FLS_SlideSpacing', None)
+        if slidespacing is not None:
+            slideoptions += "$SlideSpacing: %s, "%(slidespacing)
+
+        parkingposition = data.get('FLS_ParkingPosition', None)
+        if parkingposition is not None:
+            slideoptions += "$ParkingPosition: %s, "%(parkingposition)    
 
         #putting all options together
         all_options = autoplay + sliderbehavior + slideoptions
