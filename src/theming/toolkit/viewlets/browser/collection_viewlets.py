@@ -41,6 +41,8 @@ CONFIGURATION_KEY_BELOW = 'theming.toolkit.viewlets.featuredlisting.below'
 
 AVAILABLE_FLS_DEFAULTS = ['featuredListingSlider_ItemList', 'featuredListingSlider_Limit', 'featuredListingSlider_offset', 'featuredListingSliderJS']
 MLS_IMAGE_SIZES = ['thumb', 'mini', 'preview', 'large']
+SLIDER_STEPS = ["1", "2", "3", "4", "5","6","7", "8", "9", "10"]
+SLIDER_STEPS_FULL = ["0", "1", "2", "3", "4", "5","6","7", "8", "9", "10"]
 
 class IPossibleCollectionViewlet(Interface):
     """Marker interface for possible Collection viewlet."""
@@ -405,7 +407,7 @@ class ICollectionViewletConfiguration(Interface):
 
     featuredListingSlider_ImageSize = schema.Choice(
         description=_(
-            u'Choose the size of the image in the slider'
+            u'Choose the size of the image in rendered in the List'
         ),
         required=False,
         title=_(u'Slider Image size'),
@@ -473,7 +475,7 @@ class ICollectionViewletConfiguration(Interface):
             u"label_FLS_AutoPlaySteps",
             default=u"Auto Play Steps",
         ),
-        values= ["1", "2","3", "4", "5"]
+        values= SLIDER_STEPS
     )
 
     FLS_PauseOnHover= schema.Choice(
@@ -509,6 +511,38 @@ class ICollectionViewletConfiguration(Interface):
         values= ["0", "1", "2"]
     )
 
+    FLS_PlayOrientation = schema.Choice(
+        default=u"1",
+        required=False,
+        title=_(
+            u"label_FLS_PlayOrientation",
+            default=u"Slider Play Orientation",
+        ),
+        description=_(u'Orientation to play slide (for auto play, navigation), 1: horizental, 2: vertical, 5: horizental reverse, 6: vertical reverse'),
+        values= ["1", "2", "5", "6"]
+    )
+
+    FLS_DragOrientation = schema.Choice(
+        default=u"1",
+        required=False,
+        title=_(
+            u"label_FLS_DragOrientation",
+            default=u"Slider Drag Orientation",
+        ),
+        description=_(u'Orientation to drag slide, 0 no drag, 1 horizental, 2 vertical, 3 either (Note that the $DragOrientation should be the same as $PlayOrientation when $DisplayPieces is greater than 1, or parking position is not 0)'),
+        values= ["0", "1", "2", "3"]
+    )
+
+    FLS_MinDragOffsetToSlide = schema.TextLine(
+        default=u"20",
+        required=False,
+        title=_(
+            u"label_FLS_effect",
+            default=u"MinDragOffsetToSlide",
+        ) ,
+        description=_(u"Minimum drag offset to trigger slide in px")     
+    )
+
     FLS_ArrowKeyNavigation = schema.Bool(
         default=True,
         required=False,
@@ -519,13 +553,14 @@ class ICollectionViewletConfiguration(Interface):
     )
 
 
-    featuredListingSlider_effect =schema.TextLine(
+    FLS_SlideEasing =schema.TextLine(
         default=u"",
         required=False,
         title=_(
             u"label_FLS_effect",
-            default=u"Slider Animation Effect",
-        )      
+            default=u"Slide Easing Effect",
+        ) ,
+        description=_(u"Specifies easing for right to left animation")     
     )
 
     # options for (single) Slide inside SlidesContainer
@@ -537,7 +572,7 @@ class ICollectionViewletConfiguration(Interface):
             u"label_FLS_DisplayPieces",
             default=u"Display Pieces",
         ),
-        values= ["1", "2", "3", "4", "5","6","7", "8", "9", "10"]
+        values= SLIDER_STEPS
     )
 
     FLS_SlideWidth = schema.TextLine(
@@ -567,6 +602,18 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
 
+
+    FLS_StartIndex = schema.Choice(
+        default=u"0",
+        description=_(u'Index of slide to display when initialize, default value is 0'),  
+        required=False,
+        title=_(
+            u"label_FLS_StartIndex",
+            default=u"Slider Start Index",
+        ),
+        values= SLIDER_STEPS_FULL
+    )
+
     FLS_ParkingPosition = schema.TextLine(
         description=_(u'The offset position to park slide (this options applys only when slideshow disabled)'),  
         required=False,
@@ -574,6 +621,17 @@ class ICollectionViewletConfiguration(Interface):
             u"label_FLS_ParkingPosition",
             default=u"Slide Parking Position ",
         ),
+    )
+
+    FLS_UISearchMode = schema.Choice(
+        default=u"1",
+        description=_(u'The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).'),  
+        required=False,
+        title=_(
+            u"label_FLS_UISearchMode",
+            default=u"UISearchMode",
+        ),
+        values= ["0", "1"]
     )
 
     use_custom_js = schema.Bool(
@@ -749,6 +807,10 @@ class CollectionViewletConfiguration(form.Form):
             autoplay="$AutoPlay: false, "
         #general Slider behavior
         sliderbehavior  = "$SlideDuration: %s, "%(data.get('FLS_SlideDuration', u'500'))
+        easing = data.get('FLS_SlideEasing', None)
+        #set custom easing function if exist
+        if easing is not None: 
+            sliderbehavior += "$SlideEasing: %s, "%(easing)
         sliderbehavior += "$FillMode: %s, "%(data.get('FLS_FillMode', u'5'))
         sliderbehavior += "$Loop: %s, "%(data.get('FLS_Loop', u'1'))
         sliderbehavior += "$DisplayPieces: %s, "%(data.get('FLS_DisplayPieces', u'1'))
@@ -758,6 +820,10 @@ class CollectionViewletConfiguration(form.Form):
         else:
             akn="false"
         sliderbehavior += "$ArrowKeyNavigation: %s, "%(akn)
+        sliderbehavior += "$PlayOrientation: %s, "%(data.get('FLS_PlayOrientation', u'1'))
+        sliderbehavior += "$DragOrientation: %s, "%(data.get('FLS_DragOrientation', u'1'))
+        sliderbehavior += "$MinDragOffsetToSlide: %s, "%(data.get('FLS_MinDragOffsetToSlide', u'20'))
+        sliderbehavior += "$UISearchMode: %s, "%(data.get('FLS_UISearchMode', u'1'))
 
         #slide options
         slideoptions = ""
@@ -775,7 +841,9 @@ class CollectionViewletConfiguration(form.Form):
 
         parkingposition = data.get('FLS_ParkingPosition', None)
         if parkingposition is not None:
-            slideoptions += "$ParkingPosition: %s, "%(parkingposition)    
+            slideoptions += "$ParkingPosition: %s, "%(parkingposition) 
+
+        slideoptions += "$StartIndex: %s, "%(data.get('FLS_StartIndex', u'0'))
 
         #putting all options together
         all_options = autoplay + sliderbehavior + slideoptions
