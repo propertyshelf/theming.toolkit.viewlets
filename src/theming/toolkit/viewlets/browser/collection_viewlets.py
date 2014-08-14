@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Collection viewlets that render a carousel/slideshow"""
+"""Collection viewlets that render f.e. a carousel/slideshow"""
 
 import copy
 
@@ -386,6 +386,77 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
 
+    FLS_BulletNavigator = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_BulletNavigator",
+            default=u"Activate BulletPointNavigator",
+        ),
+        description=_(
+            u'The activated Navigator adds a BulletPoint Navigation to the Slider'
+        ),
+    )
+    BNO_ChanceToShow = schema.Choice(
+        default=u'2',
+        description=_(u'[Required] 0: Never, 1: Mouse Over, 2: Always'),
+        required=False,
+        title=_(u'When to show Bullet Navigator?'),
+        values= ["0", "1", "2"]
+    )
+    BNO_AutoCenter = schema.Choice(
+        default=u'1',
+        description=_(u'[Optional] Auto center navigator in parent container, 0: None, 1: Horizontal, 2: Vertical, 3: Both'),
+        required=False,
+        title=_(u'Auto Center?'),
+        values= ["0", "1", "2", "3"]
+    )
+    BNO_Steps = schema.Choice(
+        default=u'1',
+        description=_(u'[Optional] Steps to go for each navigation request, default value is 1'),
+        required=False,
+        title=_(u'Bullet Navigator Steps?'),
+        values= SLIDER_STEPS
+    )
+    BNO_Lanes = schema.Choice(
+        default=u'1',
+        description=_(u'[Optional] Specify lanes to arrange items, default value is 1'),
+        required=False,
+        title=_(u'Bullet Navigator Lanes'),
+        values= SLIDER_STEPS
+    )
+    BNO_Lanes = schema.Choice(
+        default=u'1',
+        description=_(u'[Optional] Specify lanes to arrange items, default value is 1'),
+        required=False,
+        title=_(u'Bullet Navigator Lanes'),
+        values= SLIDER_STEPS
+    )
+    BNO_Orientation = schema.Choice(
+        default=u"1",
+        required=False,
+        title=_(
+            u"label_BNO_Lanes",
+            default=u"Lanes"),
+        description=_(u'[Optional] The orientation of the navigator, 1 horizontal, 2 vertical, default value is 1'), 
+        values=["1", "2"]
+    )
+    BNO_SpacingX = schema.TextLine(
+        default=u'0',
+        required=False,
+        title=_(
+            u'label_BNO_SpacingX',
+            default=u'SpacingX'),
+        description=_(u'[Optional] Horizontal space between each item in pixel, default value is 0')
+    )
+    BNO_SpacingY = schema.TextLine(
+        default=u'0',
+        required=False,
+        title=_(
+            u'label_BNO_SpacingY',
+            default=u'SpacingY'),
+        description=_(u'[Optional] Vertical space between each item in pixel, default value is 0')
+    )
    
     featuredListingSlider_Limit =schema.TextLine(
         default=u"",
