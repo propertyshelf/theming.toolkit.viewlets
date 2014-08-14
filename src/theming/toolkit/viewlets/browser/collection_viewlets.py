@@ -354,6 +354,17 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
         return css_string
 
+    @property
+    def haveBulletPointNavigator(self):
+        """Check config if BulletPointNavigator should be rendered"""
+        settings = self.Settings
+        return settings.get('FLS_BulletNavigator', False)
+
+    @property
+    def BulletPointCss(self):
+        """deliver the CSS for the BulletPoint Prototype"""
+        settings = self.Settings
+        return settings.get('BNO_PrototypeCSS', None)
 
 class ICollectionViewletConfiguration(Interface):
     """FLS Configuration Form."""
@@ -415,14 +426,7 @@ class ICollectionViewletConfiguration(Interface):
         default=u'1',
         description=_(u'[Optional] Steps to go for each navigation request, default value is 1'),
         required=False,
-        title=_(u'Bullet Navigator Steps?'),
-        values= SLIDER_STEPS
-    )
-    BNO_Lanes = schema.Choice(
-        default=u'1',
-        description=_(u'[Optional] Specify lanes to arrange items, default value is 1'),
-        required=False,
-        title=_(u'Bullet Navigator Lanes'),
+        title=_(u'Bullet Navigator Steps'),
         values= SLIDER_STEPS
     )
     BNO_Lanes = schema.Choice(
@@ -436,8 +440,8 @@ class ICollectionViewletConfiguration(Interface):
         default=u"1",
         required=False,
         title=_(
-            u"label_BNO_Lanes",
-            default=u"Lanes"),
+            u"label_BNO_Orientation",
+            default=u"Orientation"),
         description=_(u'[Optional] The orientation of the navigator, 1 horizontal, 2 vertical, default value is 1'), 
         values=["1", "2"]
     )
@@ -457,6 +461,15 @@ class ICollectionViewletConfiguration(Interface):
             default=u'SpacingY'),
         description=_(u'[Optional] Vertical space between each item in pixel, default value is 0')
     )
+
+    BNO_PrototypeCSS = schema.Text(
+            default=u"position: absolute; width:15px; height:15px; background-color:black; border: 1px solid #ccc;",
+            required=False,
+            title=_(
+                u"label_PrototypeCSS",
+                default=u"BulletPoint CSS"),
+            description=_(u"Set the CSS styles for the BulletPoints")
+        )
    
     featuredListingSlider_Limit =schema.TextLine(
         default=u"",
@@ -811,13 +824,13 @@ class CollectionViewletConfiguration(form.Form):
     def generatedSliderScript(self, data):
         """generates the SliderScript from the configuration"""
 
-        generalOptions = self.__generalSliderOptions
+        #generalOptions = self.__generalSliderOptions
         sliderOptions = self.__configuredOptions(data)
         initiate_code = self.__FLSInitCode
 
         #build the FLS Script
-        if generalOptions is not None and sliderOptions is not None and initiate_code is not None:
-            genericScript="<script type='text/javascript'>$(window).load(function($) { %s %s %s });</script>"%(generalOptions, sliderOptions, initiate_code)
+        if sliderOptions is not None and initiate_code is not None:
+            genericScript="<script type='text/javascript'>$(window).load(function($) { %s %s });</script>"%(sliderOptions, initiate_code)
             return genericScript
         else:
             return None
@@ -916,8 +929,27 @@ class CollectionViewletConfiguration(form.Form):
 
         slideoptions += "$StartIndex: %s, "%(data.get('FLS_StartIndex', u'0'))
 
+        #BulletPoint Navigation
+        BPN_options = ""
+        BPN = data.get('FLS_BulletNavigator', True)
+        if BPN is True:
+            """Build BulletPoint Config together"""
+            BPN_options += "$Class: $JssorBulletNavigator$, "
+            BPN_options += "$ChanceToShow: %s, "%(data.get('BNO_ChanceToShow', 2))
+            BPN_options += "$AutoCenter: %s, "%(data.get('BNO_AutoCenter', 1))
+            BPN_options += "$Lanes: %s, "%(data.get('BNO_Lanes', 1))
+            BPN_options += "$Steps: %s, "%(data.get('BNO_Steps', 1))
+            BPN_options += "$Orientation: %s, "%(data.get('BNO_Orientation', 1))
+            BPN_options += "$SpacingX: %s, "%(data.get('BNO_SpacingX', 0))
+            BPN_options += "$SpacingY: %s, "%(data.get('BNO_SpacingY', 0))
+            #wrap the BulletNavigatorOptions
+            BPN_options = "$BulletNavigatorOptions: { " + BPN_options + "}, "
+
+
+            
+
         #putting all options together
-        all_options = autoplay + sliderbehavior + slideoptions
+        all_options = autoplay + sliderbehavior + slideoptions + BPN_options
         options ="var options={%s};"%(all_options)
         return options
 

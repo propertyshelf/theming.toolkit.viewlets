@@ -117,12 +117,18 @@
                 </div>
               </div>
 
-
             </tal:fields>
-            
           </tal:items>
           
         </div>
+        <!-- bullet navigator container -->
+          <div u="navigator" class="" style="position: absolute; bottom: 1em;">
+            <!-- bullet navigator item prototype -->
+            <div u="prototype" 
+              tal:attributes="style view/BulletPointCss"
+              />
+          </div>
+        <!-- Bullet Navigator Skin End -->
       </div>
         
       </tal:results>
