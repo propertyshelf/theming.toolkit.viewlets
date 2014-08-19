@@ -9,7 +9,7 @@ from plone.registry.interfaces import IRegistry
 
 from Products.CMFPlone import PloneMessageFactory as PMF
 
-from z3c.form import form,field, button
+from z3c.form import button, field, form, group
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryUtility
@@ -377,6 +377,9 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
 
+    
+class IItemProvider(Interface):
+    """which items show up in the slider?"""
     isMLSListingSlider = schema.Bool(
         default=True,
         required=False,
@@ -396,6 +399,223 @@ class ICollectionViewletConfiguration(Interface):
             default=u'FeaturedListingSlider Item List',
         ),
     )
+   
+    featuredListingSlider_Limit =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_FLS_limit",
+            default=u"Limit the amount of shown listings ",
+        )      
+    )
+
+    featuredListingSlider_offset =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_FLS_offset",
+            default=u"Set a offset for the Listing Items in the List",
+        )      
+    )
+
+    featuredListingSlider_ImageSize = schema.Choice(
+        description=_(
+            u'Choose the size of the image in rendered in the List'
+        ),
+        required=False,
+        title=_(u'Slider Image size'),
+        values= MLS_IMAGE_SIZES
+    )
+    
+
+class IPlayerOptions(Interface):
+    """Set the Options for the player behavior"""
+
+    featuredListingSlider_height =schema.TextLine(
+        default=u"350px",
+        required=True,
+        title=_(
+            u"label_FLS_height",
+            default=u"Carousel Stage Height",
+        )    ,
+        description=_(
+            u'Set the height of the slider stage box (default:350px). The value can be entered with as css compatible unit (px, %, em, ...).'
+        ),  
+    )
+
+    featuredListingSlider_width =schema.TextLine(
+        default=u"100%",
+        required=True,
+        title=_(
+            u"label_FLS_width",
+            default=u"Carousel Stage Width",
+        ),
+        description=_(u'Set the width of the slider stage box (default:100%). The value can be entered with as css compatible unit (px, %, em, ...).'),  
+    )
+
+    FLS_SlideDuration = schema.TextLine(
+        default=u"500",
+        required=False,
+        title=_(
+            u"label_FLS_SlideDuration",
+            default=u"Slide Duration",
+        )    ,
+        description=_(
+            u'Specifies default duration for right to left animation in milliseconds'
+        ),  
+    )
+
+    FLS_autoplay = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_autoplay",
+            default=u"Activate Autoplay on this Slider",
+        ),
+    )
+
+    FLS_AutoPlayInterval = schema.TextLine(
+        default=u"6000",
+        description=_(u'Interval (in milliseconds) to go for next slide since the previous stopped if the slider is auto playing'),  
+        required=False,
+        title=_(
+            u"label_FLS_AutoPlayInterval",
+            default=u"Auto Play Interval",
+        ),
+    )
+
+    FLS_AutoPlaySteps = schema.Choice(
+        default=u"1",
+        description=_(u'Steps to go for each navigation request (this options applys only when slideshow disabled).'),  
+        required=False,
+        title=_(
+            u"label_FLS_AutoPlaySteps",
+            default=u"Auto Play Steps",
+        ),
+        values= SLIDER_STEPS
+    )
+
+    FLS_SlideEasing =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_FLS_effect",
+            default=u"Slide Easing Effect",
+        ) ,
+        description=_(u"Specifies easing for right to left animation")     
+    )
+
+
+    FLS_PauseOnHover= schema.Choice(
+        default=u"3",
+        description=_(u'Whether to pause when mouse over if a slider is auto playing, (0): no pause, (1): pause for desktop, (2): pause for touch device, (3): pause for desktop and touch device'),  
+        required=False,
+        title=_(
+            u"label_FLS_PauseOnHover",
+            default=u"Pause on Hover",
+        ),
+        values= ["0", "1", "2","3"]
+    )
+
+    FLS_FillMode = schema.Choice(
+        default=u"5",
+        description=_(u'The way to fill image in slide, (0): stretch, (1): contain (keep aspect ratio and put all inside slide), (2): cover (keep aspect ratio and cover whole slide), (4): actual size, (5): contain for large image, actual size for small image'),  
+        required=False,
+        title=_(
+            u"label_FLS_FillMode",
+            default=u"Image filling Mode",
+        ),
+        values= ["0", "1", "2", "4", "5"]
+    )
+
+    FLS_Loop =schema.Choice(
+        default=u"1",
+        required=False,
+        title=_(
+            u"label_FLS_Loop",
+            default=u"Slider Loop Behaviour",
+        ),
+        description=_(u'Enable loop(circular) of carousel or not, 0: stop, 1: loop, 2 rewind'),
+        values= ["0", "1", "2"]
+    )
+
+    FLS_PlayOrientation = schema.Choice(
+        default=u"1",
+        required=False,
+        title=_(
+            u"label_FLS_PlayOrientation",
+            default=u"Slider Play Orientation",
+        ),
+        description=_(u'Orientation to play slide (for auto play, navigation), 1: horizental, 2: vertical, 5: horizental reverse, 6: vertical reverse'),
+        values= ["1", "2", "5", "6"]
+    )
+
+
+class ISlideConfig(Interface):
+    """Setting for Slide Customizations"""
+    # options for (single) Slide inside SlidesContainer
+    FLS_DisplayPieces = schema.Choice(
+        default=u"1",
+        description=_(u'Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1)'),  
+        required=False,
+        title=_(
+            u"label_FLS_DisplayPieces",
+            default=u"Display Pieces",
+        ),
+        values= SLIDER_STEPS
+    )
+
+    FLS_SlideWidth = schema.TextLine(
+        description=_(u'Width of every slide in pixels, default value is width of "slides" container'),  
+        required=False,
+        title=_(
+            u"label_FLS_SlideWidth",
+            default=u"Width of a single slide (in px)",
+        ),
+    )
+
+    FLS_SlideHeight = schema.TextLine(
+        description=_(u"Height of every slide in pixels, default value is height of 'slides' container"),  
+        required=False,
+        title=_(
+            u"label_FLS_SlideHeight",
+            default=u"height of a single slide (in px)",
+        ),
+    )
+
+    FLS_SlideSpacing = schema.TextLine(
+        description=_(u'Space between each slide in pixels'),  
+        required=False,
+        title=_(
+            u"label_FLS_SlideSpacing",
+            default=u"Space betwee single slides (in px)",
+        ),
+    )
+
+
+    FLS_StartIndex = schema.Choice(
+        default=u"0",
+        description=_(u'Index of slide to display when initialize, default value is 0'),  
+        required=False,
+        title=_(
+            u"label_FLS_StartIndex",
+            default=u"Slider Start Index",
+        ),
+        values= SLIDER_STEPS_FULL
+    )
+
+    FLS_ParkingPosition = schema.TextLine(
+        description=_(u'The offset position to park slide (this options applys only when slideshow disabled)'),  
+        required=False,
+        title=_(
+            u"label_FLS_ParkingPosition",
+            default=u"Slide Parking Position ",
+        ),
+    )
+
+
+class IBulletPointNavigator(Interface):
+    """contains our BulletPointNavigator fields"""
 
     FLS_BulletNavigator = schema.Bool(
         default=True,
@@ -470,142 +690,11 @@ class ICollectionViewletConfiguration(Interface):
                 default=u"BulletPoint CSS"),
             description=_(u"Set the CSS styles for the BulletPoints")
         )
-   
-    featuredListingSlider_Limit =schema.TextLine(
-        default=u"",
-        required=False,
-        title=_(
-            u"label_FLS_limit",
-            default=u"Limit the amount of shown listings ",
-        )      
-    )
 
-    featuredListingSlider_offset =schema.TextLine(
-        default=u"",
-        required=False,
-        title=_(
-            u"label_FLS_offset",
-            default=u"Set a offset for the Listing Items in the List",
-        )      
-    )
 
-    featuredListingSlider_ImageSize = schema.Choice(
-        description=_(
-            u'Choose the size of the image in rendered in the List'
-        ),
-        required=False,
-        title=_(u'Slider Image size'),
-        values= MLS_IMAGE_SIZES
-    )
-
-    featuredListingSlider_height =schema.TextLine(
-        default=u"350px",
-        required=True,
-        title=_(
-            u"label_FLS_height",
-            default=u"Carousel Stage Height",
-        )    ,
-        description=_(
-            u'Set the height of the slider stage box (default:350px). The value can be entered with as css compatible unit (px, %, em, ...).'
-        ),  
-    )
-
-    featuredListingSlider_width =schema.TextLine(
-        default=u"100%",
-        required=True,
-        title=_(
-            u"label_FLS_width",
-            default=u"Carousel Stage Width",
-        ),
-        description=_(u'Set the width of the slider stage box (default:100%). The value can be entered with as css compatible unit (px, %, em, ...).'),  
-    )
-
-    FLS_SlideDuration = schema.TextLine(
-        default=u"500",
-        required=False,
-        title=_(
-            u"label_FLS_SlideDuration",
-            default=u"Slide Duration",
-        )    ,
-        description=_(
-            u'Specifies default duration for right to left animation in milliseconds'
-        ),  
-    )
-
-    FLS_autoplay = schema.Bool(
-        default=True,
-        required=False,
-        title=_(
-            u"label_FLS_autoplay",
-            default=u"Activate Autoplay on this Slider",
-        ),
-    )
-
-    FLS_AutoPlayInterval = schema.TextLine(
-        default=u"6000",
-        description=_(u'Interval (in milliseconds) to go for next slide since the previous stopped if the slider is auto playing'),  
-        required=False,
-        title=_(
-            u"label_FLS_AutoPlayInterval",
-            default=u"Auto Play Interval",
-        ),
-    )
-
-    FLS_AutoPlaySteps = schema.Choice(
-        default=u"1",
-        description=_(u'Steps to go for each navigation request (this options applys only when slideshow disabled).'),  
-        required=False,
-        title=_(
-            u"label_FLS_AutoPlaySteps",
-            default=u"Auto Play Steps",
-        ),
-        values= SLIDER_STEPS
-    )
-
-    FLS_PauseOnHover= schema.Choice(
-        default=u"3",
-        description=_(u'Whether to pause when mouse over if a slider is auto playing, (0): no pause, (1): pause for desktop, (2): pause for touch device, (3): pause for desktop and touch device'),  
-        required=False,
-        title=_(
-            u"label_FLS_PauseOnHover",
-            default=u"Pause on Hover",
-        ),
-        values= ["0", "1", "2","3"]
-    )
-
-    FLS_FillMode = schema.Choice(
-        default=u"5",
-        description=_(u'The way to fill image in slide, (0): stretch, (1): contain (keep aspect ratio and put all inside slide), (2): cover (keep aspect ratio and cover whole slide), (4): actual size, (5): contain for large image, actual size for small image'),  
-        required=False,
-        title=_(
-            u"label_FLS_FillMode",
-            default=u"Image filling Mode",
-        ),
-        values= ["0", "1", "2", "4", "5"]
-    )
-
-    FLS_Loop =schema.Choice(
-        default=u"1",
-        required=False,
-        title=_(
-            u"label_FLS_Loop",
-            default=u"Slider Loop Behaviour",
-        ),
-        description=_(u'Enable loop(circular) of carousel or not, 0: stop, 1: loop, 2 rewind'),
-        values= ["0", "1", "2"]
-    )
-
-    FLS_PlayOrientation = schema.Choice(
-        default=u"1",
-        required=False,
-        title=_(
-            u"label_FLS_PlayOrientation",
-            default=u"Slider Play Orientation",
-        ),
-        description=_(u'Orientation to play slide (for auto play, navigation), 1: horizental, 2: vertical, 5: horizental reverse, 6: vertical reverse'),
-        values= ["1", "2", "5", "6"]
-    )
-
+class IExtendedNavigation(Interface):
+    """Configure drag behavior and arrow keys"""
+    
     FLS_DragOrientation = schema.Choice(
         default=u"1",
         required=False,
@@ -637,76 +726,8 @@ class ICollectionViewletConfiguration(Interface):
     )
 
 
-    FLS_SlideEasing =schema.TextLine(
-        default=u"",
-        required=False,
-        title=_(
-            u"label_FLS_effect",
-            default=u"Slide Easing Effect",
-        ) ,
-        description=_(u"Specifies easing for right to left animation")     
-    )
-
-    # options for (single) Slide inside SlidesContainer
-    FLS_DisplayPieces = schema.Choice(
-        default=u"1",
-        description=_(u'Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1)'),  
-        required=False,
-        title=_(
-            u"label_FLS_DisplayPieces",
-            default=u"Display Pieces",
-        ),
-        values= SLIDER_STEPS
-    )
-
-    FLS_SlideWidth = schema.TextLine(
-        description=_(u'Width of every slide in pixels, default value is width of "slides" container'),  
-        required=False,
-        title=_(
-            u"label_FLS_SlideWidth",
-            default=u"Width of a single slide (in px)",
-        ),
-    )
-
-    FLS_SlideHeight = schema.TextLine(
-        description=_(u"Height of every slide in pixels, default value is height of 'slides' container"),  
-        required=False,
-        title=_(
-            u"label_FLS_SlideHeight",
-            default=u"height of a single slide (in px)",
-        ),
-    )
-
-    FLS_SlideSpacing = schema.TextLine(
-        description=_(u'Space between each slide in pixels'),  
-        required=False,
-        title=_(
-            u"label_FLS_SlideSpacing",
-            default=u"Space betwee single slides (in px)",
-        ),
-    )
-
-
-    FLS_StartIndex = schema.Choice(
-        default=u"0",
-        description=_(u'Index of slide to display when initialize, default value is 0'),  
-        required=False,
-        title=_(
-            u"label_FLS_StartIndex",
-            default=u"Slider Start Index",
-        ),
-        values= SLIDER_STEPS_FULL
-    )
-
-    FLS_ParkingPosition = schema.TextLine(
-        description=_(u'The offset position to park slide (this options applys only when slideshow disabled)'),  
-        required=False,
-        title=_(
-            u"label_FLS_ParkingPosition",
-            default=u"Slide Parking Position ",
-        ),
-    )
-
+class IExpertConfig(Interface):
+    """The slider expert configuration"""
     FLS_UISearchMode = schema.Choice(
         default=u"1",
         description=_(u'The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).'),  
@@ -717,6 +738,10 @@ class ICollectionViewletConfiguration(Interface):
         ),
         values= ["0", "1"]
     )
+
+
+class ICustomCode(Interface):
+    """enable custom javascripts and css"""
 
     use_custom_js = schema.Bool(
         default=False,
@@ -757,11 +782,63 @@ class ICollectionViewletConfiguration(Interface):
         title=PMF(u'label__FLS_genJS', default=u'Generated Slider code'),
     )
 
-class CollectionViewletConfiguration(form.Form):
+
+class ItemProviderGroup(group.Group):
+    """Item for the Slider Form Group"""
+    label = u'Item Provider Options'
+    fields = field.Fields(IItemProvider)
+    prefix = 'itemprovider_'
+
+
+class PlayerOptionsGroup(group.Group):
+    """Player Options Form Group"""
+    label = u'Player Options'
+    fields = field.Fields(IPlayerOptions)
+    prefix = 'playeroptions_'
+
+
+class ExtendedNavigationGroup(group.Group):
+    """Extended Navigation Form Group"""
+    label = u'ExtendedNavigation'
+    fields = field.Fields(IExtendedNavigation)
+    prefix = 'extendednavigation_'
+
+
+class SlideConfigGroup(group.Group):
+    """Slide Config Form Group"""
+    label = u'Slide Config'
+    fields = field.Fields(ISlideConfig)
+    prefix = 'slideconfig_'
+
+
+class BulletNavigatorGroup(group.Group):
+    """BulletPointNavigator Form Group"""
+    label = u'BulletPointNavigator Options'
+    fields = field.Fields(IBulletPointNavigator)
+    prefix = 'bulletpoints_'
+
+
+class ExpertGroup(group.Group):
+    """Expert Config Form Group"""
+    label = u'Expert Settings'
+    fields = field.Fields(IExpertConfig)
+    prefix = 'expert_'
+
+
+class CustomCodeGroup(group.Group):
+    """CustomCode Form Group"""
+    label = u'Custom Code'
+    fields = field.Fields(ICustomCode)
+    prefix = 'customcode_'
+
+
+class CollectionViewletConfiguration(group.GroupForm, form.Form):
     """HeaderPlugin Configuration Form."""
 
     fields = field.Fields(ICollectionViewletConfiguration)
-    ignoreContext = False
+    groups = (ItemProviderGroup, PlayerOptionsGroup, ExtendedNavigationGroup, BulletNavigatorGroup, SlideConfigGroup, ExpertGroup, CustomCodeGroup)
+
+    ignoreContext = True
 
     label = _(u"Configure your MLS FeaturedListingSlider")
     description = _(
@@ -782,6 +859,8 @@ class CollectionViewletConfiguration(form.Form):
         """get Config depending on the form name"""
 
         name = self.__name__
+
+        print 'config key for: %s'%(name)
         if name == 'featuredlisting-collection-config-above':
             return CONFIGURATION_KEY_ABOVE
         elif name == 'featuredlisting-collection-config-below':
@@ -823,6 +902,7 @@ class CollectionViewletConfiguration(form.Form):
 
     def generatedSliderScript(self, data):
         """generates the SliderScript from the configuration"""
+        print 'generate script'
 
         #generalOptions = self.__generalSliderOptions
         sliderOptions = self.__configuredOptions(data)
@@ -831,6 +911,9 @@ class CollectionViewletConfiguration(form.Form):
         #build the FLS Script
         if sliderOptions is not None and initiate_code is not None:
             genericScript="<script type='text/javascript'>$(window).load(function($) { %s %s });</script>"%(sliderOptions, initiate_code)
+            from pprint import pprint
+            pprint(data)
+            pprint(genericScript)
             return genericScript
         else:
             return None
@@ -979,10 +1062,14 @@ class CollectionViewletConfiguration(form.Form):
     @button.buttonAndHandler(_(u'Save'))
     def handle_save(self, action):
         data, errors = self.extractData()
+        from pprint import pprint
+        pprint(data)
         if not errors:
             try:
                 data['genericJS']= self.generatedSliderScript(data)
             except(Exception):
+                import pdb
+                pdb.set_trace()
                 self.context.plone_utils.addPortalMessage("There was a problem with the script generation", 'warning')
                
             annotations = IAnnotations(self.context)
