@@ -838,7 +838,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     fields = field.Fields(ICollectionViewletConfiguration)
     groups = (ItemProviderGroup, PlayerOptionsGroup, ExtendedNavigationGroup, BulletNavigatorGroup, SlideConfigGroup, ExpertGroup, CustomCodeGroup)
 
-    ignoreContext = True
+    ignoreContext = False
 
     label = _(u"Configure your MLS FeaturedListingSlider")
     description = _(
@@ -850,9 +850,22 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         super(CollectionViewletConfiguration, self).__init__(context, request)
         self.context = context
         self.request = request
+        group_interfaces = (IItemProvider, IPlayerOptions, ISlideConfig, IBulletPointNavigator, IExtendedNavigation, IExpertConfig, ICustomCode)
+
+        for ginterface in group_interfaces:
+
+            if not ginterface.providedBy(self.context):
+                # We need to force the content item to provide
+                # custom for interfaces or datamanger is not happy
+                print 'Interface NOT provided'
+                print ginterface
+                alsoProvides(self.context, ginterface) 
+            
 
     def updateWidgets(self):
         super(CollectionViewletConfiguration, self).updateWidgets()
+
+
 
     @property
     def getConfigurationKey(self):
@@ -860,7 +873,6 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
 
         name = self.__name__
 
-        print 'config key for: %s'%(name)
         if name == 'featuredlisting-collection-config-above':
             return CONFIGURATION_KEY_ABOVE
         elif name == 'featuredlisting-collection-config-below':
@@ -1027,8 +1039,6 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             BPN_options += "$SpacingY: %s, "%(data.get('BNO_SpacingY', 0))
             #wrap the BulletNavigatorOptions
             BPN_options = "$BulletNavigatorOptions: { " + BPN_options + "}, "
-
-
             
 
         #putting all options together
