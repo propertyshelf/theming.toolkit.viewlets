@@ -3,6 +3,8 @@
 
 import copy
 
+from pprint import pprint
+
 from plone.app.layout.viewlets.common import ViewletBase
 from plone.memoize.view import memoize
 from plone.registry.interfaces import IRegistry
@@ -377,6 +379,25 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
 
+    featuredListingSlider_ItemList = schema.TextLine(
+        required=True,
+        title=_(
+            u'Item List to show',
+            default=u'FeaturedListingSlider Item List',
+        ),
+    )
+
+    FLS_UISearchMode = schema.Choice(
+        default=u"1",
+        description=_(u'The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).'),  
+        required=False,
+        title=_(
+            u"label_FLS_UISearchMode",
+            default=u"UISearchMode",
+        ),
+        values= ["0", "1"]
+    )
+
     
 class IItemProvider(Interface):
     """which items show up in the slider?"""
@@ -392,13 +413,6 @@ class IItemProvider(Interface):
         ),
     )
 
-    featuredListingSlider_ItemList = schema.TextLine(
-        required=True,
-        title=_(
-            u'Item List to show',
-            default=u'FeaturedListingSlider Item List',
-        ),
-    )
    
     featuredListingSlider_Limit =schema.TextLine(
         default=u"",
@@ -728,16 +742,7 @@ class IExtendedNavigation(Interface):
 
 class IExpertConfig(Interface):
     """The slider expert configuration"""
-    FLS_UISearchMode = schema.Choice(
-        default=u"1",
-        description=_(u'The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).'),  
-        required=False,
-        title=_(
-            u"label_FLS_UISearchMode",
-            default=u"UISearchMode",
-        ),
-        values= ["0", "1"]
-    )
+    
 
 
 class ICustomCode(Interface):
@@ -787,55 +792,49 @@ class ItemProviderGroup(group.Group):
     """Item for the Slider Form Group"""
     label = u'Item Provider Options'
     fields = field.Fields(IItemProvider)
-    prefix = 'itemprovider_'
 
 
 class PlayerOptionsGroup(group.Group):
     """Player Options Form Group"""
     label = u'Player Options'
     fields = field.Fields(IPlayerOptions)
-    prefix = 'playeroptions_'
 
 
 class ExtendedNavigationGroup(group.Group):
     """Extended Navigation Form Group"""
     label = u'ExtendedNavigation'
     fields = field.Fields(IExtendedNavigation)
-    prefix = 'extendednavigation_'
 
 
 class SlideConfigGroup(group.Group):
     """Slide Config Form Group"""
     label = u'Slide Config'
     fields = field.Fields(ISlideConfig)
-    prefix = 'slideconfig_'
 
 
 class BulletNavigatorGroup(group.Group):
     """BulletPointNavigator Form Group"""
     label = u'BulletPointNavigator Options'
     fields = field.Fields(IBulletPointNavigator)
-    prefix = 'bulletpoints_'
 
 
 class ExpertGroup(group.Group):
     """Expert Config Form Group"""
     label = u'Expert Settings'
-    fields = field.Fields(IExpertConfig)
-    prefix = 'expert_'
+    fields = field.Fields(ICollectionViewletConfiguration).select('FLS_UISearchMode')
+
 
 
 class CustomCodeGroup(group.Group):
     """CustomCode Form Group"""
     label = u'Custom Code'
     fields = field.Fields(ICustomCode)
-    prefix = 'customcode_'
 
 
 class CollectionViewletConfiguration(group.GroupForm, form.Form):
     """HeaderPlugin Configuration Form."""
 
-    fields = field.Fields(ICollectionViewletConfiguration)
+    fields = field.Fields(ICollectionViewletConfiguration).select('viewlet_title')
     groups = (ItemProviderGroup, PlayerOptionsGroup, ExtendedNavigationGroup, BulletNavigatorGroup, SlideConfigGroup, ExpertGroup, CustomCodeGroup)
 
     ignoreContext = False
@@ -850,22 +849,20 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         super(CollectionViewletConfiguration, self).__init__(context, request)
         self.context = context
         self.request = request
-        group_interfaces = (IItemProvider, IPlayerOptions, ISlideConfig, IBulletPointNavigator, IExtendedNavigation, IExpertConfig, ICustomCode)
-
+        group_interfaces = (ICollectionViewletConfiguration, IItemProvider, IPlayerOptions, ISlideConfig, IBulletPointNavigator, IExtendedNavigation, IExpertConfig, ICustomCode)
+        # we need to add all missing custom group interfaces to our context object
         for ginterface in group_interfaces:
-
             if not ginterface.providedBy(self.context):
-                # We need to force the content item to provide
-                # custom for interfaces or datamanger is not happy
-                print 'Interface NOT provided'
-                print ginterface
                 alsoProvides(self.context, ginterface) 
-            
+
+        
+        annotations = IAnnotations(self.context)
+        key = self.getConfigurationKey
+        print "annotations: %s"%(key)
+        pprint(annotations.get(key, {}))
 
     def updateWidgets(self):
         super(CollectionViewletConfiguration, self).updateWidgets()
-
-
 
     @property
     def getConfigurationKey(self):
@@ -910,11 +907,12 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             if fls_context.get(k, None)==None:
                 fls_context[k] = defaults[k]
 
+        print('getContent: ')
+        pprint(fls_context)
         return fls_context
 
     def generatedSliderScript(self, data):
         """generates the SliderScript from the configuration"""
-        print 'generate script'
 
         #generalOptions = self.__generalSliderOptions
         sliderOptions = self.__configuredOptions(data)
@@ -923,9 +921,6 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         #build the FLS Script
         if sliderOptions is not None and initiate_code is not None:
             genericScript="<script type='text/javascript'>$(window).load(function($) { %s %s });</script>"%(sliderOptions, initiate_code)
-            from pprint import pprint
-            pprint(data)
-            pprint(genericScript)
             return genericScript
         else:
             return None
@@ -1072,11 +1067,10 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     @button.buttonAndHandler(_(u'Save'))
     def handle_save(self, action):
         data, errors = self.extractData()
-        from pprint import pprint
-        pprint(data)
         if not errors:
             try:
                 data['genericJS']= self.generatedSliderScript(data)
+    
             except(Exception):
                 import pdb
                 pdb.set_trace()
