@@ -788,44 +788,53 @@ class ICustomCode(Interface):
     )
 
 
-class ItemProviderGroup(group.Group):
+class FormBaseGroup(group.Group):
+    """Base groupt providing custom getContent for Annotations"""
+    label = u'I'
+    fields = None
+
+    def getContent(self):
+        # Default to sharing content with parent
+        return self.__parent__.getContent()
+
+class ItemProviderGroup(FormBaseGroup):
     """Item for the Slider Form Group"""
     label = u'Item Provider Options'
     fields = field.Fields(IItemProvider)
 
 
-class PlayerOptionsGroup(group.Group):
+class PlayerOptionsGroup(FormBaseGroup):
     """Player Options Form Group"""
     label = u'Player Options'
     fields = field.Fields(IPlayerOptions)
 
 
-class ExtendedNavigationGroup(group.Group):
+class ExtendedNavigationGroup(FormBaseGroup):
     """Extended Navigation Form Group"""
     label = u'ExtendedNavigation'
     fields = field.Fields(IExtendedNavigation)
 
 
-class SlideConfigGroup(group.Group):
+class SlideConfigGroup(FormBaseGroup):
     """Slide Config Form Group"""
     label = u'Slide Config'
     fields = field.Fields(ISlideConfig)
 
 
-class BulletNavigatorGroup(group.Group):
+class BulletNavigatorGroup(FormBaseGroup):
     """BulletPointNavigator Form Group"""
     label = u'BulletPointNavigator Options'
     fields = field.Fields(IBulletPointNavigator)
 
 
-class ExpertGroup(group.Group):
+class ExpertGroup(FormBaseGroup):
     """Expert Config Form Group"""
     label = u'Expert Settings'
     fields = field.Fields(ICollectionViewletConfiguration).select('FLS_UISearchMode')
 
 
 
-class CustomCodeGroup(group.Group):
+class CustomCodeGroup(FormBaseGroup):
     """CustomCode Form Group"""
     label = u'Custom Code'
     fields = field.Fields(ICustomCode)
