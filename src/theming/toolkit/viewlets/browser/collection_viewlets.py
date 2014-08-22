@@ -46,6 +46,7 @@ MLS_IMAGE_SIZES = ['thumb', 'mini', 'preview', 'large']
 SLIDER_STEPS = ["1", "2", "3", "4", "5","6","7", "8", "9", "10"]
 SLIDER_STEPS_FULL = ["0", "1", "2", "3", "4", "5","6","7", "8", "9", "10"]
 
+
 class IPossibleCollectionViewlet(Interface):
     """Marker interface for possible Collection viewlet."""
 
@@ -367,6 +368,7 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         """deliver the CSS for the BulletPoint Prototype"""
         settings = self.Settings
         return settings.get('BNO_PrototypeCSS', None)
+
 
 class ICollectionViewletConfiguration(Interface):
     """FLS Configuration Form."""
@@ -858,17 +860,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         super(CollectionViewletConfiguration, self).__init__(context, request)
         self.context = context
         self.request = request
-        group_interfaces = (ICollectionViewletConfiguration, IItemProvider, IPlayerOptions, ISlideConfig, IBulletPointNavigator, IExtendedNavigation, IExpertConfig, ICustomCode)
-        # we need to add all missing custom group interfaces to our context object
-        for ginterface in group_interfaces:
-            if not ginterface.providedBy(self.context):
-                alsoProvides(self.context, ginterface) 
-
         
-        annotations = IAnnotations(self.context)
-        key = self.getConfigurationKey
-        print "annotations: %s"%(key)
-        pprint(annotations.get(key, {}))
 
     def updateWidgets(self):
         super(CollectionViewletConfiguration, self).updateWidgets()
@@ -916,8 +908,6 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             if fls_context.get(k, None)==None:
                 fls_context[k] = defaults[k]
 
-        print('getContent: ')
-        pprint(fls_context)
         return fls_context
 
     def generatedSliderScript(self, data):
@@ -1115,6 +1105,8 @@ class CollectionViewletStatus(object):
 
 class CollectionViewletToggle(object):
     """Toggle HeaderPlugins viewlet for the current context."""
+    GROUP_INTERFACES = (ICollectionViewletConfiguration, IItemProvider, IPlayerOptions, ISlideConfig, IBulletPointNavigator, IExtendedNavigation, IExpertConfig, ICustomCode)
+
 
     def __init__(self, context, request):
         self.context = context
@@ -1126,11 +1118,23 @@ class CollectionViewletToggle(object):
         if ICollectionViewlet.providedBy(self.context):
             # Deactivate.
             noLongerProvides(self.context, ICollectionViewlet)
+            # we need to REMOVE all custom group interfaces from our context object
+            for ginterface in self.GROUP_INTERFACES:
+                if ginterface.providedBy(self.context):
+                    noLongerProvides(self.context, ginterface)
+
             self.context.reindexObject(idxs=['object_provides', ])
             msg = _(u"Collection viewlet deactivated.")
         elif IPossibleCollectionViewlet.providedBy(self.context):
             alsoProvides(self.context, ICollectionViewlet)
+
+            # we need to add all missing custom group interfaces to our context object
+            for ginterface in self.GROUP_INTERFACES:
+                if not ginterface.providedBy(self.context):
+                    alsoProvides(self.context, ginterface) 
+
             self.context.reindexObject(idxs=['object_provides', ])
+
             msg = _(u"Collection viewlet activated.")
         else:
             msg = _(
