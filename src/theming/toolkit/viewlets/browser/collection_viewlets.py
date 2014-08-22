@@ -3,8 +3,6 @@
 
 import copy
 
-from pprint import pprint
-
 from plone.app.layout.viewlets.common import ViewletBase
 from plone.memoize.view import memoize
 from plone.registry.interfaces import IRegistry
@@ -381,6 +379,10 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
 
+
+    
+class IItemProvider(Interface):
+    """which items show up in the slider?"""
     featuredListingSlider_ItemList = schema.TextLine(
         required=True,
         title=_(
@@ -389,20 +391,6 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
 
-    FLS_UISearchMode = schema.Choice(
-        default=u"1",
-        description=_(u'The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).'),  
-        required=False,
-        title=_(
-            u"label_FLS_UISearchMode",
-            default=u"UISearchMode",
-        ),
-        values= ["0", "1"]
-    )
-
-    
-class IItemProvider(Interface):
-    """which items show up in the slider?"""
     isMLSListingSlider = schema.Bool(
         default=True,
         required=False,
@@ -744,6 +732,17 @@ class IExtendedNavigation(Interface):
 
 class IExpertConfig(Interface):
     """The slider expert configuration"""
+
+    FLS_UISearchMode = schema.Choice(
+        default=u"1",
+        description=_(u'The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).'),  
+        required=False,
+        title=_(
+            u"label_FLS_UISearchMode",
+            default=u"UISearchMode",
+        ),
+        values= ["0", "1"]
+    )
     
 
 
@@ -832,8 +831,7 @@ class BulletNavigatorGroup(FormBaseGroup):
 class ExpertGroup(FormBaseGroup):
     """Expert Config Form Group"""
     label = u'Expert Settings'
-    fields = field.Fields(ICollectionViewletConfiguration).select('FLS_UISearchMode')
-
+    fields = field.Fields(IExpertConfig)
 
 
 class CustomCodeGroup(FormBaseGroup):
@@ -845,7 +843,7 @@ class CustomCodeGroup(FormBaseGroup):
 class CollectionViewletConfiguration(group.GroupForm, form.Form):
     """HeaderPlugin Configuration Form."""
 
-    fields = field.Fields(ICollectionViewletConfiguration).select('viewlet_title')
+    fields = field.Fields(ICollectionViewletConfiguration)
     groups = (ItemProviderGroup, PlayerOptionsGroup, ExtendedNavigationGroup, BulletNavigatorGroup, SlideConfigGroup, ExpertGroup, CustomCodeGroup)
 
     ignoreContext = False
