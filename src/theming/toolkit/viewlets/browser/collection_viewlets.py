@@ -699,14 +699,59 @@ class ArrowNavigator(Interface):
     """Arrow Navigation Options"""
 
     FLS_ArrowNavigator = schema.Bool(
-        default=True,
-        required=False,
-        title=_(
+        default= True,
+        required= False,
+        title= _(
             u"label_FLS_ArrowNavigator",
             default=u"Activate ArrowNavigator",
         ),
-        description=_(
+        description= _(
             u'The activated Navigator adds a Arrow Navigator (prev & next) to the Slider'
+        ),
+    )
+
+    AN_Class = schema.TextLine(
+        default=u'$JssorArrowNavigator$',
+        required=True,
+        title=_(
+            u'label_AN_Class',
+            default=u'Arrow Class'),
+        description=_(u'Class to create arrow navigator instance. Default: $JssorArrowNavigator$')
+    )
+
+    AN_ChanceToShow = schema.Choice(
+        default=u'2',
+        description=_(u'0: Never, 1: Mouse Over, 2: Always'),
+        required=False,
+        title=_(u'When to show Arrow Navigator?'),
+        values= ["0", "1", "2"]
+    )
+
+    AN_AutoCenter = schema.Choice(
+        default=u'2',
+        description=_(u'0 None, 1 Horizontal, 2 Vertical, 3 Both'),
+        required=False,
+        title=_(u'Auto center arrows in parent container?'),
+        values= ["0", "1", "2", "3"]
+    )
+
+    AN_Steps = schema.Choice(
+        default=u'1',
+        description=_(u'[Optional] Steps to go for each navigation request, default value is 1'),
+        required=False,
+        title=_(u'Arrow Navigator Steps'),
+        values= SLIDER_STEPS
+    )
+
+    AN_Scale = schema.Bool(
+        default= True,
+        required= False,
+        title= _(
+            u"label_AN_Scale",
+            default=u"Scale Arrows?",
+        ),
+        description= _(
+            u'Scales arrow navigator or not while slider scale.'
         ),
     )
 
