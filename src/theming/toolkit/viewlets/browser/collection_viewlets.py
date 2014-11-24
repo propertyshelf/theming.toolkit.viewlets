@@ -371,6 +371,9 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 class ICollectionViewletConfiguration(Interface):
     """FLS Configuration Form."""
 
+    
+class IItemProvider(Interface):
+    """which items show up in the slider?"""
     viewlet_title = schema.TextLine(
         required=False,
         title=_(
@@ -379,10 +382,6 @@ class ICollectionViewletConfiguration(Interface):
         ),
     )
 
-
-    
-class IItemProvider(Interface):
-    """which items show up in the slider?"""
     featuredListingSlider_ItemList = schema.TextLine(
         required=True,
         title=_(
@@ -696,6 +695,34 @@ class IBulletPointNavigator(Interface):
         )
 
 
+class ArrowNavigator(Interface):
+    """Arrow Navigation Options"""
+
+    FLS_ArrowNavigator = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_ArrowNavigator",
+            default=u"Activate ArrowNavigator",
+        ),
+        description=_(
+            u'The activated Navigator adds a Arrow Navigator (prev & next) to the Slider'
+        ),
+    )
+
+
+class ThumbnailNavigator(Interface):
+    """Thumbnail Navigator Options"""
+
+
+class Slideshow(Interface):
+    """Arrow Navigation Options"""
+
+
+class CaptionSlider(Interface):
+    """Caption Slider Options"""
+
+
 class IExtendedNavigation(Interface):
     """Configure drag behavior and arrow keys"""
     
@@ -791,7 +818,7 @@ class ICustomCode(Interface):
 
 class FormBaseGroup(group.Group):
     """Base groupt providing custom getContent for Annotations"""
-    label = u'I'
+    label = u''
     fields = None
 
     def getContent(self):
