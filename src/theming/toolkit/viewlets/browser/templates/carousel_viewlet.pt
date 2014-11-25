@@ -21,8 +21,7 @@
     </div>
 
 <div class="fls-wrapper" id="fls-top-wrapper"
-    tal:define="stageCSS view/StageCss;"
-  >
+    tal:define="stageCSS view/StageCss;">
   <div class="featured_listing_collection" id="slider1_container" 
     tal:attributes="style string:${stageCSS};">
       <tal:results
@@ -121,6 +120,11 @@
           </tal:items>
           
         </div>
+        <tal:arrownav tal:condition="view/haveArrowNavigator">
+          <span u="arrowleft" class="jssora02l" style="width: 55px; height: 55px; top: 122.5px; left: 8px;"/>
+          <span u="arrowright" class="jssora02r" style="width: 55px; height: 55px; top: 122.5px; right: 8px;"/>
+        </tal:arrownav>
+        <tal:bulletnav tal:condition="view/haveBulletPointNavigator">
         <!-- bullet navigator container -->
           <div u="navigator" class="" style="position: absolute; bottom: 1em;">
             <!-- bullet navigator item prototype -->
@@ -129,6 +133,7 @@
               />
           </div>
         <!-- Bullet Navigator Skin End -->
+      </tal:bulletnav>
       </div>
         
       </tal:results>

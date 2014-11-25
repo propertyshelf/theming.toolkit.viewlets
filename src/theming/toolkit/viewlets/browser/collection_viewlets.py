@@ -367,6 +367,12 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         settings = self.Settings
         return settings.get('BNO_PrototypeCSS', None)
 
+    @property
+    def haveArrowNavigator(self):
+        """Check config if ArrowNavigator should be rendered"""
+        settings = self.Settings
+        return settings.get('FLS_ArrowNavigator', False)
+
 
 class ICollectionViewletConfiguration(Interface):
     """FLS Configuration Form."""
@@ -695,7 +701,7 @@ class IBulletPointNavigator(Interface):
         )
 
 
-class ArrowNavigator(Interface):
+class IArrowNavigator(Interface):
     """Arrow Navigation Options"""
 
     FLS_ArrowNavigator = schema.Bool(
@@ -756,15 +762,15 @@ class ArrowNavigator(Interface):
     )
 
 
-class ThumbnailNavigator(Interface):
+class IThumbnailNavigator(Interface):
     """Thumbnail Navigator Options"""
 
 
-class Slideshow(Interface):
+class ISlideshow(Interface):
     """Arrow Navigation Options"""
 
 
-class CaptionSlider(Interface):
+class ICaptionSlider(Interface):
     """Caption Slider Options"""
 
 
@@ -900,6 +906,12 @@ class BulletNavigatorGroup(FormBaseGroup):
     fields = field.Fields(IBulletPointNavigator)
 
 
+class ArrowNavigatorGroup(FormBaseGroup):
+    """ArrowNavigator Form Group"""
+    label = u'ArrowNavigator Options'
+    fields = field.Fields(IArrowNavigator)
+
+
 class ExpertGroup(FormBaseGroup):
     """Expert Config Form Group"""
     label = u'Expert Settings'
@@ -916,7 +928,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     """HeaderPlugin Configuration Form."""
 
     fields = field.Fields(ICollectionViewletConfiguration)
-    groups = (ItemProviderGroup, PlayerOptionsGroup, ExtendedNavigationGroup, BulletNavigatorGroup, SlideConfigGroup, ExpertGroup, CustomCodeGroup)
+    groups = (ItemProviderGroup, PlayerOptionsGroup, ExtendedNavigationGroup, BulletNavigatorGroup, ArrowNavigatorGroup, SlideConfigGroup, ExpertGroup, CustomCodeGroup)
 
     ignoreContext = False
 
@@ -1034,6 +1046,28 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         script=''
         return script
 
+    def __ArrowNavigatorOptions(self, data):
+        """get string of arrow navigation options"""
+
+        AN_options = ""
+        AN = data.get('FLS_ArrowNavigator', True)
+        if AN is True:
+            """Build BulletPoint Config together"""
+            AN_options += "$Class: %s, "%(data.get('AN_Class', '$JssorArrowNavigator$'))
+            AN_options += "$ChanceToShow: %s, "%(data.get('AN_ChanceToShow', 2))
+            AN_options += "$AutoCenter: %s, "%(data.get('AN_AutoCenter', 2))
+            AN_options += "$Steps: %s, "%(data.get('AN_Steps', 1))
+            if data.get('AN_Scale', True):
+                AN_options += "$Scale: true "
+            else:
+                AN_options += "$Scale: false "
+            #wrap the ArrowNavigatorOptions
+            AN_options = "$ArrowNavigatorOptions: { " + AN_options + "}, "
+
+            return AN_options
+        else:
+            return False
+
     def __configuredOptions(self, data):
         """returns a string with the options from the configuration"""
         #check for autoplay
@@ -1104,9 +1138,13 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             #wrap the BulletNavigatorOptions
             BPN_options = "$BulletNavigatorOptions: { " + BPN_options + "}, "
             
+        #Arrow Navigator
+        AN_options = self.__ArrowNavigatorOptions(data)
+        if AN_options is False:
+            AN_options = ''
 
         #putting all options together
-        all_options = autoplay + sliderbehavior + slideoptions + BPN_options
+        all_options = autoplay + sliderbehavior + slideoptions + BPN_options + AN_options
         options ="var options={%s};"%(all_options)
         return options
 
