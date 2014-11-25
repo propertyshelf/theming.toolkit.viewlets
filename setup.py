@@ -28,6 +28,10 @@ setup(name='theming.toolkit.viewlets',
           'setuptools',
           # -*- Extra requirements: -*-
           'theming.toolkit.core',
+          'plone.app.dexterity [grok]',
+          'plone.directives.form',
+          'plone.mls.listing >= 0.9.11',
+          'Products.PloneTestCase'
       ],
       extras_require={
              'test': ['plone.app.testing',]
