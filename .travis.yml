@@ -1,18 +1,18 @@
 language: python
 python:
-  - 2.6
-  - 2.7
+  - "2.6_with_system_site_packages"
+  - "2.7_with_system_site_packages"
 env:
   - PLONE_VERSION=4.1
   - PLONE_VERSION=4.2
   - PLONE_VERSION=4.3
 matrix:
   exclude:
-    - python: 2.7
+    - python: "2.7_with_system_site_packages"
       env: PLONE_VERSION=4.1
-    - python: 2.6
+    - python: "2.6_with_system_site_packages"
       env: PLONE_VERSION=4.2
-    - python: 2.6
+    - python: "2.6_with_system_site_packages"
       env: PLONE_VERSION=4.3
 before_install:
   - sudo apt-get update -qq
