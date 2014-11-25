@@ -26,7 +26,3 @@ branches:
   only:
     - master
 script: bin/test
-notifications:
-  irc: irc.freenode.org#propertyshelf
-  hipchat:
-    secure: "haQNP6AVCh7QkqAqjeB5yrscRyTiGLzgeXUKCGTgA+oH7fHs/UOB2PFuMRdG55qmg6qkFHId9PintevaSThkNmRtmbrwfRIsGqHPyKgcIAybwfPrk3CEFKU4SWP4oTOR9D/zqlWAz/9sEcoMezKDJUyqywsTkfbbO70eztqP/io="
