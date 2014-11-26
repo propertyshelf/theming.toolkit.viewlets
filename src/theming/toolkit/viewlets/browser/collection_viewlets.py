@@ -415,16 +415,19 @@ class IItemProvider(Interface):
     viewlet_title = schema.TextLine(
         required=False,
         title=_(
-            u'Carousel Title',
-            default=u'Featured Listings',
+            u'label_CarouselTitle',
+            default=u'Slider Headline',
         ),
     )
 
     featuredListingSlider_ItemList = schema.TextLine(
         required=True,
         title=_(
-            u'Item List to show',
-            default=u'FeaturedListingSlider Item List',
+            u'label_ItemList',
+            default=u'Content Provider',
+        ),
+        description=_(
+            u'Please enter the PATH to the Collection which holds the items for the Slider. Example{ /Plone/en/listing-collection }'
         ),
     )
 
@@ -446,8 +449,18 @@ class IItemProvider(Interface):
         required=False,
         title=_(
             u"label_FLS_limit",
-            default=u"Limit the amount of shown listings ",
-        )      
+            default=u"Limit Content Provider Items",
+        ),
+        description=_(u'To avoid endless loading times, limit the Items from the Content Provider above.')
+    )
+
+    featuredListingSlider_ImageSize = schema.Choice(
+        description=_(
+            u'Choose the size of the image in rendered in the List'
+        ),
+        required=False,
+        title=_(u'Slider Image size'),
+        values= MLS_IMAGE_SIZES
     )
 
     featuredListingSlider_offset =schema.TextLine(
@@ -459,40 +472,11 @@ class IItemProvider(Interface):
         )      
     )
 
-    featuredListingSlider_ImageSize = schema.Choice(
-        description=_(
-            u'Choose the size of the image in rendered in the List'
-        ),
-        required=False,
-        title=_(u'Slider Image size'),
-        values= MLS_IMAGE_SIZES
-    )
+    
     
 
 class IPlayerOptions(Interface):
     """Set the Options for the player behavior"""
-
-    featuredListingSlider_height =schema.TextLine(
-        default=u"350px",
-        required=True,
-        title=_(
-            u"label_FLS_height",
-            default=u"Carousel Stage Height",
-        )    ,
-        description=_(
-            u'Set the height of the slider stage box (default:350px). The value can be entered with as css compatible unit (px, %, em, ...).'
-        ),  
-    )
-
-    featuredListingSlider_width =schema.TextLine(
-        default=u"100%",
-        required=True,
-        title=_(
-            u"label_FLS_width",
-            default=u"Carousel Stage Width",
-        ),
-        description=_(u'Set the width of the slider stage box (default:100%). The value can be entered with as css compatible unit (px, %, em, ...).'),  
-    )
 
     FLS_SlideDuration = schema.TextLine(
         default=u"500",
@@ -628,14 +612,36 @@ class IPlayerOptions(Interface):
 
 class ISlideConfig(Interface):
     """Setting for Slide Customizations"""
-    # options for (single) Slide inside SlidesContainer
+    # options for Stage & Slides
+    featuredListingSlider_height =schema.TextLine(
+        default=u"350px",
+        required=True,
+        title=_(
+            u"label_FLS_height",
+            default=u"Stage Height",
+        )    ,
+        description=_(
+            u'Set the height of the slider stage box (default:350px). The value can be entered with as css compatible unit (px, %, em, ...).'
+        ),  
+    )
+
+    featuredListingSlider_width =schema.TextLine(
+        default=u"100%",
+        required=True,
+        title=_(
+            u"label_FLS_width",
+            default=u"Stage Width",
+        ),
+        description=_(u'Set the width of the slider stage box (default:100%). The value can be entered with as css compatible unit (px, %, em, ...).'),  
+    )
+
     FLS_DisplayPieces = schema.Choice(
         default=u"1",
         description=_(u'Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1)'),  
         required=False,
         title=_(
             u"label_FLS_DisplayPieces",
-            default=u"Display Pieces",
+            default=u"How many Slides?",
         ),
         values= SLIDER_STEPS
     )
@@ -645,7 +651,7 @@ class ISlideConfig(Interface):
         required=False,
         title=_(
             u"label_FLS_SlideWidth",
-            default=u"Width of a single slide (in px)",
+            default=u"Slide Width (in px)",
         ),
     )
 
@@ -654,7 +660,7 @@ class ISlideConfig(Interface):
         required=False,
         title=_(
             u"label_FLS_SlideHeight",
-            default=u"height of a single slide (in px)",
+            default=u"Slide Height (in px)",
         ),
     )
 
@@ -670,11 +676,11 @@ class ISlideConfig(Interface):
 
     FLS_StartIndex = schema.Choice(
         default=u"0",
-        description=_(u'Index of slide to display when initialize, default value is 0'),  
+        description=_(u'Index of the slide to display start, default value is 0'),  
         required=False,
         title=_(
             u"label_FLS_StartIndex",
-            default=u"Slider Start Index",
+            default=u"Index Start Slide",
         ),
         values= SLIDER_STEPS_FULL
     )
@@ -938,9 +944,10 @@ class ICustomCode(Interface):
         default=False,
         required=False,
         title=_(
-            u"label_use_custom_js",
-            default=u"Show local Slider Javascript",
+            u'label_use_custom_js',
+            default=u'Use my custom Slider Javascript',
         ),
+        description=u'For the ultimate tweak you can use a fully customized JavaScript if you wish. The generated Code is available for Copy&Paste ease the start.'
     )
 
     featuredListingSliderJS =schema.Text(
@@ -985,7 +992,7 @@ class FormBaseGroup(group.Group):
 
 class ItemProviderGroup(FormBaseGroup):
     """Item for the Slider Form Group"""
-    label = u'Item Provider Options'
+    label = u'Slider Contents'
     fields = field.Fields(IItemProvider)
 
 
@@ -997,13 +1004,13 @@ class PlayerOptionsGroup(FormBaseGroup):
 
 class ExtendedNavigationGroup(FormBaseGroup):
     """Extended Navigation Form Group"""
-    label = u'ExtendedNavigation'
+    label = u'Extended Navigation'
     fields = field.Fields(IExtendedNavigation)
 
 
 class SlideConfigGroup(FormBaseGroup):
     """Slide Config Form Group"""
-    label = u'Slide Config'
+    label = u'Stage & Slide Settings'
     fields = field.Fields(ISlideConfig)
 
 
@@ -1015,19 +1022,19 @@ class BulletNavigatorGroup(FormBaseGroup):
 
 class ArrowNavigatorGroup(FormBaseGroup):
     """ArrowNavigator Form Group"""
-    label = u'ArrowNavigator Options'
+    label = u'Arrow Navigator [<] [>]'
     fields = field.Fields(IArrowNavigator)
 
 
 class ExpertGroup(FormBaseGroup):
     """Expert Config Form Group"""
-    label = u'Expert Settings'
+    label = u'Geek Settings'
     fields = field.Fields(IExpertConfig)
 
 
 class CustomCodeGroup(FormBaseGroup):
     """CustomCode Form Group"""
-    label = u'Custom Code'
+    label = u'Customize it! '
     fields = field.Fields(ICustomCode)
 
 
@@ -1035,7 +1042,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     """HeaderPlugin Configuration Form."""
 
     fields = field.Fields(ICollectionViewletConfiguration)
-    groups = (ItemProviderGroup, PlayerOptionsGroup, ExtendedNavigationGroup, BulletNavigatorGroup, ArrowNavigatorGroup, SlideConfigGroup, ExpertGroup, CustomCodeGroup)
+    groups = (ItemProviderGroup, PlayerOptionsGroup, SlideConfigGroup, BulletNavigatorGroup, ArrowNavigatorGroup , ExtendedNavigationGroup, ExpertGroup, CustomCodeGroup)
 
     ignoreContext = False
 
