@@ -8,10 +8,16 @@
     overflow: hidden;
 }
 
-.jssora02r {
+.jssora02r, .jssora02rdn{
     background-position: -63px -33px;
 }
+.jssora02r:hover, .jssora02r:focus {
+    background-position: -183px -33px;
+}
 
-.jssora02l {
+.jssora02l, .jssora02ldn {
     background-position: -3px -33px;
+}
+.jssora02l:hover, .jssora02l:focus {
+    background-position: -123px -33px;
 }
