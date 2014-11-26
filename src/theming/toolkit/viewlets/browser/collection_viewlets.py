@@ -52,7 +52,7 @@ ARROW_STYLE['arrow04']='<span u="arrowleft" class="jssora04l" style="width: 28px
 ARROW_STYLE['arrow05']='<span u="arrowleft" class="jssora05l" style="width: 40px; height: 40px; top: 130px;   left: 8px;"/><span u="arrowright" class="jssora05r" style="width: 40px; height: 40px; top: 130px;   right: 8px;"/>'
 ARROW_STYLE['arrow06']='<span u="arrowleft" class="jssora06l" style="width: 45px; height: 45px; top: 127.5px; left: 8px;"/><span u="arrowright" class="jssora06r" style="width: 45px; height: 45px; top: 127.5px; right: 8px;"/>'
 ARROW_STYLE['arrow07']='<span u="arrowleft" class="jssora07l" style="width: 50px; height: 50px; top: 125px;   left: 8px;"/><span u="arrowright" class="jssora07r" style="width: 50px; height: 50px; top: 125px;   right: 8px;"/>'
-ARROW_STYLE['arrow08']='<span u="arrowleft" class="jssora08l" style="width: 50px; height: 50px; top: 8px; left: 275px;"/><span u="arrowright" class="jssora08r" style="width: 50px; height: 50px; bottom: 8px; left: 275px;"/>'
+ARROW_STYLE['arrow08']='<span u="arrowleft" class="jssorb08l" style="width: 50px; height: 50px; top: 8px; left: 275px;"/><span u="arrowright" class="jssorb08r" style="width: 50px; height: 50px; bottom: 8px; left: 275px;"/>'
 ARROW_STYLE['arrow09']='<span u="arrowleft" class="jssora09l" style="width: 50px; height: 50px; top: 125px; left: 8px;"/><span u="arrowright" class="jssora09r" style="width: 50px; height: 50px; top: 125px; right: 8px;"/>'
 ARROW_STYLE['arrow10']='<span u="arrowleft" class="jssora10l" style="width: 28px; height: 40px; top: 130px; left: 8px;"/><span u="arrowright" class="jssora10r" style="width: 28px; height: 40px; top: 130px; right: 8px;"/>'
 ARROW_STYLE['arrow11']='<span u="arrowleft" class="jssora11l" style="width: 37px; height: 37px; top: 131.5px; left: 8px;"/><span u="arrowright" class="jssora11r" style="width: 37px; height: 37px; top: 131.5px; right: 8px;"/>'
@@ -755,8 +755,8 @@ class IArrowNavigator(Interface):
         title=_(u'Arrow Style'),
         values= [   "arrow01", "arrow02", "arrow03", "arrow04", "arrow05", 
                     "arrow06", "arrow07", "arrow08", "arrow09", "arrow10", 
-                    "arrow11", "arrow012", "arrow13", "arrow14", "arrow015",  
-                    "arrow16", "arrow018",  "arrow19", "arrow20", "arrow021"
+                    "arrow11", "arrow12", "arrow13", "arrow14", "arrow15",  
+                    "arrow16", "arrow18", "arrow19", "arrow20", "arrow21"
                 ]
     )
 
