@@ -748,6 +748,18 @@ class IArrowNavigator(Interface):
         ),
     )
 
+    AN_ArrowStyle = schema.Choice(
+        default=u'arrow01',
+        description=_(u'Choose a style for the navigation arrows'),
+        required=False,
+        title=_(u'Arrow Style'),
+        values= [   "arrow01", "arrow02", "arrow03", "arrow04", "arrow05", 
+                    "arrow06", "arrow07", "arrow08", "arrow09", "arrow10", 
+                    "arrow11", "arrow012", "arrow13", "arrow14", "arrow015",  
+                    "arrow16", "arrow018",  "arrow19", "arrow20", "arrow021"
+                ]
+    )
+
     AN_ChanceToShow = schema.Choice(
         default=u'2',
         description=_(u'0: Never, 1: Mouse Over, 2: Always'),
@@ -1130,10 +1142,8 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             return False
 
     def __generateANTemplate(self, data):
-        """generate the template for the arrows"""
-        string = '<span u="arrowleft" class="jssora02l" style="width: 55px; height: 55px; top: 122.5px; left: 8px;"/>'
-        string +=  '<span u="arrowright" class="jssora02r" style="width: 55px; height: 55px; top: 122.5px; right: 8px;"/>'
-        return string
+        """generate the template for the arrows"""    
+        return ARROW_STYLE[data.get('AN_ArrowStyle', 'arrow01')]
 
     def __configuredOptions(self, data):
         """returns a string with the options from the configuration"""
