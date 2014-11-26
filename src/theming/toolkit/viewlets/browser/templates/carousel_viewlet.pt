@@ -120,10 +120,8 @@
           </tal:items>
           
         </div>
-        <tal:arrownav tal:condition="view/haveArrowNavigator">
-          <span u="arrowleft" class="jssora02l" style="width: 55px; height: 55px; top: 122.5px; left: 8px;"/>
-          <span u="arrowright" class="jssora02r" style="width: 55px; height: 55px; top: 122.5px; right: 8px;"/>
-        </tal:arrownav>
+        <tal:arrownav tal:condition="view/haveArrowNavigator" 
+          tal:content="structure view/get_ArrowNavigator|nothing"/>
         <tal:bulletnav tal:condition="view/haveBulletPointNavigator">
         <!-- bullet navigator container -->
           <div u="navigator" class="" style="position: absolute; bottom: 1em;">

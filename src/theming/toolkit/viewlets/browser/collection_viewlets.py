@@ -129,6 +129,16 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             return settings.get('genericJS', None)
 
     @property
+    def get_ArrowNavigator(self):
+        """Get Arrow Navigator"""
+        settings = self.Settings
+        script_mode = settings.get('AN_useCustomTemplate', None)
+        if script_mode is True:
+            return settings.get('AN_customTemplate', None)
+        else:
+            return settings.get('AN_genericTemplate', None)
+
+    @property
     def get_css(self):
         """Get custom css"""
         settings = self.Settings
@@ -716,15 +726,6 @@ class IArrowNavigator(Interface):
         ),
     )
 
-    AN_Class = schema.TextLine(
-        default=u'$JssorArrowNavigator$',
-        required=True,
-        title=_(
-            u'label_AN_Class',
-            default=u'Arrow Class'),
-        description=_(u'Class to create arrow navigator instance. Default: $JssorArrowNavigator$')
-    )
-
     AN_ChanceToShow = schema.Choice(
         default=u'2',
         description=_(u'0: Never, 1: Mouse Over, 2: Always'),
@@ -759,6 +760,35 @@ class IArrowNavigator(Interface):
         description= _(
             u'Scales arrow navigator or not while slider scale.'
         ),
+    )
+
+
+    AN_genericTemplate =schema.Text(
+        default=u"",
+        description=PMF(
+            u'help_FLS_genericTemplate',
+            default=u'This template is auto-generated from the settings',
+        ),
+        required=False,
+        title=PMF(u'label__FLS_genericTemplate', default=u'Generated ArrowNavigator Template'),
+        readonly=True
+    )
+    AN_useCustomTemplate = schema.Bool(
+        default=False,
+        required=False,
+        title=_(
+            u"label_use_custom_template",
+            default=u"Use customized Navigator Template.",
+        ),
+    )
+    AN_customTemplate =schema.Text(
+        default=u"",
+        description=PMF(
+            u'help_FLS_customTemplate',
+            default=u'This template can be adjusted',
+        ),
+        required=False,
+        title=PMF(u'label__FLS_customTemplate', default=u'Custom Arrow Navigation'),
     )
 
 
@@ -820,6 +850,15 @@ class IExpertConfig(Interface):
             default=u"UISearchMode",
         ),
         values= ["0", "1"]
+    )
+
+    AN_Class = schema.TextLine(
+        default=u'$JssorArrowNavigator$',
+        required=True,
+        title=_(
+            u'label_AN_Class',
+            default=u'Arrow Class'),
+        description=_(u'Class to create arrow navigator instance. Default: $JssorArrowNavigator$')
     )
     
 
@@ -1068,6 +1107,12 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         else:
             return False
 
+    def __generateANTemplate(self, data):
+        """generate the template for the arrows"""
+        string = '<span u="arrowleft" class="jssora02l" style="width: 55px; height: 55px; top: 122.5px; left: 8px;"/>'
+        string +=  '<span u="arrowright" class="jssora02r" style="width: 55px; height: 55px; top: 122.5px; right: 8px;"/>'
+        return string
+
     def __configuredOptions(self, data):
         """returns a string with the options from the configuration"""
         #check for autoplay
@@ -1177,6 +1222,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         if not errors:
             try:
                 data['genericJS']= self.generatedSliderScript(data)
+                data['AN_genericTemplate']= self.__generateANTemplate(data)
     
             except(Exception):
                 import pdb
