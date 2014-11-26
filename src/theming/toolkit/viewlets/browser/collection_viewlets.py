@@ -574,8 +574,10 @@ class IPlayerOptions(Interface):
         required=False,
         title=_(
             u"label_SS_ShowLink",
-            default=u"Whether to bring slide link on top of the slider when slideshow is running, [default = false]",
+            default=u"Show Slide Link?",
         ),
+        description=_(u'Whether to bring slide link on top of the slider when slideshow is running, [default = false]'),  
+        
     )
 
 
@@ -1173,7 +1175,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     def __ArrowNavigatorOptions(self, data):
         """get string of arrow navigation options"""
 
-        AN_options = ""
+        AN_options = ''
         AN = data.get('FLS_ArrowNavigator', True)
         if AN is True:
             #Build BulletPoint Config together
@@ -1195,17 +1197,23 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     def __SlideshowOptions(self, data):
         """get string of Slideshow options"""
 
-        #Build BulletPoint Config together
-        SS_options = "$Class: %s, "%(data.get('SS_Class', '$JssorSlideshowRunner$'))
-        SS_options += "$Transitions: %s, "%(data.get('SS_Transitions', '{$Duration:1000,$Cols:8,$Clip:1}'))
-        SS_options += "$TransitionsOrder: %s, "%(data.get('SS_TransitionsOrder', '1'))
-        if data.get('SS_ShowLink', True):
-            SS_options += "$ShowLink: true "
-        else:
-            SS_options += "$ShowLink: false "
+        SS_options = ''
+        SS = data.get('FLS_SlideShow', False)
+
+        if SS is True:
+            #Build BulletPoint Config together
+            SS_options = "$Class: %s, "%(data.get('SS_Class', '$JssorSlideshowRunner$'))
+            SS_options += "$Transitions: [%s], "%(data.get('SS_Transitions', '{$Duration:1000,$Cols:8,$Clip:1}'))
+            SS_options += "$TransitionsOrder: %s, "%(data.get('SS_TransitionsOrder', '1'))
+            
+            if data.get('SS_ShowLink', True):
+                SS_options += "$ShowLink: true "
+            else:
+                SS_options += "$ShowLink: false "
         
-        #wrap the SlideshowOptions
-        SS_options = "$SlideshowOptions: { " + SS_options + "}, "
+            #wrap the SlideshowOptions
+            SS_options = "$SlideshowOptions: { " + SS_options + "}, "
+
         return SS_options
         
     def __generateANTemplate(self, data):
@@ -1263,7 +1271,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         slideoptions += "$StartIndex: %s, "%(data.get('FLS_StartIndex', u'0'))
 
         # BulletPoint Navigation
-        BPN_options = self.__BulletPointNavigatorOptions     
+        BPN_options = self.__BulletPointNavigatorOptions(data)   
             
         #Arrow Navigator
         AN_options = self.__ArrowNavigatorOptions(data)
@@ -1297,7 +1305,6 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             script +=" } catch(error){console.log(err);}"
 
             return script
-
 
 
     @button.buttonAndHandler(_(u'Save'))
