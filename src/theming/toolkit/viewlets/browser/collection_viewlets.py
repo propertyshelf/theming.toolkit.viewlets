@@ -536,14 +536,46 @@ class IPlayerOptions(Interface):
         values= SLIDER_STEPS
     )
 
-    FLS_SlideEasing =schema.TextLine(
+    FLS_SlideShow = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_SlideShow",
+            default=u"Activate Slideshow Options",
+        ),
+        description=_(
+            u'Use complex transitions instead of a simple slide effect'
+        ),
+    )
+
+    SS_Transitions =schema.TextLine(
         default=u"",
         required=False,
         title=_(
-            u"label_FLS_effect",
-            default=u"Slide Easing Effect",
+            u"label_SS_transition",
+            default=u"SlideShow Transition Effects",
         ) ,
-        description=_(u"Specifies easing for right to left animation")     
+        description=_(u"Paste custom Transition Effects here")     
+    )
+
+    SS_TransitionsOrder = schema.Choice(
+        default=u"1",
+        description=_(u'The way to choose between multiple transition, (1): Sequence [default], (0): Random'),  
+        required=False,
+        title=_(
+            u"label_SS_TransitionOrder",
+            default=u"TransitionsOrder",
+        ),
+        values= ["0", "1"]
+    )
+
+    SS_ShowLink = schema.Bool(
+        default=False,
+        required=False,
+        title=_(
+            u"label_SS_ShowLink",
+            default=u"Whether to bring slide link on top of the slider when slideshow is running, [default = false]",
+        ),
     )
 
 
@@ -831,7 +863,7 @@ class IThumbnailNavigator(Interface):
 
 
 class ISlideshow(Interface):
-    """Arrow Navigation Options"""
+    """Slideshow Options"""
 
 
 class ICaptionSlider(Interface):
@@ -1119,13 +1151,32 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         script=''
         return script
 
+    def __BulletPointNavigatorOptions(self, data):
+        """returns the BulletPoint Navi Options or empty string"""
+        BPN = data.get('FLS_BulletNavigator', True)
+        if BPN is True:
+            """Build BulletPoint Config together"""
+            BPN_options = "$Class: $JssorBulletNavigator$, "
+            BPN_options += "$ChanceToShow: %s, "%(data.get('BNO_ChanceToShow', 2))
+            BPN_options += "$AutoCenter: %s, "%(data.get('BNO_AutoCenter', 1))
+            BPN_options += "$Lanes: %s, "%(data.get('BNO_Lanes', 1))
+            BPN_options += "$Steps: %s, "%(data.get('BNO_Steps', 1))
+            BPN_options += "$Orientation: %s, "%(data.get('BNO_Orientation', 1))
+            BPN_options += "$SpacingX: %s, "%(data.get('BNO_SpacingX', 0))
+            BPN_options += "$SpacingY: %s, "%(data.get('BNO_SpacingY', 0))
+            #wrap the BulletNavigatorOptions
+            BPN_options = "$BulletNavigatorOptions: { " + BPN_options + "}, "
+            return BPN_options
+        else:
+            return ''
+
     def __ArrowNavigatorOptions(self, data):
         """get string of arrow navigation options"""
 
         AN_options = ""
         AN = data.get('FLS_ArrowNavigator', True)
         if AN is True:
-            """Build BulletPoint Config together"""
+            #Build BulletPoint Config together
             AN_options += "$Class: %s, "%(data.get('AN_Class', '$JssorArrowNavigator$'))
             AN_options += "$ChanceToShow: %s, "%(data.get('AN_ChanceToShow', 2))
             AN_options += "$AutoCenter: %s, "%(data.get('AN_AutoCenter', 2))
@@ -1141,6 +1192,22 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         else:
             return False
 
+    def __SlideshowOptions(self, data):
+        """get string of Slideshow options"""
+
+        #Build BulletPoint Config together
+        SS_options = "$Class: %s, "%(data.get('SS_Class', '$JssorSlideshowRunner$'))
+        SS_options += "$Transitions: %s, "%(data.get('SS_Transitions', '{$Duration:1000,$Cols:8,$Clip:1}'))
+        SS_options += "$TransitionsOrder: %s, "%(data.get('SS_TransitionsOrder', '1'))
+        if data.get('SS_ShowLink', True):
+            SS_options += "$ShowLink: true "
+        else:
+            SS_options += "$ShowLink: false "
+        
+        #wrap the SlideshowOptions
+        SS_options = "$SlideshowOptions: { " + SS_options + "}, "
+        return SS_options
+        
     def __generateANTemplate(self, data):
         """generate the template for the arrows"""    
         return ARROW_STYLE[data.get('AN_ArrowStyle', 'arrow01')]
@@ -1161,10 +1228,6 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             autoplay="$AutoPlay: false, "
         #general Slider behavior
         sliderbehavior  = "$SlideDuration: %s, "%(data.get('FLS_SlideDuration', u'500'))
-        easing = data.get('FLS_SlideEasing', None)
-        #set custom easing function if exist
-        if easing is not None: 
-            sliderbehavior += "$SlideEasing: %s, "%(easing)
         sliderbehavior += "$FillMode: %s, "%(data.get('FLS_FillMode', u'5'))
         sliderbehavior += "$Loop: %s, "%(data.get('FLS_Loop', u'1'))
         sliderbehavior += "$DisplayPieces: %s, "%(data.get('FLS_DisplayPieces', u'1'))
@@ -1199,29 +1262,18 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
 
         slideoptions += "$StartIndex: %s, "%(data.get('FLS_StartIndex', u'0'))
 
-        #BulletPoint Navigation
-        BPN_options = ""
-        BPN = data.get('FLS_BulletNavigator', True)
-        if BPN is True:
-            """Build BulletPoint Config together"""
-            BPN_options += "$Class: $JssorBulletNavigator$, "
-            BPN_options += "$ChanceToShow: %s, "%(data.get('BNO_ChanceToShow', 2))
-            BPN_options += "$AutoCenter: %s, "%(data.get('BNO_AutoCenter', 1))
-            BPN_options += "$Lanes: %s, "%(data.get('BNO_Lanes', 1))
-            BPN_options += "$Steps: %s, "%(data.get('BNO_Steps', 1))
-            BPN_options += "$Orientation: %s, "%(data.get('BNO_Orientation', 1))
-            BPN_options += "$SpacingX: %s, "%(data.get('BNO_SpacingX', 0))
-            BPN_options += "$SpacingY: %s, "%(data.get('BNO_SpacingY', 0))
-            #wrap the BulletNavigatorOptions
-            BPN_options = "$BulletNavigatorOptions: { " + BPN_options + "}, "
+        # BulletPoint Navigation
+        BPN_options = self.__BulletPointNavigatorOptions     
             
         #Arrow Navigator
         AN_options = self.__ArrowNavigatorOptions(data)
         if AN_options is False:
             AN_options = ''
 
-        #putting all options together
-        all_options = autoplay + sliderbehavior + slideoptions + BPN_options + AN_options
+        # Slideshow Options
+        SS_options = self.__SlideshowOptions(data)
+        # putting all options together
+        all_options = autoplay + sliderbehavior + slideoptions + BPN_options + AN_options + SS_options
         options ="var options={%s};"%(all_options)
         return options
 
