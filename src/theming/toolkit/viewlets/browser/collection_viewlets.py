@@ -868,10 +868,6 @@ class IThumbnailNavigator(Interface):
     """Thumbnail Navigator Options"""
 
 
-class ISlideshow(Interface):
-    """Slideshow Options"""
-
-
 class ICaptionSlider(Interface):
     """Caption Slider Options"""
 
@@ -921,6 +917,15 @@ class ICaptionSlider(Interface):
 
 class IExtendedNavigation(Interface):
     """Configure drag behavior and arrow keys"""
+
+    FLS_ArrowKeyNavigation = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_ArrowKeyNavigation",
+            default=u"Allows keyboard (arrow key) navigation or not",
+        ),
+    )
     
     FLS_DragOrientation = schema.Choice(
         default=u"1",
@@ -941,15 +946,6 @@ class IExtendedNavigation(Interface):
             default=u"MinDragOffsetToSlide",
         ) ,
         description=_(u"Minimum drag offset to trigger slide in px")     
-    )
-
-    FLS_ArrowKeyNavigation = schema.Bool(
-        default=True,
-        required=False,
-        title=_(
-            u"label_FLS_ArrowKeyNavigation",
-            default=u"Allows keyboard (arrow key) navigation or not",
-        ),
     )
 
 
