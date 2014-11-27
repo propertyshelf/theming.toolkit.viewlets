@@ -473,8 +473,6 @@ class IItemProvider(Interface):
     )
 
     
-    
-
 class IPlayerOptions(Interface):
     """Set the Options for the player behavior"""
 
@@ -877,6 +875,49 @@ class ISlideshow(Interface):
 class ICaptionSlider(Interface):
     """Caption Slider Options"""
 
+    FLS_CaptionSlider = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_CaptionSlider",
+            default=u"Activate Caption Slider",
+        ),
+        description=_(
+            u'Use transitions for the text'
+        ),
+    )
+
+    CS_Transitions =schema.TextLine(
+        default=u"",
+        required=False,
+        title=_(
+            u"label_CS_transition",
+            default=u"Caption Slider Transition Effects",
+        ) ,
+        description=_(u"Paste custom Transition Effects here")     
+    )
+
+    CS_PlayInMode = schema.Choice(
+        default=u"1",
+        description=_(u'(0): None (no play), (1): Chain (goes after main slide)[default], (3): Chain Flatten (goes after main slide and flatten all caption animations)'),  
+        required=False,
+        title=_(
+            u"label_CS_PlayInMode",
+            default=u"PlayInMode",
+        ),
+        values= ["0", "1", "3"]
+    )
+
+    CS_PlayOutMode = schema.Choice(
+        default=u"1",
+        description=_(u'(0): None (no play), (1): Chain (goes before main slide)[default], (3): Chain Flatten (goes before main slide and flatten all caption animations)'),  
+        required=False,
+        title=_(
+            u"label_CS_PlayOutMode",
+            default=u"PlayOutMode",
+        ),
+        values= ["0", "1", "3"]
+    )
 
 class IExtendedNavigation(Interface):
     """Configure drag behavior and arrow keys"""
@@ -934,7 +975,24 @@ class IExpertConfig(Interface):
             default=u'Arrow Class'),
         description=_(u'Class to create arrow navigator instance. Default: $JssorArrowNavigator$')
     )
-    
+
+    SS_Class = schema.TextLine(
+        default=u'$JssorSlideshowRunner$',
+        required=True,
+        title=_(
+            u'label_SS_Class',
+            default=u'SlideShow Class'),
+        description=_(u'Class to create instance of slideshow.[default= $JssorSlideshowRunner$]')
+    )
+
+    CS_Class = schema.TextLine(
+        default=u'$JssorCaptionSlider$',
+        required=True,
+        title=_(
+            u'label_CS_Class',
+            default=u'CaptionSlider Class'),
+        description=_(u'Class to create instance to animate caption.[default= $JssorCaptionSlider$]')
+    )
 
 
 class ICustomCode(Interface):
