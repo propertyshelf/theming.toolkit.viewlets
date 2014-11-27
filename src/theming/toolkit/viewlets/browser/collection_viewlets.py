@@ -1080,6 +1080,12 @@ class ArrowNavigatorGroup(FormBaseGroup):
     fields = field.Fields(IArrowNavigator)
 
 
+class CaptionSliderGroup(FormBaseGroup):
+    """CaptionSlider Form Group"""
+    label = u'Caption Settings'
+    fields = field.Fields(ICaptionSlider)
+
+
 class ExpertGroup(FormBaseGroup):
     """Expert Config Form Group"""
     label = u'Geek Settings'
@@ -1096,7 +1102,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     """HeaderPlugin Configuration Form."""
 
     fields = field.Fields(ICollectionViewletConfiguration)
-    groups = (ItemProviderGroup, PlayerOptionsGroup, SlideConfigGroup, BulletNavigatorGroup, ArrowNavigatorGroup , ExtendedNavigationGroup, ExpertGroup, CustomCodeGroup)
+    groups = (ItemProviderGroup, PlayerOptionsGroup, SlideConfigGroup, BulletNavigatorGroup, ArrowNavigatorGroup, CaptionSliderGroup, ExtendedNavigationGroup, ExpertGroup, CustomCodeGroup)
 
     ignoreContext = False
 
