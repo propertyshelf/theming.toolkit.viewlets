@@ -883,7 +883,7 @@ class ICaptionSlider(Interface):
         ),
     )
 
-    CS_Transitions =schema.TextLine(
+    CS_CaptionTransitions =schema.TextLine(
         default=u"",
         required=False,
         title=_(
@@ -1282,6 +1282,24 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             SS_options = "$SlideshowOptions: { " + SS_options + "}, "
 
         return SS_options
+
+    def __CaptionSliderOptions(self, data):
+        """get string of CaptionSlider options"""
+
+        CS_options = ''
+        CS = data.get('FLS_SlideShow', False)
+
+        if CS is True:
+            #Build Config together
+            CS_options = "$Class: %s, "%(data.get('CS_Class', '$JssorCaptionSlider$'))
+            CS_options += "$CaptionTransitions: [%s], "%(data.get('CS_CaptionTransitions', '{$Duration:1000,$Cols:8,$Clip:1}'))
+            CS_options += "$PlayInMode: %s, "%(data.get('CS_PlayInMode', '1'))
+            CS_options += "$PlayOutMode: %s, "%(data.get('CS_PlayOutMode', '1'))
+            
+            #wrap the CaptionSlider Options
+            CS_options = "$CaptionSliderOptions: { " + CS_options + "}, "
+
+        return CS_options
         
     def __generateANTemplate(self, data):
         """generate the template for the arrows"""    
