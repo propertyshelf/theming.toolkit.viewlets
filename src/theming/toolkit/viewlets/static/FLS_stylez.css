@@ -1,3 +1,14 @@
+/* Slider appearance */
+.fls-wrapper{
+    border:1px solid #ccc;
+    background-color:#000;
+}
+/* Slider captions */
+.fls-content{
+    max-height:20%;
+    overflow:auto;
+    background-color:#fff;
+}
 /* Arrow Navigator Stylez */
 
 /* Arrow 01 */
