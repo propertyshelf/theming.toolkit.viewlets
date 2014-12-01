@@ -7,12 +7,31 @@
 .fls-content{
     max-height:20%;
     overflow:auto;
-    background-color:#fff;
+    background-color:transparent;
+    background: url(dark_caption_bg.png) repeat;
     bottom:0;
     position :absolute;
     width:100%;
     padding:1em 1em 0;
 }
+.fls-content a, .fls-content p,
+.fls-content h1, .fls-content h2, .fls-content h3,
+.fls-content h4, .fls-content h5, .fls-content h6,
+#content .fls-content h1 a, #content .fls-content h2 a,
+#content .fls-content h3 a, #content .fls-content h4 a,
+#content .fls-content h5 a, #content .fls-content h6 a,
+#content .fls-content a:link{
+    color:#fff;
+    text-decoration: none;
+    font-weight:normal;
+    border-bottom:0 none transparent;
+}
+
+.fls-content h5{
+    width:30%;
+    float:left;
+}
+
 
 /*  */
 .fls-slides{
