@@ -1236,7 +1236,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
 
         #build the FLS Script
         if sliderOptions is not None and initiate_code is not None:
-            genericScript="<script type='text/javascript'>$(window).load(function($) { %s %s });</script>"%(sliderOptions, initiate_code)
+            genericScript="<script type='text/javascript'>$(document).ready(function($) { %s %s });</script>"%(sliderOptions, initiate_code)
             return genericScript
         else:
             return None
