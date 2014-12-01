@@ -66,6 +66,25 @@ ARROW_STYLE['arrow19']='<span u="arrowleft" class="jssora19l" style="width: 50px
 ARROW_STYLE['arrow20']='<span u="arrowleft" class="jssora20l" style="width: 55px; height: 55px; top: 122.5px; left: 8px;"/><span u="arrowright" class="jssora20r" style="width: 55px; height: 55px; top: 122.5px; right: 8px;"/>'
 ARROW_STYLE['arrow21']='<span u="arrowleft" class="jssora21l" style="width: 55px; height: 55px; top: 122.5px; left: 8px;"/><span u="arrowright" class="jssora21r" style="width: 55px; height: 55px; top: 122.5px; right: 8px;"/>'
 
+BULLET_STYLE ={}
+BULLET_STYLE['bullet01']='<div u="navigator" class="jssorb01" style="position:absolute; bottom:16px; right:10px;"><div u="prototype" style="position:absolute; width:12px; height:12px;"/></div>'
+BULLET_STYLE['bullet02']='<div u="navigator" class="jssorb02" style="position:absolute; bottom:16px; left:6px;" ><div u="prototype"  style="position:absolute; width:21px; height:21px; text-align:center; line-height:21px; color:White; font-size:12px;"><div u="numbertemplate" /></div></div>'
+BULLET_STYLE['bullet03']='<div u="navigator" class="jssorb03" style="position:absolute; bottom:16px; left:6px;" ><div u="prototype"  style="position:absolute; width:21px; height:21px; text-align:center; line-height:21px; color:white; font-size:12px;"><div u="numbertemplate" /></div></div>'
+BULLET_STYLE['bullet05']='<div u="navigator" class="jssorb05" style="position:absolute; bottom:16px; right:6px;"><div u="prototype"  style="position:absolute; width:16px; height:16px;" /></div>'
+BULLET_STYLE['bullet06']='<div u="navigator" class="jssorb06" style="position:absolute; bottom:16px; left:6px;" ><div u="prototype"  style="position:absolute; width:18px; height:18px;" /></div>'
+BULLET_STYLE['bullet07']='<div u="navigator" class="jssorb07" style="position:absolute; bottom:16px; left:6px;" ><div u="prototype"  style="position:absolute; width:20px; height:20px;" /></div>'
+BULLET_STYLE['bullet09']='<div u="navigator" class="jssorb09" style="position:absolute; bottom:16px; right:10px;"><div u="prototype" style="position:absolute; width:12px; height:12px;" /></div>'
+BULLET_STYLE['bullet10']='<div u="navigator" class="jssorb10" style="position:absolute; bottom:16px; right:6px;" ><div u="prototype" style="position:absolute; width:11px; height:11px;" /></div>'
+BULLET_STYLE['bullet11']='<div u="navigator" class="jssorb11" style="position:absolute; bottom:16px; right:6px;" ><div u="prototype" style="position:absolute; width:11px; height:11px;" /></div>'
+BULLET_STYLE['bullet12']='<div u="navigator" class="jssorb12" style="position:absolute; bottom:16px; right:6px;" ><div u="prototype" style="position:absolute; width:16px; height:16px;"/></div>'
+BULLET_STYLE['bullet13']='<div u="navigator" class="jssorb13" style="position:absolute; bottom:16px; right:6px;" ><div u="prototype" style="position:absolute; width:21px; height:21px;" /></div>'
+BULLET_STYLE['bullet14']='<div u="navigator" class="jssorb14" style="position:absolute; bottom:16px; right:6px;"><div u="prototype" style="position:absolute; width:12px; height:12px;" /></div>'
+BULLET_STYLE['bullet16']='<div u="navigator" class="jssorb16" style="position:absolute;bottom:16px;right:6px;"><div u="prototype" style="position:absolute; width:21px; height:21px;" /></div>'
+BULLET_STYLE['bullet17']='<div u="navigator" class="jssorb17" style="position:absolute;bottom:16px;right:6px;"><div u="prototype" style="position:absolute; width:16px; height:16px;" /></div>'
+BULLET_STYLE['bullet18']='<div u="navigator" class="jssorb18" style="position:absolute;bottom:16px;right:6px;"><div u="prototype" style="position:absolute; width:24px; height:24px;text-align:center;line-height:24px;font-size:16px;"><div u="numbertemplate" class="n" /></div></div>'
+BULLET_STYLE['bullet20']='<div u="navigator" class="jssorb20" style="position:absolute;bottom:16px;left:6px;"><div u="prototype" style="position:absolute; width:19px; height:19px;text-align:center;line-height:19px;color:White;font-size:12px;"><div u="numbertemplate"/></div></div>'
+BULLET_STYLE['bullet21']='<div u="navigator" class="jssorb21" style="position:absolute;bottom:16px;left:6px;"><div u="prototype" style="position:absolute; width:19px; height:19px;text-align:center;line-height:19px;color:White;font-size:12px;" /></div>'
+
 
 class IPossibleCollectionViewlet(Interface):
     """Marker interface for possible Collection viewlet."""
@@ -159,6 +178,16 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             return settings.get('AN_customTemplate', None)
         else:
             return settings.get('AN_genericTemplate', None)
+
+    @property
+    def get_BulletPointNavigator(self):
+        """Get Arrow Navigator"""
+        settings = self.Settings
+        script_mode = settings.get('BNO_useCustomTemplate', None)
+        if script_mode is True:
+            return settings.get('BNO_customTemplate', None)
+        else:
+            return settings.get('BNO_genericTemplate', None)
 
     @property
     def get_css(self):
@@ -707,6 +736,19 @@ class IBulletPointNavigator(Interface):
             u'The activated Navigator adds a BulletPoint Navigation to the Slider'
         ),
     )
+
+    BNO_BulletStyle = schema.Choice(
+        default=u'bullet01',
+        description=_(u'Choose a style for the navigation arrows'),
+        required=False,
+        title=_(u'Bullet Point Style'),
+        values= [   "bullet01", "bullet02", "bullet03", "bullet05", "bullet06", 
+                    "bullet07", "bullet09", "bullet10", "bullet11", "bullet12", 
+                    "bullet13", "bullet14", "bullet16", "bullet17", "bullet18",  
+                    "bullet20", "bullet21"
+                ]
+    )
+
     BNO_ChanceToShow = schema.Choice(
         default=u'2',
         description=_(u'[Required] 0: Never, 1: Mouse Over, 2: Always'),
@@ -761,14 +803,33 @@ class IBulletPointNavigator(Interface):
         description=_(u'[Optional] Vertical space between each item in pixel, default value is 0')
     )
 
-    BNO_PrototypeCSS = schema.Text(
-            default=u"position: absolute; width:15px; height:15px; background-color:black; border: 1px solid #ccc;",
-            required=False,
-            title=_(
-                u"label_PrototypeCSS",
-                default=u"BulletPoint CSS"),
-            description=_(u"Set the CSS styles for the BulletPoints")
-        )
+    BNO_genericTemplate =schema.Text(
+        default=u"",
+        description=PMF(
+            u'help_BNO_genericTemplate',
+            default=u'This template is auto-generated from the settings',
+        ),
+        required=False,
+        title=PMF(u'label__BNO_genericTemplate', default=u'Generated BulletPointNavigator Template'),
+        readonly=True
+    )
+    BNO_useCustomTemplate = schema.Bool(
+        default=False,
+        required=False,
+        title=_(
+            u"label_BNO_use_custom_template",
+            default=u"Use customized Navigator Template.",
+        ),
+    )
+    BNO_customTemplate =schema.Text(
+        default=u"",
+        description=PMF(
+            u'help_BNO_customTemplate',
+            default=u'This template can be adjusted',
+        ),
+        required=False,
+        title=PMF(u'label__BNO_customTemplate', default=u'Custom Bullet Point Navigation'),
+    )
 
 
 class IArrowNavigator(Interface):
@@ -884,7 +945,7 @@ class ICaptionSlider(Interface):
     )
 
     CS_CaptionTransitions =schema.TextLine(
-        default=u"",
+        default=u"{$Duration:900,x:0.6,$Easing:{$Left:$JssorEasing$.$EaseInOutSine},$Opacity:2}",
         required=False,
         title=_(
             u"label_CS_transition",
@@ -1287,12 +1348,12 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         """get string of CaptionSlider options"""
 
         CS_options = ''
-        CS = data.get('FLS_SlideShow', False)
+        CS = data.get('FLS_CaptionSlider', False)
 
         if CS is True:
             #Build Config together
             CS_options = "$Class: %s, "%(data.get('CS_Class', '$JssorCaptionSlider$'))
-            CS_options += "$CaptionTransitions: [%s], "%(data.get('CS_CaptionTransitions', '{$Duration:1000,$Cols:8,$Clip:1}'))
+            CS_options += "$CaptionTransitions: [%s], "%(data.get('CS_CaptionTransitions', '{$Duration:900,x:0.6,$Easing:{$Left:$JssorEasing$.$EaseInOutSine},$Opacity:2}'))
             CS_options += "$PlayInMode: %s, "%(data.get('CS_PlayInMode', '1'))
             CS_options += "$PlayOutMode: %s, "%(data.get('CS_PlayOutMode', '1'))
             
@@ -1304,6 +1365,10 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     def __generateANTemplate(self, data):
         """generate the template for the arrows"""    
         return ARROW_STYLE[data.get('AN_ArrowStyle', 'arrow01')]
+
+    def __generateBNTemplate(self, data):
+        """generate the template for the bullet points"""    
+        return BULLET_STYLE[data.get('BNO_BulletStyle', 'bullet01')]
 
     def __configuredOptions(self, data):
         """returns a string with the options from the configuration"""
@@ -1356,17 +1421,19 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         slideoptions += "$StartIndex: %s, "%(data.get('FLS_StartIndex', u'0'))
 
         # BulletPoint Navigation
-        BPN_options = self.__BulletPointNavigatorOptions(data)   
-            
+        BPN = self.__BulletPointNavigatorOptions(data)    
         #Arrow Navigator
-        AN_options = self.__ArrowNavigatorOptions(data)
-        if AN_options is False:
-            AN_options = ''
+        AN = self.__ArrowNavigatorOptions(data)
+        if AN is False:
+            AN = ''
 
         # Slideshow Options
-        SS_options = self.__SlideshowOptions(data)
+        SS = self.__SlideshowOptions(data)
+        # Caption Transitions
+        CT = self.__CaptionSliderOptions(data)
+
         # putting all options together
-        all_options = autoplay + sliderbehavior + slideoptions + BPN_options + AN_options + SS_options
+        all_options = autoplay + sliderbehavior + slideoptions + BPN + AN + SS + CT
         options ="var options={%s};"%(all_options)
         return options
 
@@ -1399,6 +1466,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             try:
                 data['genericJS']= self.generatedSliderScript(data)
                 data['AN_genericTemplate']= self.__generateANTemplate(data)
+                data['BNO_genericTemplate']= self.__generateBNTemplate(data)
     
             except(Exception):
                 import pdb
