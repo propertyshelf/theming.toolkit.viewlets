@@ -447,6 +447,12 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         settings = self.Settings
         return settings.get('FLS_ThumbnailNavigator', False)
 
+    @property
+    def showCaption(self):
+        """Do we want to see the text with the image?"""
+        settings = self.Settings
+        return settings.get('FLS_Captions', False)
+
 class ICollectionViewletConfiguration(Interface):
     """FLS Configuration Form."""
 
@@ -602,7 +608,6 @@ class IPlayerOptions(Interface):
         description=_(u'Whether to bring slide link on top of the slider when slideshow is running, [default = false]'),  
         
     )
-
 
     FLS_PauseOnHover= schema.Choice(
         default=u"3",
@@ -1107,6 +1112,17 @@ class IThumbnailNavigator(Interface):
 
 class ICaptionSlider(Interface):
     """Caption Slider Options"""
+    FLS_Captions = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_Caption",
+            default=u"Enable Captions",
+        ),
+        description=_(
+            u'Show the text next to the Image?'
+        ),
+    )
 
     FLS_CaptionSlider = schema.Bool(
         default=True,

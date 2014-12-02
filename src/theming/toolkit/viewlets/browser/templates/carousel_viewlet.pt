@@ -58,7 +58,9 @@
                     tal:attributes="src listing/lead_image_thumb"/>
               </tal:image>
 
-              <div class="fls-content top" u="caption" t="0" t2="0">
+              <div class="fls-content top"
+                tal:condition="view/showCaption"
+                u="caption" t="0" t2="0">
                 <h2 class="listing-title"><a tal:attributes="href listing_url" tal:content="listing_title" /></h2>
 
                 <div class="item price"
