@@ -895,7 +895,6 @@ class IArrowNavigator(Interface):
         ),
     )
 
-
     AN_genericTemplate =schema.Text(
         default=u"",
         description=PMF(
@@ -906,6 +905,7 @@ class IArrowNavigator(Interface):
         title=PMF(u'label__FLS_genericTemplate', default=u'Generated ArrowNavigator Template'),
         readonly=True
     )
+
     AN_useCustomTemplate = schema.Bool(
         default=False,
         required=False,
@@ -914,6 +914,7 @@ class IArrowNavigator(Interface):
             default=u"Use customized Navigator Template.",
         ),
     )
+
     AN_customTemplate =schema.Text(
         default=u"",
         description=PMF(
@@ -927,6 +928,160 @@ class IArrowNavigator(Interface):
 
 class IThumbnailNavigator(Interface):
     """Thumbnail Navigator Options"""
+
+    FLS_ThumbnailNavigator = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_ThumbnailNavigator",
+            default=u"Activate Thumbnail Navigator",
+        ),
+        description=_(
+            u'The activated Navigator adds a Thumbnail Navigation to the Slider'
+        ),
+    )
+
+    TNO_ThumbnailStyle = schema.Choice(
+        default=u'thumb01',
+        description=_(u'Choose a style for the navigation arrows'),
+        required=False,
+        title=_(u'Bullet Point Style'),
+        values= [   'thumb01', 'thumb02', 'thumb03', 'thumb04',
+                    'thumb05', 'thumb06', 'thumb07', 'thumb08',
+                    'thumb11', 'thumb010', 'thumb11', 'thumb12',
+
+                ]
+    )
+
+    TNO_ChanceToShow = schema.Choice(
+        default=u'2',
+        description=_(u'[Required] 0: Never, 1: Mouse Over, 2: Always'),
+        required=False,
+        title=_(u'When to show Thumbnail Navigator?'),
+        values= ["0", "1", "2"]
+    )
+    TNO_ActionMode = schema.Choice(
+        default=u'1',
+        description=_(u'(0): None, (1): act by click [default], (2): act by mouse hover, (3): both'),
+        required=False,
+        title=_(u'Action Mode?'),
+        values= ["0", "1", "2", "3"]
+    )
+    TNO_AutoCenter = schema.Choice(
+        default=u'1',
+        description=_(u'[Optional] Auto center thumbnails in parent container, 0: None, 1: Horizontal, 2: Vertical, 3: Both'),
+        required=False,
+        title=_(u'Auto Center?'),
+        values= ["0", "1", "2", "3"]
+    )
+
+    TNO_Lanes = schema.Choice(
+        default=u'1',
+        description=_(u'[Optional] Specify lanes to arrange thumbnails [default=1]'),
+        required=False,
+        title=_(u'Thumbnail Lanes'),
+        values= SLIDER_STEPS
+    )
+
+    TNO_SpacingX = schema.TextLine(
+        default=u'0',
+        required=False,
+        title=_(
+            u'label_TNO_SpacingX',
+            default=u'SpacingX'),
+        description=_(u'[Optional] Horizontal space between each item in pixel, default value is 0')
+    )
+
+    TNO_SpacingY = schema.TextLine(
+        default=u'0',
+        required=False,
+        title=_(
+            u'label_TNO_SpacingY',
+            default=u'SpacingY'),
+        description=_(u'[Optional] Vertical space between each item in pixel, default value is 0')
+    )
+
+    TNO_DisplayPieces = schema.Choice(
+        default=u'1',
+        description=_(u'[Optional] Number of pieces to display [default=1]'),
+        required=False,
+        title=_(u'Display Pieces'),
+        values= SLIDER_STEPS
+    )
+
+    TNO_ParkingPosition = schema.TextLine(
+        description=_(u'The offset position to park thumbnail'),  
+        required=False,
+        title=_(
+            u"label_TNO_ParkingPosition",
+            default=u"Thumbnail Parking Position ",
+        ),
+    )
+
+    TNO_Orientation = schema.Choice(
+        default=u"1",
+        required=False,
+        title=_(
+            u"label_BNO_Orientation",
+            default=u"Orientation"),
+        description=_(u'[Optional] The orientation of the navigator, 1 horizontal, 2 vertical, default value is 1'), 
+        values=["1", "2"]
+    )
+
+    TNO_Scale = schema.Bool(
+        default= True,
+        required= False,
+        title= _(
+            u"label_TNO_Scale",
+            default=u"Scale Thumbnails?",
+        ),
+        description= _(
+            u'Scales thumbnail navigator or not while slider scale? [default=true]'
+        ),
+    )
+
+    TNO_DisableDrag = schema.Bool(
+        default= False,
+        required= False,
+        title= _(
+            u"label_TNO_DisableDrag",
+            default=u"Disable Drag?",
+        ),
+        description= _(
+            u'Disable drag or not? [default=false]'
+        ),
+    )
+
+    TNO_genericTemplate =schema.Text(
+        default=u"",
+        description=PMF(
+            u'help_BNO_genericTemplate',
+            default=u'This template is auto-generated from the settings',
+        ),
+        required=False,
+        title=PMF(u'label__BNO_genericTemplate', default=u'Generated BulletPointNavigator Template'),
+        readonly=True
+    )
+
+    TNO_useCustomTemplate = schema.Bool(
+        default=False,
+        required=False,
+        title=_(
+            u"label_TNO_use_custom_template",
+            default=u"Use customized Navigator Template?",
+        
+        ),
+    )
+
+    TNO_customTemplate =schema.Text(
+        default=u"",
+        description=PMF(
+            u'help_TNO_customTemplate',
+            default=u'This template can be adjusted',
+        ),
+        required=False,
+        title=PMF(u'label__TNO_customTemplate', default=u'Custom Thumbnail Navigation'),
+    )
 
 
 class ICaptionSlider(Interface):
