@@ -951,6 +951,17 @@ class IThumbnailNavigator(Interface):
                 ]
     )
 
+    TNO_Loop =schema.Choice(
+        default=u"1",
+        required=False,
+        title=_(
+            u"label_TNO_Loop",
+            default=u"Thumbnail Loop Behaviour",
+        ),
+        description=_(u'Enable loop(circular) of carousel or not, (0): stop, (1): loop, (2): rewind'),
+        values= ["0", "1", "2"]
+    )
+
     TNO_ChanceToShow = schema.Choice(
         default=u'2',
         description=_(u'[Required] 0: Never, 1: Mouse Over, 2: Always'),
@@ -1473,7 +1484,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         AN_options = ''
         AN = data.get('FLS_ArrowNavigator', True)
         if AN is True:
-            #Build BulletPoint Config together
+            #Build Arrow Navi Config together
             AN_options += "$Class: %s, "%(data.get('AN_Class', '$JssorArrowNavigator$'))
             AN_options += "$ChanceToShow: %s, "%(data.get('AN_ChanceToShow', 2))
             AN_options += "$AutoCenter: %s, "%(data.get('AN_AutoCenter', 2))
@@ -1488,6 +1499,40 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             return AN_options
         else:
             return False
+
+    def __ThumbnailNavigatorOptions(self, data):
+        """get string of thumbnail navigation options"""
+
+        TN_options = ''
+        TN = data.get('FLS_ThumbnailNavigator', True)
+        if TN is True:
+            #Build Thumbnail Config
+            TN_options += "$Class: %s, "%(data.get('TN_Class', '$JssorThumbnailNavigator$'))
+            TN_options += "$Loop: %s, "%(data.get('TNO_Loop', 1))
+            TN_options += "$ActionMode: %s, "%(data.get('TNO_ActionMode', 1))
+            TN_options += "$AutoCenter: %s, "%(data.get('TNO_AutoCenter', 2))
+            TN_options += "$Lanes: %s, "%(data.get('TNO_Lanes',1))
+            TN_options += "$ChanceToShow: %s, "%(data.get('TNO_ChanceToShow', 2))
+            TN_options += "$SpacingX: %s, "%(data.get('TNO_SpacingX', 0))
+            TN_options += "$SpacingY: %s, "%(data.get('TNO_SpacingY', 0))
+            TN_options += "$DisplayPieces: %s,"%(data.get('TNO_DisplayPieces',1))
+            TN_options += "$ParkingPosition: %s,"%(data.get('TNO_ParkingPosition',0))
+            TN_options += "$Orientation: %s,"%(data.get('TNO_Orientation',1))
+
+            if data.get('TNO_Scale', True):
+                TN_options += "$Scale: true, "
+            else:
+                TN_options += "$Scale: false, "
+
+            if data.get('TNO_DisableDrag', False):
+                TN_options += "$DisableDrag: true, "
+            
+            #wrap the ThumbnailNavigatorOptions
+            TN_options = "$ThumbnailNavigatorOptions: { " + TN_options + "}, "
+
+            return TN_options
+        else:
+            return ''
 
     def __SlideshowOptions(self, data):
         """get string of Slideshow options"""
