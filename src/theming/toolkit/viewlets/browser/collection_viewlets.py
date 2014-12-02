@@ -739,7 +739,7 @@ class IBulletPointNavigator(Interface):
 
     BNO_BulletStyle = schema.Choice(
         default=u'bullet01',
-        description=_(u'Choose a style for the navigation arrows'),
+        description=_(u'Choose a style for the Bullet Point Navigator'),
         required=False,
         title=_(u'Bullet Point Style'),
         values= [   "bullet01", "bullet02", "bullet03", "bullet05", "bullet06", 
@@ -943,13 +943,11 @@ class IThumbnailNavigator(Interface):
 
     TNO_ThumbnailStyle = schema.Choice(
         default=u'thumb01',
-        description=_(u'Choose a style for the navigation arrows'),
-        required=False,
-        title=_(u'Bullet Point Style'),
+        description=_(u'Choose a style for the Thumbnail'),
+        title=_(u'Thumbnail Style'),
         values= [   'thumb01', 'thumb02', 'thumb03', 'thumb04',
                     'thumb05', 'thumb06', 'thumb07', 'thumb08',
-                    'thumb11', 'thumb010', 'thumb11', 'thumb12',
-
+                    'thumb09', 'thumb010', 'thumb11', 'thumb12',
                 ]
     )
 
@@ -1296,6 +1294,12 @@ class ArrowNavigatorGroup(FormBaseGroup):
     fields = field.Fields(IArrowNavigator)
 
 
+class ThumbnailNavigatorGroup(FormBaseGroup):
+    """ThumbnailNavigator Form Group"""
+    label = u'Thumbnails'
+    fields = field.Fields(IThumbnailNavigator)
+
+
 class CaptionSliderGroup(FormBaseGroup):
     """CaptionSlider Form Group"""
     label = u'Caption Settings'
@@ -1318,11 +1322,11 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     """HeaderPlugin Configuration Form."""
 
     fields = field.Fields(ICollectionViewletConfiguration)
-    groups = (ItemProviderGroup, PlayerOptionsGroup, SlideConfigGroup, BulletNavigatorGroup, ArrowNavigatorGroup, CaptionSliderGroup, ExtendedNavigationGroup, ExpertGroup, CustomCodeGroup)
+    groups = (ItemProviderGroup, PlayerOptionsGroup, SlideConfigGroup, BulletNavigatorGroup, ArrowNavigatorGroup, ThumbnailNavigatorGroup, CaptionSliderGroup, ExtendedNavigationGroup, ExpertGroup, CustomCodeGroup)
 
     ignoreContext = False
 
-    label = _(u"Configure your MLS FeaturedListingSlider")
+    label = _(u"Configure your PS Slider.")
     description = _(
         u"Adjust the slider settings."
     )
