@@ -1204,6 +1204,14 @@ class IExpertConfig(Interface):
         description=_(u'Class to create instance to animate caption.[default= $JssorCaptionSlider$]')
     )
 
+    TN_Class = schema.TextLine(
+        default=u'$JssorThumbnailNavigator$',
+        required=True,
+        title=_(
+            u'label_TN_Class',
+            default=u'Thumbnail Navigator Class'),
+        description=_(u'Class to create thumbnail navigator instance.[default= $JssorThumbnailNavigator$]')
+    )
 
 class ICustomCode(Interface):
     """enable custom javascripts and css"""
