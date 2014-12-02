@@ -25,14 +25,14 @@
 
     <object name="featuredlisting-collection-config-above" meta_type="CMF Action">
       <property name="available_expr">object/@@featuredlisting-collection-status-above/active</property>
-      <property name="description" i18n:translate="">Configure Top FeaturedListing</property>
+      <property name="description" i18n:translate="">Configure PS Slider (top)</property>
       <property name="icon_expr"></property>
       <property name="i18n_domain">theming.toolkit.viewlets</property>
       <property name="link_target"></property>
       <property name="permissions">
         <element value="Modify portal content" />
       </property>
-      <property name="title" i18n:translate="">Configure FeaturedListing (top)</property>
+      <property name="title" i18n:translate="">Configure PS Slider (top)</property>
       <property name="url_expr">string:${object_url}/@@featuredlisting-collection-config-above</property>
       <property name="visible">True</property>
     </object>
@@ -73,27 +73,27 @@
     <!-- ================ -->
     <object name="featuredlisting-collection-activate-above" meta_type="CMF Action">
       <property name="available_expr">object/@@featuredlisting-collection-status-above/can_activate</property>
-      <property name="description" i18n:translate="">Activate FeaturedListings (top)</property>
+      <property name="description" i18n:translate="">Activate PS Slider (top)</property>
       <property name="icon_expr"></property>
       <property name="i18n_domain">theming.toolkit.viewlets</property>
       <property name="link_target"></property>
       <property name="permissions">
         <element value="Modify portal content" />
       </property>
-      <property name="title" i18n:translate="">Activate FeaturedListings (top)</property>
+      <property name="title" i18n:translate="">Activate PS Slider (top)</property>
       <property name="url_expr">string:${object_url}/@@featuredlisting-collection-toggle-above</property>
       <property name="visible">True</property>
     </object>
     <object name="featuredlisting-collection-deactivate-above" meta_type="CMF Action">
       <property name="available_expr">object/@@featuredlisting-collection-status-above/active</property>
-      <property name="description" i18n:translate="">Deactivate FeaturedListings (top)</property>
+      <property name="description" i18n:translate="">Deactivate PS Slider (top)</property>
       <property name="icon_expr"></property>
       <property name="i18n_domain">theming.toolkit.viewlets</property>
       <property name="link_target"></property>
       <property name="permissions">
         <element value="Modify portal content" />
       </property>
-      <property name="title" i18n:translate="">Deactivate FeaturedListings (top)</property>
+      <property name="title" i18n:translate="">Deactivate PS Slider (top)</property>
       <property name="url_expr">string:${object_url}/@@featuredlisting-collection-toggle-above</property>
       <property name="visible">True</property>
     </object>
