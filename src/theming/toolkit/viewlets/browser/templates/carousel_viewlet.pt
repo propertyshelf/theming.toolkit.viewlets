@@ -127,6 +127,20 @@
           tal:content="structure view/get_ArrowNavigator|nothing"/>
         <tal:bulletnav tal:condition="view/haveBulletPointNavigator"
           tal:content="structure view/get_BulletPointNavigator|nothing"/>
+        <tal:thumbnav >
+          <div u="thumbnavigator" class="jssort01" 
+            style="position:absolute;width:800px;height:100px;left:0px;bottom:0px;">
+            <div u="slides" style="cursor:move;">
+              <div u="prototype" class="p" style="position:absolute;width:72px;height:72px;top:0;left:0;">
+                <div class="w">
+                  <div u="thumbnailtemplate" 
+                    style=" width:100%;height:100%;border:none;position:absolute;top:0;left:0;"></div>
+                </div>
+                <div class="c"></div>
+              </div>
+            </div>
+          </div>
+        </tal:thumbnav>
 
       </div>
         
