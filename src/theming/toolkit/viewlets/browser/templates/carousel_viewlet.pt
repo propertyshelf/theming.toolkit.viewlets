@@ -43,10 +43,9 @@
               <tal:image
                   tal:define="image listing/lead_image | nothing">
                   <a  u="image"
-                      style=""
                       tal:attributes="href listing_url;
                                       title listing_title">
-                    <img style=""
+                    <img
                       tal:condition="image"
                       tal:attributes="src image;
                                       alt listing_title" />
