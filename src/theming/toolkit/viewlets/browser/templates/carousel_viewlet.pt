@@ -43,10 +43,10 @@
               <tal:image
                   tal:define="image listing/lead_image | nothing">
                   <a  u="image"
-                      style="width:auto!important; height:auto!important;"
+                      style=""
                       tal:attributes="href listing_url;
                                       title listing_title">
-                    <img style="width:auto!important; height:auto!important;"
+                    <img style=""
                       tal:condition="image"
                       tal:attributes="src image;
                                       alt listing_title" />
@@ -55,6 +55,8 @@
                       src="++resource++plone.mls.listing.images/no-image.png" />
                    <!-- <small class="caption top"  tal:content="listing_title" />-->
                   </a>
+                  <img u="thumb" tal:condition="view/haveThumbnailNavigator"
+                    tal:attributes="src listing/lead_image_thumb"/>
               </tal:image>
 
               <div class="fls-content top" u="caption" t="0" t2="0">

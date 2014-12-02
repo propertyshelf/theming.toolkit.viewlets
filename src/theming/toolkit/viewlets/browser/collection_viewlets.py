@@ -371,6 +371,13 @@ class FeaturedListingCollectionViewlet(ViewletBase):
                 """replace the original url with a new to a bigger image"""
                 if iurl is not None:        
                     data[index]['lead_image'] = iurl.replace('FLSSIZE', isize)
+                    # add thumbnail path
+                    data[index]['lead_image_thumb'] = iurl.replace('FLSSIZE', 'thumb')
+                    data[index]['lead_image_mini'] = iurl.replace('FLSSIZE', 'mini')
+                    data[index]['lead_image_preview'] = iurl.replace('FLSSIZE', 'preview')
+                    data[index]['lead_image_large'] = iurl.replace('FLSSIZE', 'large')
+
+
 
             except Exception, e:
                 """something wrong with the url?"""
@@ -434,6 +441,11 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         settings = self.Settings
         return settings.get('FLS_ArrowNavigator', False)
 
+    @property
+    def haveThumbnailNavigator(self):
+        """Check config if ThumbnailNavigator should be rendered"""
+        settings = self.Settings
+        return settings.get('FLS_ThumbnailNavigator', False)
 
 class ICollectionViewletConfiguration(Interface):
     """FLS Configuration Form."""
@@ -1498,7 +1510,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
 
             return AN_options
         else:
-            return False
+            return ''
 
     def __ThumbnailNavigatorOptions(self, data):
         """get string of thumbnail navigation options"""
@@ -1516,8 +1528,9 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             TN_options += "$SpacingX: %s, "%(data.get('TNO_SpacingX', 0))
             TN_options += "$SpacingY: %s, "%(data.get('TNO_SpacingY', 0))
             TN_options += "$DisplayPieces: %s,"%(data.get('TNO_DisplayPieces',1))
-            TN_options += "$ParkingPosition: %s,"%(data.get('TNO_ParkingPosition',0))
             TN_options += "$Orientation: %s,"%(data.get('TNO_Orientation',1))
+            if data.get('TNO_ParkingPosition',0) is not None:
+                TN_options += "$ParkingPosition: %s,"%(data.get('TNO_ParkingPosition',0))            
 
             if data.get('TNO_Scale', True):
                 TN_options += "$Scale: true, "
@@ -1636,16 +1649,15 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         BPN = self.__BulletPointNavigatorOptions(data)    
         #Arrow Navigator
         AN = self.__ArrowNavigatorOptions(data)
-        if AN is False:
-            AN = ''
-
         # Slideshow Options
         SS = self.__SlideshowOptions(data)
         # Caption Transitions
         CT = self.__CaptionSliderOptions(data)
+        # Thumbnail Options
+        TO = self.__ThumbnailNavigatorOptions(data)
 
         # putting all options together
-        all_options = autoplay + sliderbehavior + slideoptions + BPN + AN + SS + CT
+        all_options = autoplay + sliderbehavior + slideoptions + BPN + AN + SS + CT + TO
         options ="var options={%s};"%(all_options)
         return options
 
