@@ -17,11 +17,11 @@
           <script type="text/javascript" src="++resource++theming.toolkit.viewlets/fls_integration.js" />
    
       <div class="sliderscript" tal:content="structure view/get_code|nothing"/>
-      <div class="slidercss" tal:content="structure view/get_css|nothing"/>
-    </div>
+      </div>
 
 <div class="fls-wrapper" id="fls-top-wrapper"
-    tal:define="stageCSS view/StageCss;">
+    tal:define="stageCSS view/StageCss;
+                slidesCSS view/SlidesCss">
   <div class="featured_listing_collection" id="slider1_container" 
     tal:attributes="style string:${stageCSS};">
       <tal:results
