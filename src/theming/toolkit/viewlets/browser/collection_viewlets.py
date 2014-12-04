@@ -537,10 +537,11 @@ class IItemProvider(Interface):
     )
 
     featuredListingSlider_ImageSize = schema.Choice(
+        default= 'large',
         description=_(
             u'Choose the size of the image in rendered in the List'
         ),
-        required=False,
+        required=True,
         title=_(u'Slider Image size'),
         values= MLS_IMAGE_SIZES
     )
@@ -601,7 +602,7 @@ class IPlayerOptions(Interface):
     )
 
     FLS_SlideShow = schema.Bool(
-        default=True,
+        default=False,
         required=False,
         title=_(
             u"label_FLS_SlideShow",
@@ -613,7 +614,7 @@ class IPlayerOptions(Interface):
     )
 
     SS_Transitions =schema.TextLine(
-        default=u"",
+        default=u"{$Duration:1900,$Clip:15}",
         required=False,
         title=_(
             u"label_SS_transition",
@@ -656,7 +657,7 @@ class IPlayerOptions(Interface):
     )
 
     FLS_FillMode = schema.Choice(
-        default=u"5",
+        default=u"2",
         description=_(u'The way to fill image in slide, (0): stretch, (1): contain (keep aspect ratio and put all inside slide), (2): cover (keep aspect ratio and cover whole slide), (4): actual size, (5): contain for large image, actual size for small image'),  
         required=False,
         title=_(
@@ -790,7 +791,7 @@ class IBulletPointNavigator(Interface):
     )
 
     BNO_BulletStyle = schema.Choice(
-        default=u'bullet01',
+        default=u'bullet16',
         description=_(u'Choose a style for the Bullet Point Navigator'),
         required=False,
         title=_(u'Bullet Point Style'),
@@ -802,14 +803,14 @@ class IBulletPointNavigator(Interface):
     )
 
     BNO_ChanceToShow = schema.Choice(
-        default=u'2',
+        default=u'1',
         description=_(u'[Required] 0: Never, 1: Mouse Over, 2: Always'),
         required=False,
         title=_(u'When to show Bullet Navigator?'),
         values= ["0", "1", "2"]
     )
     BNO_AutoCenter = schema.Choice(
-        default=u'1',
+        default=u'3',
         description=_(u'[Optional] Auto center navigator in parent container, 0: None, 1: Horizontal, 2: Vertical, 3: Both'),
         required=False,
         title=_(u'Auto Center?'),
@@ -823,7 +824,7 @@ class IBulletPointNavigator(Interface):
         values= SLIDER_STEPS
     )
     BNO_Lanes = schema.Choice(
-        default=u'1',
+        default=u'2',
         description=_(u'[Optional] Specify lanes to arrange items, default value is 1'),
         required=False,
         title=_(u'Bullet Navigator Lanes'),
@@ -902,7 +903,7 @@ class IArrowNavigator(Interface):
     AN_ArrowStyle = schema.Choice(
         default=u'arrow01',
         description=_(u'Choose a style for the navigation arrows'),
-        required=False,
+        required=True,
         title=_(u'Arrow Style'),
         values= [   "arrow01", "arrow02", "arrow03", "arrow04", "arrow05", 
                     "arrow06", "arrow07", "arrow08", "arrow09", "arrow10", 
@@ -982,7 +983,7 @@ class IThumbnailNavigator(Interface):
     """Thumbnail Navigator Options"""
 
     FLS_ThumbnailNavigator = schema.Bool(
-        default=True,
+        default=False,
         required=False,
         title=_(
             u"label_FLS_ThumbnailNavigator",
@@ -999,8 +1000,9 @@ class IThumbnailNavigator(Interface):
         title=_(u'Thumbnail Style'),
         values= [   'thumb01', 'thumb02', 'thumb03', 'thumb04',
                     'thumb05', 'thumb06', 'thumb07', 'thumb08',
-                    'thumb09', 'thumb010', 'thumb11', 'thumb12',
-                ]
+                    'thumb09', 'thumb10', 'thumb11', 'thumb12',
+                ],
+        required=True
     )
 
     TNO_SlidesCSS = schema.TextLine(
@@ -1130,7 +1132,7 @@ class IThumbnailNavigator(Interface):
             default=u'This template is auto-generated from the settings',
         ),
         required=False,
-        title=PMF(u'label__BNO_genericTemplate', default=u'Generated BulletPointNavigator Template'),
+        title=PMF(u'label__BNO_genericTemplate', default=u'Generated Thumbnail Navigation Template'),
         readonly=True
     )
 
@@ -1182,7 +1184,7 @@ class ICaptionSlider(Interface):
     )
 
     CS_CaptionTransitions =schema.TextLine(
-        default=u"{$Duration:900,x:0.6,$Easing:{$Left:$JssorEasing$.$EaseInOutSine},$Opacity:2}",
+        default=u'{$Duration:1900,$Clip:15}',
         required=False,
         title=_(
             u"label_CS_transition",
@@ -1661,8 +1663,12 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         return THUMBNAIL_STYLE[data.get('TNO_ThumbnailStyle', 'thumb01')]
 
     def __getTNOSlidesCSS(self, data):
-        """set css for slides"""
-        return SlidesCSS[data.get('TNO_ThumbnailStyle', 'thumb01')]
+        """Size css for slides"""
+        try:
+            return SlidesCSS[data.get('TNO_ThumbnailStyle', 'thumb01')]
+
+        except Exception:
+            return ''
 
     def __configuredOptions(self, data):
         """returns a string with the options from the configuration"""
