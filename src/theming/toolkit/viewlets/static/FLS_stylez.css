@@ -471,10 +471,87 @@
 .jssorb21 .dn,.jssorb21 .dn:hover{background-position:-95px -5px}
 
 /* Thumbnail Syles */
+/* Thumbnail Syles 01 */
 .jssort01 .w{position:absolute;top:0;left:0;width:100%;height:100%}
 .jssort01 .c{position:absolute;top:0;left:0;width:68px;height:68px;border:#000 2px solid}
 .jssort01 .p:hover .c,.jssort01 .pav:hover .c,
 .jssort01 .pav .c{background:url(t01.png) center center;border-width:0;top:2px;left:2px;width:68px;height:68px}
 .jssort01 .p:hover .c,.jssort01 .pav:hover .c{top:0;left:0;width:70px;height:70px;border:#fff 1px solid}
+
+/* Thumbnail Syles 02 */
+.jssort02 .w{position:absolute;top:0;left:0;width:100%;height:100%}
+.jssort02 .c{position:absolute;top:0;left:0;width:95px;height:62px;border:#000 2px solid}
+.jssort02 .p:hover .c,.jssort02 .pav:hover .c,.jssort02 .pav .c
+{background:url(t01.png) center center;border-width:0;top:2px;left:2px;width:95px;height:62px}
+.jssort02 .p:hover .c,.jssort02 .pav:hover .c{top:0;left:0;width:97px;height:64px;border:#fff 1px solid}
+
+/* Thumbnail Syles 03 */
+.jssort03 .w,.jssort03 .pav:hover .w{position:absolute;width:60px;height:30px;border:#fff 1px dashed}
+* html .jssort03 .w{width:62px;height:32px}
+.jssort03 .pdn .w,.jssort03 .pav .w{border-style:solid}
+.jssort03 .c{width:62px;height:32px;filter:alpha(opacity=45);opacity:.45;transition:opacity .6s;-moz-transition:opacity .6s;-webkit-transition:opacity .6s;-o-transition:opacity .6s}
+.jssort03 .p:hover .c,.jssort03 .pav .c{filter:alpha(opacity=0);opacity:0}
+.jssort03 .p:hover .c{transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}
+
+/* Thumbnail Syles 04 */
+.jssort04 .w,.jssort04 .pav:hover .w{position:absolute;width:60px;height:30px;border:#09f 1px solid}
+* html .jssort04 .w{width:62px;height:32px}
+.jssort04 .pdn .w,.jssort04 .pav .w{border-style:solid}
+.jssort04 .c{width:62px;height:32px;filter:alpha(opacity=45);opacity:.45;transition:opacity .6s;-moz-transition:opacity .6s;-webkit-transition:opacity .6s;-o-transition:opacity .6s}
+.jssort04 .p:hover .c,.jssort04 .pav .c{filter:alpha(opacity=0);opacity:0}
+.jssort04 .p:hover .c{transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}
+
+/* Thumbnail Syles 05 */
+.jssort05 .f{clip:rect(8px 63px 63px 8px)}
+.jssort05 .i{position:absolute;background:#000;filter:alpha(opacity=30);opacity:.3;width:72px;height:72px;top:0;left:0;transition:background-color .6s;-moz-transition:background-color .6s;-webkit-transition:background-color .6s;-o-transition:background-color .6s}
+.jssort05 .pav .i{background:#fff;filter:alpha(opacity=80);opacity:.8}
+.jssort05 .pdn .i{background:none}
+.jssort05 .p:hover .i,.jssort05 .pav:hover .i{background:#fff;filter:alpha(opacity=30);opacity:.3}
+.jssort05 .p:hover .i{transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}
+
+/* Thumbnail Syles 06 */
+.jssort06 .f{clip:rect(8px 91px 58px 8px)}
+.jssort06 .pav .f{clip:rect(2px 97px 64px 2px)}
+.jssort06 .i{position:absolute;background:#000;filter:alpha(opacity=30);opacity:.3;width:99px;height:66px;top:0;left:0;transition:background-color .6s;-moz-transition:background-color .6s;-webkit-transition:background-color .6s;-o-transition:background-color .6s}
+.jssort06 .pav .i{background:#fff;filter:alpha(opacity=100);opacity:1}
+.jssort06 .pdn .i{background:none}
+.jssort06 .p:hover .i,.jssort06 .pav:hover .i{background:#fff;filter:alpha(opacity=30);opacity:.3}
+.jssort06 .p:hover .i{transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}
+
+/* Thumbnail Syles 07 */
+.jssort07 .i{position:absolute;top:0;left:0;width:72px;height:72px;filter:alpha(opacity=80);opacity:.8}
+.jssort07 .p:hover .i,.jssort07 .pav .i{filter:alpha(opacity=100);opacity:1}
+.jssort07 .o{position:absolute;top:0;left:0;width:70px;height:70px;border:1px solid #000;transition:border-color .6s;-moz-transition:border-color .6s;-webkit-transition:border-color .6s;-o-transition:border-color .6s}
+* html .jssort07 .o{width:72px;height:72px}
+.jssort07 .pav .o,.jssort07 .p:hover .o{border-color:#fff}
+.jssort07 .pav:hover .o{border-color:#09f}
+.jssort07 .p:hover .o{transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}
+
+
+/* Thumbnail Syles 08 */
+.jssort08 .i{position:absolute;top:0;left:0;width:50px;height:50px;filter:alpha(opacity=80);opacity:.8}
+.jssort08 .p:hover .i,.jssort08 .pav:hover .i{filter:alpha(opacity=100);opacity:1}
+.jssort08 .o{position:absolute;top:0;left:0;width:48px;height:48px;border:1px solid #000;transition:border-color .6s;-moz-transition:border-color .6s;-webkit-transition:border-color .6s;-o-transition:border-color .6s}
+* html .jssort08 .o{width:50px;height:50px}
+.jssort08 .pav .o,.jssort08 .p:hover .o{border-color:#fff}
+.jssort08 .pav:hover .o{border-color:#09f}
+.jssort08 .p:hover .o{transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}
+
+/* Thumbnail Syles 09 */
+/* Thumbnail Syles 10 */
+
+/* Thumbnail Syles 11 */
+.jssort11 .p .t{FILTER:alpha(opacity=45);opacity:.45;transition:opacity .6s;-moz-transition:opacity .6s;-webkit-transition:opacity .6s;-o-transition:opacity .6s}
+.jssort11 .pav .t,.jssort11 .pav:hover .t,.jssort11 .p:hover .t{FILTER:alpha(opacity=100);opacity:1;transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}
+
+/* Thumbnail Syles 12 */
+.jssort12 .p img{FILTER:alpha(opacity=55);opacity:.55;transition:opacity .6s;-moz-transition:opacity .6s;-webkit-transition:opacity .6s;-o-transition:opacity .6s}
+.jssort12 .pav img,.jssort12 .pav:hover img,.jssort12 .p:hover img{FILTER:alpha(opacity=100);opacity:1;transition:none;-moz-transition:none;-webkit-transition:none;-o-transition:none}
+.jssort12 .pav:hover img,.jssort12 .p:hover img{FILTER:alpha(opacity=70);opacity:.7}
+.jssort12 .title,.jssort12 .title_back{position:absolute;top:70px;left:0;width:200px;height:30px;line-height:30px;text-align:center;color:#000;font-size:20px}
+.jssort12 .title_back{background-color:#fff;filter:alpha(opacity=50);opacity:.5}
+.jssort12 .pav:hover .title_back,.jssort12 .p:hover .title_back{filter:alpha(opacity=40);opacity:.4}
+.jssort12 .pav .title_back{background-color:#000;filter:alpha(opacity=50);opacity:.5}
+.jssort12 .pav .title{color:#fff}
 
 

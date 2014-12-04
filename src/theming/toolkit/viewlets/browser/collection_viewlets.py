@@ -86,6 +86,23 @@ BULLET_STYLE['bullet18']='<div u="navigator" class="jssorb18" style="position:ab
 BULLET_STYLE['bullet20']='<div u="navigator" class="jssorb20" style="position:absolute;bottom:16px;left:6px;"><div u="prototype" style="position:absolute; width:19px; height:19px;text-align:center;line-height:19px;color:White;font-size:12px;"><div u="numbertemplate"/></div></div>'
 BULLET_STYLE['bullet21']='<div u="navigator" class="jssorb21" style="position:absolute;bottom:16px;left:6px;"><div u="prototype" style="position:absolute; width:19px; height:19px;text-align:center;line-height:19px;color:White;font-size:12px;" /></div>'
 
+THUMBNAIL_STYLE ={}
+THUMBNAIL_STYLE['thumb01']='<div u="thumbnavigator" class="jssort01" style="position:absolute;width:800px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="position:absolute;width:72px;height:72px;top:0;left:0;"><div class="w"><div u="thumbnailtemplate" style=" width:100%;height:100%;border:none;position:absolute;top:0;left:0;"></div></div><div class="c"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb02']='<div u="thumbnavigator" class="jssort02" style="position:absolute;width:240px;height:480px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="position:absolute;width:99px;height:66px;top:0;left:0;"><div class="w"><div u="thumbnailtemplate" style=" width:100%;height:100%;border:none;position:absolute;top:0;left:0;"></div></div><div class="c"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb03']='<div u="thumbnavigator" class="jssort03" style="position:absolute;width:600px;height:60px;left:0px;bottom:0px;"><div style=" background-color:#000;filter:alpha(opacity=30);opacity:.3;width:100%;height:100%;"></div><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:62px;HEIGHT:32px;TOP:0;LEFT:0;"><div class="w"><div u="thumbnailtemplate" style=" WIDTH:100%;HEIGHT:100%;border:none;position:absolute;TOP:0;LEFT:0;"></div></div><div class="c" style="POSITION:absolute;BACKGROUND-COLOR:#000;TOP:0;LEFT:0"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb04']='<div u="thumbnavigator" class="jssort04" style="position:absolute;width:600px;height:60px;right:0px;bottom:0px;"><div u="slides" style="bottom:25px;right:30px;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:62px;HEIGHT:32px;TOP:0;LEFT:0;"><div class="w"><div u="thumbnailtemplate" style=" WIDTH:100%;HEIGHT:100%;border:none;position:absolute;TOP:0;LEFT:0;"></div></div><div class="c" style="POSITION:absolute;BACKGROUND-COLOR:#000;TOP:0;LEFT:0"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb05']='<div u="thumbnavigator" class="jssort05" style="position:absolute;width:800px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:72px;HEIGHT:72px;TOP:0;LEFT:0;"><div class="o" style="position:absolute;top:1px;left:1px;width:72px;height:72px;overflow:hidden;"><div u="thumbnailtemplate" class="b" style="width:72px;height:72px;border:none;position:absolute;TOP:0;LEFT:0;"></div><div class="i"></div><div u="thumbnailtemplate" class="f" style="width:72px;height:72px;border:none;position:absolute;TOP:0;LEFT:0;"></div></div></div></div></div>'
+THUMBNAIL_STYLE['thumb06']='<div u="thumbnavigator" class="jssort06" style="position:absolute;width:240px;height:480px;right:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="position:absolute;width:99px;height:66px;top:0;left:0;"><div class="o" style="position:absolute;top:0px;left:0px;width:99px;height:66px;overflow:hidden;"><div u="thumbnailtemplate" class="b" style="width:99px;height:66px;border:none;position:absolute;top:0;left:0;"></div><div class="i"></div><div u="thumbnailtemplate" class="f" style="width:99px;height:66px;border:none;position:absolute;top:0;left:0;"></div></div></div></div></div>'
+THUMBNAIL_STYLE['thumb07']='<div u="thumbnavigator" class="jssort07" style="position:absolute;width:800px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:72px;HEIGHT:72px;TOP:0;LEFT:0;"><div u="thumbnailtemplate" class="i" style="position:absolute;"></div><div class="o"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb08']='<div u="thumbnavigator" class="jssort08" style="position:absolute;width:600px;height:100px;left:180px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="position:absolute;width:50px;height:50px;top:0;left:0;"><div u="thumbnailtemplate" class="i" style="position:absolute;"></div><div class="o"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb09']='<div u="thumbnavigator" class="sliderb-T" style="position:absolute;bottom:0px;left:0px;height:45px;width:600px;"><div style="filter:alpha(opacity=40);opacity:0.4;position:absolute;display:block;background-color:#000000;top:0px;left:0px;width:100%;height:100%;"></div><div u="slides"><div u="prototype" style="position:absolute;width:600px;height:45px;top:0;left:0;"><div u="thumbnailtemplate" style="position:absolute;width:100%;height:100%;top:0;left:0;font-family:verdana;font-weight:normal;color:#fff;line-height:45px;font-size:20px;padding-left:10px;"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb10']='<div u="thumbnavigator" class="slider1-T" style="position:absolute;bottom:0px;left:0px;height:30px;width:600px;"><div style="filter:alpha(opacity=50);opacity:0.5;position:absolute;display:block;background-color:#000;top:0px;left:0px;width:100%;height:100%;"></div><div u="slides" style="cursor:move;"><div u="prototype" style="position:absolute;width:600px;height:30px;top:0;left:0;"><div u="thumbnailtemplate" style="position:absolute;width:100%;height:100%;top:0;left:0;font-family:verdana;font-weight:normal;color:#fff;line-height:30px;font-size:16px;padding-left:10px;"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb11']='<div u="thumbnavigator" class="jssort11" style="cursor:default;position:absolute;width:600px;height:60px;left:0px;bottom:0px;"><div style=" background-color:#000;filter:alpha(opacity=30);opacity:.3;width:100%;height:100%;"></div><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:60px;HEIGHT:30px;TOP:0;LEFT:0;"><div u="thumbnailtemplate" class="t" style=" WIDTH:60px;HEIGHT:30px;border:none;position:absolute;TOP:0;LEFT:0;"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb12']='<div u="thumbnavigator" class="jssort12" style="cursor:default;position:absolute;width:600px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:200px;HEIGHT:100px;TOP:0;LEFT:0;"><div u="thumbnailtemplate" style="WIDTH:200px;HEIGHT:100px;border:none;position:absolute;TOP:0;LEFT:0;"></div></div></div></div>'
+
+SlidesCSS={}
+SlidesCSS['thumb01']=''
+SlidesCSS['thumb02']='cursor:move;position:absolute;left:240px;top:0px;width:720px;height:480px;overflow:hidden;' 
 
 class IPossibleCollectionViewlet(Interface):
     """Marker interface for possible Collection viewlet."""
@@ -189,6 +206,16 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             return settings.get('BNO_customTemplate', None)
         else:
             return settings.get('BNO_genericTemplate', None)
+
+    @property
+    def get_ThumbnailNavigator(self):
+        """Get Thumbnail Navigator"""
+        settings = self.Settings
+        script_mode = settings.get('TNO_useCustomTemplate', None)
+        if script_mode is True:
+            return settings.get('TNO_customTemplate', None)
+        else:
+            return settings.get('TNO_genericTemplate', None)
 
     @property
     def get_css(self):
@@ -423,6 +450,13 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             css_string+=' width:'+self.StageWidth+';'
 
         return css_string
+
+    @property
+    def SlidesCss(self):
+        """"""
+        settings = self.Settings
+        return settings.get('TNO_SlidesCSS', '')
+    
 
     @property
     def haveBulletPointNavigator(self):
@@ -967,6 +1001,16 @@ class IThumbnailNavigator(Interface):
                     'thumb05', 'thumb06', 'thumb07', 'thumb08',
                     'thumb09', 'thumb010', 'thumb11', 'thumb12',
                 ]
+    )
+
+    TNO_SlidesCSS = schema.TextLine(
+        default=u'',
+        required=False,
+        title=_(
+            u'label_TNO_SlideCSS',
+            default=u'Slides CSS for Thumbnails'),
+        description=_(u'Slides CSS for Thumbnail Styles'),
+        readonly=True
     )
 
     TNO_Loop =schema.Choice(
@@ -1612,6 +1656,14 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         """generate the template for the bullet points"""    
         return BULLET_STYLE[data.get('BNO_BulletStyle', 'bullet01')]
 
+    def __generateTNTemplate(self, data):
+        """generate the template for the thumbnails"""    
+        return THUMBNAIL_STYLE[data.get('TNO_ThumbnailStyle', 'thumb01')]
+
+    def __getTNOSlidesCSS(self, data):
+        """set css for slides"""
+        return SlidesCSS[data.get('TNO_ThumbnailStyle', 'thumb01')]
+
     def __configuredOptions(self, data):
         """returns a string with the options from the configuration"""
         #check for autoplay
@@ -1708,7 +1760,9 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
                 data['genericJS']= self.generatedSliderScript(data)
                 data['AN_genericTemplate']= self.__generateANTemplate(data)
                 data['BNO_genericTemplate']= self.__generateBNTemplate(data)
-    
+                data['TNO_genericTemplate']= self.__generateTNTemplate(data)
+                data['TNO_SlidesCSS']= self.__getTNOSlidesCSS(data)
+             
             except(Exception):
                 import pdb
                 pdb.set_trace()
