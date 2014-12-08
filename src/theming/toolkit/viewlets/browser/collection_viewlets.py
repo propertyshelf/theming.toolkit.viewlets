@@ -190,6 +190,12 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             return settings.get('genericJS', None)
 
     @property
+    def get_PositionClass(self):
+        """Set CSS marker class for Diazo Rules"""
+        settings = self.Settings
+        return settings.get('viewlet_positionClass','aboveContentArea')
+
+    @property
     def get_ArrowNavigator(self):
         """Get Arrow Navigator"""
         settings = self.Settings
