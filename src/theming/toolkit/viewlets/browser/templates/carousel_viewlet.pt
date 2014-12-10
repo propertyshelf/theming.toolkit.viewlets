@@ -33,7 +33,7 @@
           <p i18n:translate="">The collection doesn't have any results.</p>
         </div>
       <div u="slides" class="fls-slides"
-        tal:attributes="style string:${stageCSS};">
+        tal:attributes="style string:${slidesCSS};">
         <div class="collection-item visualIEFloatFix"
              tal:repeat="listing results">
           <tal:items

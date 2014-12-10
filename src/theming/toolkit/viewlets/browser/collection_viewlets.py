@@ -461,9 +461,14 @@ class FeaturedListingCollectionViewlet(ViewletBase):
 
     @property
     def SlidesCss(self):
-        """"""
+        """return Css for SlidesContainer"""
+        """returns Stage Css if nothing is set for slides"""
         settings = self.Settings
-        return settings.get('TNO_SlidesCSS', '')
+        css = settings.get('TNO_SlidesCSS', None)
+        if css is not None:
+            return css
+        else:
+            return self.StageCss
     
 
     @property
