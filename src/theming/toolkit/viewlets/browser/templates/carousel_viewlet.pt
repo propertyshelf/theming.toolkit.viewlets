@@ -129,12 +129,13 @@
       </div>
       </tal:results>
       <!-- Navigators -->
-      <tal:arrownav tal:condition="view/haveArrowNavigator" 
-          tal:content="structure view/get_ArrowNavigator|nothing"/>
       <tal:bulletnav tal:condition="view/haveBulletPointNavigator"
           tal:content="structure view/get_BulletPointNavigator|nothing"/>
       <tal:thumbnav tal:condition="view/haveThumbnailNavigator"
           tal:content="structure view/get_ThumbnailNavigator|nothing"/>
+      <tal:arrownav tal:condition="view/haveArrowNavigator" 
+          tal:content="structure view/get_ArrowNavigator|nothing"/>
+      
     </div>
     
   </div>
