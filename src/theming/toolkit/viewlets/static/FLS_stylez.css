@@ -1,7 +1,7 @@
 /* Slider appearance */
 .fls-wrapper{
     border:1px solid #ccc;
-    background-color:#000;
+    /* background-color:#000; */
 }
 /* Slider captions */
 .fls-content{
