@@ -29,6 +29,8 @@ from theming.toolkit.core.interfaces import IToolkitSettings
 from theming.toolkit.viewlets.browser.interfaces import IToolkitBaseViewlets
 from theming.toolkit.viewlets.i18n import _
 
+from pprint import pprint
+
 try:
     from plone.app.collection.interfaces import ICollection
 except ImportError:
@@ -90,7 +92,7 @@ BULLET_STYLE['bullet21']='<div u="navigator" class="jssorb21" style="position:ab
 
 THUMBNAIL_STYLE ={}
 THUMBNAIL_STYLE['thumb01']='<div u="thumbnavigator" class="jssort01" style="position:absolute;width:800px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="position:absolute;width:72px;height:72px;top:0;left:0;"><div class="w"><div u="thumbnailtemplate" style=" width:100%;height:100%;border:none;position:absolute;top:0;left:0;"></div></div><div class="c"></div></div></div></div>'
-THUMBNAIL_STYLE['thumb02']='<div u="thumbnavigator" class="jssort02" style="position:absolute;width:240px;height:480px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="position:absolute;width:99px;height:66px;top:0;left:0;"><div class="w"><div u="thumbnailtemplate" style=" width:100%;height:100%;border:none;position:absolute;top:0;left:0;"></div></div><div class="c"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb02']='<div u="thumbnavigator" class="jssort02" style="position:absolute;width:240px;height:480px; min-height:100%;max-height:100%;left:0px;bottom:0px;"><div u="slides" style="cursor:move; overflow:visible;"><div u="prototype" class="p" style="position:absolute;width:99px;height:66px;top:0;left:0;"><div class="w"><div u="thumbnailtemplate" style=" width:100%;height:100%;border:none;position:absolute;top:0;left:0;"></div></div><div class="c"></div></div></div></div>'
 THUMBNAIL_STYLE['thumb03']='<div u="thumbnavigator" class="jssort03" style="position:absolute;width:600px;height:60px;left:0px;bottom:0px;"><div style=" background-color:#000;filter:alpha(opacity=30);opacity:.3;width:100%;height:100%;"></div><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:62px;HEIGHT:32px;TOP:0;LEFT:0;"><div class="w"><div u="thumbnailtemplate" style=" WIDTH:100%;HEIGHT:100%;border:none;position:absolute;TOP:0;LEFT:0;"></div></div><div class="c" style="POSITION:absolute;BACKGROUND-COLOR:#000;TOP:0;LEFT:0"></div></div></div></div>'
 THUMBNAIL_STYLE['thumb04']='<div u="thumbnavigator" class="jssort04" style="position:absolute;width:600px;height:60px;right:0px;bottom:0px;"><div u="slides" style="bottom:25px;right:30px;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:62px;HEIGHT:32px;TOP:0;LEFT:0;"><div class="w"><div u="thumbnailtemplate" style=" WIDTH:100%;HEIGHT:100%;border:none;position:absolute;TOP:0;LEFT:0;"></div></div><div class="c" style="POSITION:absolute;BACKGROUND-COLOR:#000;TOP:0;LEFT:0"></div></div></div></div>'
 THUMBNAIL_STYLE['thumb05']='<div u="thumbnavigator" class="jssort05" style="position:absolute;width:800px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:72px;HEIGHT:72px;TOP:0;LEFT:0;"><div class="o" style="position:absolute;top:1px;left:1px;width:72px;height:72px;overflow:hidden;"><div u="thumbnailtemplate" class="b" style="width:72px;height:72px;border:none;position:absolute;TOP:0;LEFT:0;"></div><div class="i"></div><div u="thumbnailtemplate" class="f" style="width:72px;height:72px;border:none;position:absolute;TOP:0;LEFT:0;"></div></div></div></div></div>'
@@ -103,9 +105,8 @@ THUMBNAIL_STYLE['thumb11']='<div u="thumbnavigator" class="jssort11" style="curs
 THUMBNAIL_STYLE['thumb12']='<div u="thumbnavigator" class="jssort12" style="cursor:default;position:absolute;width:600px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:200px;HEIGHT:100px;TOP:0;LEFT:0;"><div u="thumbnailtemplate" style="WIDTH:200px;HEIGHT:100px;border:none;position:absolute;TOP:0;LEFT:0;"></div></div></div></div>'
 
 SlidesCSS={}
-SlidesCSS['full']='width:100%; height:100%; overflow:hidden;'
 SlidesCSS['thumb01']='cursor:move;position:absolute;left:0px;top:0px;width:800px;height:356px;overflow:hidden;'
-SlidesCSS['thumb02']='cursor:move;position:absolute;left:240px;top:0px;width:720px;height:480px;overflow:hidden;' 
+SlidesCSS['thumb02']='cursor:move;position:absolute;left:240px;top:0px;width:720px;height:480px;overflow:visible; min-width:80%; min-height:100%; max-height:100%; max-width:100%;' 
 SlidesCSS['thumb03']='cursor:move;position:absolute;left:0px;top:0px;width:600px;height:300px;overflow:hidden;'
 SlidesCSS['thumb04']='cursor:move;position:absolute;left:0px;top:0px;width:960px;height:400px;overflow:hidden;'
 SlidesCSS['thumb05']='cursor:move;position:absolute;left:0px;top:0px;width:800px;height:356px;overflow:hidden;'
@@ -1034,6 +1035,7 @@ class IThumbnailNavigator(Interface):
         values= [   'thumb01', 'thumb02', 'thumb03', 'thumb04',
                     'thumb05', 'thumb06', 'thumb07', 'thumb08',
                     'thumb09', 'thumb10', 'thumb11', 'thumb12',
+                    'custom'
                 ],
         required=True
     )
@@ -1692,9 +1694,6 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         """generate the template for the bullet points"""    
         return BULLET_STYLE[data.get('BNO_BulletStyle', 'bullet01')]
 
-    def __generateTNTemplate(self, data):
-        """generate the template for the thumbnails"""    
-        return THUMBNAIL_STYLE[data.get('TNO_ThumbnailStyle', 'thumb01')]
 
     def __getTNOSlidesCSS(self, data):
         """Size css for slides"""
@@ -1703,6 +1702,41 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
 
         except Exception:
             return ''
+
+    def LayoutWizzard(self, raw):
+        """checks for selected layouts and set config"""
+        print 'LayoutWizzard '
+        pprint(raw)
+
+        data = raw
+
+        # Arrow Navigator Setting Template
+        data['AN_genericTemplate']= self.__generateANTemplate(raw)
+
+        # BulletPoint Navigator Settings Template
+        data['BNO_genericTemplate']= self.__generateBNTemplate(raw)
+
+        # Thumbnail Navigator Settings Template
+        TNTemplate= raw.get('TNO_ThumbnailStyle', 'custom')
+        if TNTemplate is not None and TNTemplate!='custom':
+            print TNTemplate
+            data['TNO_SlidesCSS']=SlidesCSS.get(TNTemplate, None)
+            data['TNO_genericTemplate']= THUMBNAIL_STYLE.get(TNTemplate, None)
+
+            #settings for skin 2
+            if TNTemplate == 'thumb02':
+                # 2 Lanes
+                data['TNO_Lanes']='2'
+                # TNO_Orientation
+                data['TNO_Orientation']='2'
+                # 6 Pieces: TNO_DisplayPieces
+                data['TNO_DisplayPieces']='6'
+                # Spacing
+                data['TNO_SpacingX']='15'
+                data['TNO_SpacingY']='15'
+                data['TNO_ParkingPosition']='15'
+        
+        return data
 
     def __configuredOptions(self, data):
         """returns a string with the options from the configuration"""
@@ -1796,21 +1830,24 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
     def handle_save(self, action):
         data, errors = self.extractData()
         if not errors:
+            # process data for setting templates
             try:
-                data['genericJS']= self.generatedSliderScript(data)
-                data['AN_genericTemplate']= self.__generateANTemplate(data)
-                data['BNO_genericTemplate']= self.__generateBNTemplate(data)
-                data['TNO_genericTemplate']= self.__generateTNTemplate(data)
-                data['TNO_SlidesCSS']= self.__getTNOSlidesCSS(data)
-             
+                data = self.LayoutWizzard(data)
             except(Exception):
-                import pdb
-                pdb.set_trace()
-                self.context.plone_utils.addPortalMessage("There was a problem with the script generation", 'warning')
-               
+                self.context.plone_utils.addPortalMessage("There was a problem with the Layout Settings. ", 'error')
+
+            # generic script
+            try:
+                data['genericJS']= self.generatedSliderScript(data)           
+            except(Exception):
+                self.context.plone_utils.addPortalMessage("There was a problem with the script generation. Please check the Slider Settings if a text field contains invalid content. ", 'error')
+
             annotations = IAnnotations(self.context)
             key = self.getConfigurationKey
-            annotations[key] = data
+           
+            for k in data:
+                annotations[key][k]=data[k]
+
             self.request.response.redirect(absoluteURL(self.context,
                                                        self.request))
 
