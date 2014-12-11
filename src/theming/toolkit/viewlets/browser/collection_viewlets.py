@@ -103,8 +103,20 @@ THUMBNAIL_STYLE['thumb11']='<div u="thumbnavigator" class="jssort11" style="curs
 THUMBNAIL_STYLE['thumb12']='<div u="thumbnavigator" class="jssort12" style="cursor:default;position:absolute;width:600px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:200px;HEIGHT:100px;TOP:0;LEFT:0;"><div u="thumbnailtemplate" style="WIDTH:200px;HEIGHT:100px;border:none;position:absolute;TOP:0;LEFT:0;"></div></div></div></div>'
 
 SlidesCSS={}
-SlidesCSS['thumb01']=''
+SlidesCSS['full']='width:100%; height:100%; overflow:hidden;'
+SlidesCSS['thumb01']='cursor:move;position:absolute;left:0px;top:0px;width:800px;height:356px;overflow:hidden;'
 SlidesCSS['thumb02']='cursor:move;position:absolute;left:240px;top:0px;width:720px;height:480px;overflow:hidden;' 
+SlidesCSS['thumb03']='cursor:move;position:absolute;left:0px;top:0px;width:600px;height:300px;overflow:hidden;'
+SlidesCSS['thumb04']='cursor:move;position:absolute;left:0px;top:0px;width:960px;height:400px;overflow:hidden;'
+SlidesCSS['thumb05']='cursor:move;position:absolute;left:0px;top:0px;width:800px;height:356px;overflow:hidden;'
+SlidesCSS['thumb06']='cursor:move;position:absolute;left:0px;top:0px;width:720px;height:480px;overflow:hidden;'
+SlidesCSS['thumb07']='cursor:move;position:absolute;left:0px;top:0px;width:800px;height:356px;overflow:hidden;'
+SlidesCSS['thumb08']='cursor:move;position:absolute;left:180px;top:50px;width:600px;height:300px;overflow:hidden;'
+SlidesCSS['thumb09']='cursor:move;position:absolute;left:0px;top:0px;width:600px;height:300px;overflow:hidden;'
+SlidesCSS['thumb10']='cursor:move;position:absolute;left:0px;top:0px;width:600px;height:300px;overflow:hidden;'
+SlidesCSS['thumb11']='cursor:move;position:absolute;left:0px;top:0px;width:600px;height:300px;overflow:hidden;'
+SlidesCSS['thumb12']='cursor:move;position:absolute;left:0px;top:0px;width:600px;height:300px;overflow:hidden;'
+
 
 class IPossibleCollectionViewlet(Interface):
     """Marker interface for possible Collection viewlet."""
@@ -470,7 +482,6 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         else:
             return self.StageCss
     
-
     @property
     def haveBulletPointNavigator(self):
         """Check config if BulletPointNavigator should be rendered"""
