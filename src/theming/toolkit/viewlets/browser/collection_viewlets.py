@@ -1358,10 +1358,11 @@ class ICustomCode(Interface):
         default=u"",
         description=PMF(
             u'help_FLS_genJS',
-            default=u'This Javascript Code is auto-generated from the settings',
+            default=u'This Javascript Code is auto-generated from the Slider settings. You may copy&paste this code as base for customizations above.',
         ),
         required=False,
         title=PMF(u'label__FLS_genJS', default=u'Generated Slider code'),
+        readonly=True,
     )
 
 
