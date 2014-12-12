@@ -91,7 +91,7 @@ BULLET_STYLE['bullet20']='<div u="navigator" class="jssorb20" style="position:ab
 BULLET_STYLE['bullet21']='<div u="navigator" class="jssorb21" style="position:absolute;bottom:16px;left:6px;"><div u="prototype" style="position:absolute; width:19px; height:19px;text-align:center;line-height:19px;color:White;font-size:12px;" /></div>'
 
 THUMBNAIL_STYLE ={}
-THUMBNAIL_STYLE['thumb01']='<div u="thumbnavigator" class="jssort01" style="position:absolute;width:800px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="position:absolute;width:72px;height:72px;top:0;left:0;"><div class="w"><div u="thumbnailtemplate" style=" width:100%;height:100%;border:none;position:absolute;top:0;left:0;"></div></div><div class="c"></div></div></div></div>'
+THUMBNAIL_STYLE['thumb01']='<div u="thumbnavigator" class="jssort01" style="position:absolute;width:800px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="position:absolute;width:72px;height:72px;top:0;left:0; bottom:14px;"><div class="w"><div u="thumbnailtemplate" style=" width:100%;height:100%;border:none;position:absolute;bottom:0;left:0;"></div></div><div class="c"></div></div></div></div>'
 THUMBNAIL_STYLE['thumb02']='<div u="thumbnavigator" class="jssort02" style="position:absolute;width:240px;height:480px; min-height:100%;max-height:100%;left:0px;bottom:0px;"><div u="slides" style="cursor:move; overflow:visible;"><div u="prototype" class="p" style="position:absolute;width:99px;height:66px;top:0;left:0;"><div class="w"><div u="thumbnailtemplate" style=" width:100%;height:100%;border:none;position:absolute;top:0;left:0;"></div></div><div class="c"></div></div></div></div>'
 THUMBNAIL_STYLE['thumb03']='<div u="thumbnavigator" class="jssort03" style="position:absolute;width:600px;height:60px;left:0px;bottom:0px;"><div style=" background-color:#000;filter:alpha(opacity=30);opacity:.3;width:100%;height:100%;"></div><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:62px;HEIGHT:32px;TOP:0;LEFT:0;"><div class="w"><div u="thumbnailtemplate" style=" WIDTH:100%;HEIGHT:100%;border:none;position:absolute;TOP:0;LEFT:0;"></div></div><div class="c" style="POSITION:absolute;BACKGROUND-COLOR:#000;TOP:0;LEFT:0"></div></div></div></div>'
 THUMBNAIL_STYLE['thumb04']='<div u="thumbnavigator" class="jssort04" style="position:absolute;width:600px;height:60px;right:0px;bottom:0px;"><div u="slides" style="bottom:25px;right:30px;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:62px;HEIGHT:32px;TOP:0;LEFT:0;"><div class="w"><div u="thumbnailtemplate" style=" WIDTH:100%;HEIGHT:100%;border:none;position:absolute;TOP:0;LEFT:0;"></div></div><div class="c" style="POSITION:absolute;BACKGROUND-COLOR:#000;TOP:0;LEFT:0"></div></div></div></div>'
@@ -105,8 +105,8 @@ THUMBNAIL_STYLE['thumb11']='<div u="thumbnavigator" class="jssort11" style="curs
 THUMBNAIL_STYLE['thumb12']='<div u="thumbnavigator" class="jssort12" style="cursor:default;position:absolute;width:600px;height:100px;left:0px;bottom:0px;"><div u="slides" style="cursor:move;"><div u="prototype" class="p" style="POSITION:absolute;WIDTH:200px;HEIGHT:100px;TOP:0;LEFT:0;"><div u="thumbnailtemplate" style="WIDTH:200px;HEIGHT:100px;border:none;position:absolute;TOP:0;LEFT:0;"></div></div></div></div>'
 
 SlidesCSS={}
-SlidesCSS['thumb01']='cursor:move;position:absolute;left:0px;top:0px;width:800px;height:356px;overflow:hidden;'
-SlidesCSS['thumb02']='cursor:move;position:absolute;left:240px;top:0px;width:720px;height:480px;overflow:visible; min-width:80%; min-height:100%; max-height:100%; max-width:100%;' 
+SlidesCSS['thumb01']='cursor:move;position:absolute;left:0px;top:0px;overflow:hidden;'
+SlidesCSS['thumb02']='cursor:move;position:absolute;left:240px;top:0px;overflow:hidden;width:720px;height:100%;' 
 SlidesCSS['thumb03']='cursor:move;position:absolute;left:0px;top:0px;width:600px;height:300px;overflow:hidden;'
 SlidesCSS['thumb04']='cursor:move;position:absolute;left:0px;top:0px;width:960px;height:400px;overflow:hidden;'
 SlidesCSS['thumb05']='cursor:move;position:absolute;left:0px;top:0px;width:800px;height:356px;overflow:hidden;'
@@ -1695,10 +1695,10 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         return BULLET_STYLE[data.get('BNO_BulletStyle', 'bullet01')]
 
 
-    def __getTNOSlidesCSS(self, data):
+    def __getTNOSlidesCSS(self, style_key):
         """Size css for slides"""
         try:
-            return SlidesCSS[data.get('TNO_ThumbnailStyle', 'thumb01')]
+            return SlidesCSS.get(style_key, '')
 
         except Exception:
             return ''
@@ -1709,6 +1709,12 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         pprint(raw)
 
         data = raw
+        stageHeightPX= raw.get('featuredListingSlider_height', None)
+        try:
+            stageHeight=int(stageHeightPX.replace('px', ''))
+        except Exception:
+            stageHeight=0
+        stageWidthPX= raw.get('featuredListingSlider_width', None)
 
         # Arrow Navigator Setting Template
         data['AN_genericTemplate']= self.__generateANTemplate(raw)
@@ -1720,8 +1726,25 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         TNTemplate= raw.get('TNO_ThumbnailStyle', 'custom')
         if TNTemplate is not None and TNTemplate!='custom':
             print TNTemplate
-            data['TNO_SlidesCSS']=SlidesCSS.get(TNTemplate, None)
+            LayoutSlidesCSS = SlidesCSS.get(TNTemplate, '')
+            # data['TNO_SlidesCSS']=self.__getTNOSlidesCSS(TNTemplate)
             data['TNO_genericTemplate']= THUMBNAIL_STYLE.get(TNTemplate, None)
+
+            if TNTemplate == 'thumb01':
+                # Slide height= StageHeight-Thumbnail navigator height
+                slidesHeight= 'height:%dpx;'%(stageHeight-180)
+                slidesWidth='width:100%;'
+                data['TNO_SlidesCSS'] = LayoutSlidesCSS + slidesHeight + slidesWidth
+
+                # 1 Lane
+                data['TNO_Lanes']='1'
+                # TNO_Orientation
+                data['TNO_Orientation']='1'
+                # 10 Pieces: TNO_DisplayPieces
+                data['TNO_DisplayPieces']='10'
+                # Spacing
+                data['TNO_SpacingX']='5'
+                data['TNO_SpacingY']='0'
 
             #settings for skin 2
             if TNTemplate == 'thumb02':
