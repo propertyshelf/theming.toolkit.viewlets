@@ -740,13 +740,13 @@ class ISlideConfig(Interface):
     )
 
     featuredListingSlider_width =schema.TextLine(
-        default=u"100%",
+        default=u"940px",
         required=True,
         title=_(
             u"label_FLS_width",
-            default=u"Stage Width",
+            default=u"max. Stage Width",
         ),
-        description=_(u'Set the width of the slider stage box (default:100%). The value can be entered with as css compatible unit (px, %, em, ...).'),  
+        description=_(u'Set the max-width of the slider Stage box (default:940). The value is in px.')
     )
 
     FLS_DisplayPieces = schema.Choice(
