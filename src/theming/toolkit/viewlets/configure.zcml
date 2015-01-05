@@ -4,6 +4,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="theming.toolkit.viewlets">
 
   <!-- Include package dependencies. -->
@@ -30,6 +31,16 @@
   <!-- -*- extra stuff goes here -*- -->
 
   <class class="Products.Archetypes.BaseObject.BaseObject">
+    <implements interface="theming.toolkit.viewlets.browser.header_plugins.IPossibleHeaderPlugins" />
+    <implements interface="theming.toolkit.viewlets.browser.collection_viewlets.IPossibleCollectionViewlet" />
+  </class>
+
+  <class class="Products.Archetypes.BaseObject.BaseObject" zcml:condition="installed Products.Archetypes">
+    <implements interface="theming.toolkit.viewlets.browser.header_plugins.IPossibleHeaderPlugins" />
+    <implements interface="theming.toolkit.viewlets.browser.collection_viewlets.IPossibleCollectionViewlet" />
+  </class>
+
+  <class class="plone.dexterity.content.DexterityContent" zcml:condition="installed plone.dexterity">
     <implements interface="theming.toolkit.viewlets.browser.header_plugins.IPossibleHeaderPlugins" />
     <implements interface="theming.toolkit.viewlets.browser.collection_viewlets.IPossibleCollectionViewlet" />
   </class>
