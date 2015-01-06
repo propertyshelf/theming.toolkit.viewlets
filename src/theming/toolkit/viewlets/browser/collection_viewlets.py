@@ -287,9 +287,9 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         """get Config depending on viewlet.manager"""
 
         manager_name = self.manager.__name__
-        if manager_name == u'plone.abovecontentbody':
+        if manager_name == u'plone.abovecontent':
             return CONFIGURATION_KEY_ABOVE
-        elif manager_name == u'plone.belowcontentbody':
+        elif manager_name == u'plone.belowcontent':
             return CONFIGURATION_KEY_BELOW
         else:
             return CONFIGURATION_KEY
