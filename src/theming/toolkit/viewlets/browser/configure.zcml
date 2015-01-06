@@ -45,7 +45,7 @@
       class=".collection_viewlets.FeaturedListingCollectionViewlet"
       for=".collection_viewlets.ICollectionViewlet"
       layer=".interfaces.IToolkitViewlets"
-      manager="plone.app.layout.viewlets.interfaces.IAboveContentBody"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
       name="theming.toolkit.viewlets.featuredlisting-collection-above"
       permission="zope2.View"
       template="templates/carousel_viewlet.pt"
