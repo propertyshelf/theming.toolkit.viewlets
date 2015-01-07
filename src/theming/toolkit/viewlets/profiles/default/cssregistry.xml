@@ -6,7 +6,7 @@
         id="++resource++theming.toolkit.viewlets/FLS_stylez.css"
         cacheable="True"
         compression="safe"
-        cookable="True"
+        cookable="False"
         enabled="1"
         rel="stylesheet"/>
 </object>
