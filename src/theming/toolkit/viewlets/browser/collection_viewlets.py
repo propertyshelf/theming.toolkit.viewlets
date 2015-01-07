@@ -1713,8 +1713,8 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
 
     def LayoutWizzard(self, raw):
         """checks for selected layouts and set config"""
-        print 'LayoutWizzard '
-        pprint(raw)
+        #print 'LayoutWizzard '
+        #pprint(raw)
 
         data = raw
         stageHeightPX= raw.get('featuredListingSlider_height', None)
@@ -1722,7 +1722,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             stageHeight=int(stageHeightPX.replace('px', ''))
         except Exception:
             stageHeight=0
-        stageWidthPX= raw.get('featuredListingSlider_width', None)
+        #stageWidthPX= raw.get('featuredListingSlider_width', None)
 
         # Arrow Navigator Setting Template
         data['AN_genericTemplate']= self.__generateANTemplate(raw)
@@ -1733,14 +1733,14 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         # Thumbnail Navigator Settings Template
         TNTemplate= raw.get('TNO_ThumbnailStyle', 'custom')
         if TNTemplate is not None and TNTemplate!='custom':
-            print TNTemplate
+            #print TNTemplate
             LayoutSlidesCSS = SlidesCSS.get(TNTemplate, '')
             # data['TNO_SlidesCSS']=self.__getTNOSlidesCSS(TNTemplate)
             data['TNO_genericTemplate']= THUMBNAIL_STYLE.get(TNTemplate, None)
 
             if TNTemplate == 'thumb01':
                 # Slide height= StageHeight-Thumbnail navigator height
-                slidesHeight= 'height:%dpx;'%(stageHeight-180)
+                slidesHeight= 'height:%dpx;'%(stageHeight-110)
                 slidesWidth='width:100%;'
                 data['TNO_SlidesCSS'] = LayoutSlidesCSS + slidesHeight + slidesWidth
 
@@ -1753,6 +1753,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
                 # Spacing
                 data['TNO_SpacingX']='5'
                 data['TNO_SpacingY']='0'
+                data['TNO_AutoCenter']='3'
 
             #settings for skin 2
             if TNTemplate == 'thumb02':
