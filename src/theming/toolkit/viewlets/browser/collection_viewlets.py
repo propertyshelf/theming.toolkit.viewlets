@@ -23,6 +23,12 @@ from plone.mls.listing.browser import (
     listing_collection,
     recent_listings,
 )
+try:
+    from ps.plone.mls.browser.listings import featured
+    has_PSExtensions = True
+except ImportError:
+    has_PSExtensions = False
+
 
 #local import
 from theming.toolkit.core.interfaces import IToolkitSettings
@@ -164,6 +170,8 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             return listing_collection.CONFIGURATION_KEY
         elif recent_listings.IRecentListings.providedBy(obj):
             return recent_listings.CONFIGURATION_KEY
+        elif has_PSExtensions and featured.IFeaturedListings.providedBy(obj):
+            return featured.CONFIGURATION_KEY
         else:
             return False
 
