@@ -526,7 +526,10 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         stagetype = settings.get('CS_StageType', 'Box')
         position = settings.get('CS_StagePosition', 'bottom-left')
         return 'caption_stage '+ stagetype +' '+ position
-   
+
+    @property
+    def CaptionDataLayout(self):
+        return self.Settings.get('CS_DataType', 'layout01')
 
 
 class ICollectionViewletConfiguration(Interface):
@@ -1245,13 +1248,13 @@ class ICaptionSlider(Interface):
 
 
     CS_DataType = schema.Choice(
-        default=u"Price: Compact",
+        default=u"layout01",
         required=True,
         title=_(
             u"label_CS_DataType",
-            default=u"Caption Data Type",
+            default=u"Caption Data Layout",
         ),
-        values= ["Price: Compact", "Price: Extended", "Title: Compact", "Title: Extended"]
+        values= ['layout01', 'layout02', 'layout03', 'layout04', 'layout05']
     )
 
     CS_StageMargin =schema.TextLine(

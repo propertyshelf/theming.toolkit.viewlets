@@ -54,70 +54,42 @@
                     <img
                       tal:condition="not:image" alt="" title=""
                       src="++resource++plone.mls.listing.images/no-image.png" />
-                   <!-- <small class="caption top"  tal:content="listing_title" />-->
                   </a>
                   <img u="thumb" tal:condition="view/haveThumbnailNavigator"
                     tal:attributes="src listing/lead_image_thumb"/>
               </tal:image>
 
-              <div class="fls-content top"
+              <div
                 tal:condition="view/showCaption"
-                u="caption" t="0" t2="0">
-                <h2 class="listing-title"><a tal:attributes="href listing_url" tal:content="listing_title" /></h2>
-
-                <div class="item price"
-                  tal:define="item listing/price|nothing"
-                  tal:condition="item">
-                  <h5 class="item-heading" tal:content="item/label" tal:condition="item">[Label]</h5>
-                  <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
-                </div>
-
-                <div class="item beds_baths"
-                  tal:define="item listing/beds_baths|nothing" tal:condition="item">
-                  <h5 class="item-heading" tal:content="item/label">[Label]</h5>
-                  <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
-                </div>
-
-                <div class="item location"
-                  tal:define="item listing/location|nothing" tal:condition="item">
-                  <h5 class="item-heading" tal:content="item/label">[Label]</h5>
-                  <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
-                </div>
-
-                <div class="item lot_size"
-                  tal:define="item listing/lot_size|nothing" tal:condition="item">
-                  <h5 class="item-heading" tal:content="item/label">[Label]</h5>
-                  <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="structure item/value">[Value]</a></p>
-                </div>
-
-                <div class="item workflow_status"
-                  tal:define="item listing/workflow_status|nothing" tal:condition="item">
-                  <h5 class="item-heading" tal:content="item/label">[Label]</h5>
-                  <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
-                </div>
-
-                <div class="item listing_type"
-                  tal:define="item listing/listing_type|nothing" tal:condition="item">
-                  <h5 class="item-heading" tal:content="item/label">[Label]</h5>
-                  <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
-                </div>
-
-                <div class="item object_type"
-                  tal:define="item listing/object_type|nothing" tal:condition="item">
-                  <h5 class="item-heading" tal:content="item/label">[Label]</h5>
-                  <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
-                </div>
-
-                <div class="item location_type"
-                  tal:define="item listing/location_type|nothing" tal:condition="item">
-                  <h5 class="item-heading" tal:content="item/label">[Label]</h5>
-                  <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
-                </div>
-
-                <div class="item view_type"
-                  tal:define="item listing/view_type|nothing" tal:condition="item">
-                  <h5 class="item-heading" tal:content="item/label">[Label]</h5>
-                  <p class="item-body"><a href="" tal:attributes="href listing_url" tal:omit-tag="not: wraplink" tal:content="item/value">[Value]</a></p>
+                u="caption" t="0" t2="0"
+                tal:attributes="class view/CaptionCSSClass"
+                tal:define="layout view/CaptionDataLayout">
+                <div class="fls_caption">
+                  <div 
+                    tal:attributes="class layout"
+                    tal:condition="python: layout=='layout01'">
+                    <h3 class="highlight price" tal:content="listing/price/value"/>
+                    <div class="title" tal:content="listing/title/value"/>
+                    <div class="location" tal:content="listing/location/value"/>
+                    <div class="bedbath">
+                      <a class="baths"><span tal:content="listing/rooms_baths/value|nothing"/></a>
+                      <a class="beds"><span tal:content="listing/rooms_beds/value|nothing"/></a>
+                    </div>
+                  </div>
+                  <div 
+                    tal:attributes="class layout"
+                    tal:condition="python: layout=='layout02'">
+                    <div class="row01"><div class="title" tal:content="listing/title/value"/></div>
+                    <div class="row02">
+                      <span class="baths"><span tal:content="listing/rooms_baths/value|nothing"/></span>
+                      <span class="beds"><span tal:content="listing/rooms_beds/value|nothing"/></span>
+                      <span class="location" tal:content="listing/location/value"/>
+                      <span class="highlight price" tal:content="listing/price/value"/>
+                    </div>
+                  </div>
+                  <div tal:condition="python: layout=='layout03'">Layout 03</div>
+                  <div tal:condition="python: layout=='layout04'">Layout 04</div>
+                  <div tal:condition="python: layout=='layout05'">Layout 05</div>
                 </div>
               </div>
 
