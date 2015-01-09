@@ -335,7 +335,6 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             try to return a resultset of items
             different data provider are intended
             we try until we find a resultset 
-
         """
         provider = self.ItemProvider
         
@@ -518,8 +517,17 @@ class FeaturedListingCollectionViewlet(ViewletBase):
     @property
     def showCaption(self):
         """Do we want to see the text with the image?"""
+        return self.Settings.get('FLS_Captions', False)
+
+    @property
+    def CaptionCSSClass(self):
+        """uses current settings to generate the correct caption classes"""
         settings = self.Settings
-        return settings.get('FLS_Captions', False)
+        stagetype = settings.get('CS_StageType', 'Box')
+        position = settings.get('CS_StagePosition', 'bottom-left')
+        return 'caption_stage '+ stagetype +' '+ position
+   
+
 
 class ICollectionViewletConfiguration(Interface):
     """FLS Configuration Form."""
@@ -748,7 +756,7 @@ class ISlideConfig(Interface):
     )
 
     featuredListingSlider_width =schema.TextLine(
-        default=u"940px",
+        default=u"100%",
         required=True,
         title=_(
             u"label_FLS_width",
