@@ -1214,6 +1214,48 @@ class ICaptionSlider(Interface):
         ),
     )
 
+    CS_StageType = schema.Choice(
+        default=u"Box",
+        description=_(u'(Box): height:30%, width:30% (Column): height:100%, width:30% (Row): height:20%, width:100%'),  
+        required=True,
+        title=_(
+            u"label_CS_StageType",
+            default=u"Caption Stage Type",
+        ),
+        values= ["Box", "Column", "Row"]
+    )
+
+    CS_StagePosition = schema.Choice(
+        default=u"top-left",
+        required=True,
+        title=_(
+            u"label_CS_StageType",
+            default=u"Caption Stage Type",
+        ),
+        values= ["top-left", "top-right", "bottom-left", "bottom-right"]
+    )
+
+
+    CS_DataType = schema.Choice(
+        default=u"Price: Compact",
+        required=True,
+        title=_(
+            u"label_CS_DataType",
+            default=u"Caption Data Type",
+        ),
+        values= ["Price: Compact", "Price: Extended", "Title: Compact", "Title: Extended"]
+    )
+
+    CS_StageMargin =schema.TextLine(
+        default=u'0',
+        required=False,
+        title=_(
+            u"label_CS_StageMargin",
+            default=u"Caption Offset",
+        ) ,
+        description=_(u"Offset Space from the border in PX. Default: 0")     
+    )
+
     FLS_CaptionSlider = schema.Bool(
         default=True,
         required=False,
