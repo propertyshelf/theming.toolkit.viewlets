@@ -72,6 +72,7 @@
                   <div 
                     tal:attributes="class layout"
                     tal:condition="python: layout=='layout01'">
+                    
                     <h3 class="highlight price" tal:content="listing/price/value"/>
                     <div class="title" tal:content="listing/title/value"/>
                     <div class="location" tal:content="listing/location/value"/>
@@ -84,17 +85,19 @@
                   <div 
                     tal:attributes="class layout"
                     tal:condition="python: layout=='layout02'">
+                    <h5>Layout 02</h5>
                     <div class="row01"><div class="title" tal:content="listing/title/value"/></div>
                     <div class="row02">
-                      <span class="baths"><span tal:content="listing/rooms_baths/value|nothing"/></span>
-                      <span class="beds"><span tal:content="listing/rooms_beds/value|nothing"/></span>
+                      <span class="baths" tal:condition="listing/rooms_baths"><span tal:content="listing/rooms_baths/value"/></span>
+                      <span class="beds" tal:condition="listing/rooms_beds/value">
+                        <span tal:content="listing/rooms_beds/value|nothing"/></span>
                       <span class="location" tal:content="listing/location/value"/>
                       <span class="highlight price" tal:content="listing/price/value"/>
                     </div>
                   </div>
-                  <div tal:condition="python: layout=='layout03'">Layout 03</div>
-                  <div tal:condition="python: layout=='layout04'">Layout 04</div>
-                  <div tal:condition="python: layout=='layout05'">Layout 05</div>
+                  <div tal:condition="python: layout=='layout03'"><h5>Layout 03</h5></div>
+                  <div tal:condition="python: layout=='layout04'"><h5>Layout 04</h5></div>
+                  <div tal:condition="python: layout=='layout05'"><h5>Layout 05</h5></div>
                 </div>
               </div>
 
