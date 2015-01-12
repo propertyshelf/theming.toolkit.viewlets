@@ -564,7 +564,7 @@
     background-color:transparent;
 }
 .caption_stage.Box{
-    width:25%;
+    width:30%;
     min-width:100px;
     max-width: 100%;
 }
@@ -581,20 +581,40 @@
     bottom:0;
     left:0;
 }
+.caption_stage.bottom-left.offset{
+    bottom:2em;
+    left:2em;
+}
 .caption_stage.bottom-right{
     bottom:0;
     right:0;
+}
+.caption_stage.bottom-right.offset{
+    bottom:2em;
+    right:2em;
 }
 .caption_stage.top-left{
     top:0;
     left:0;
 }
+.caption_stage.top-left.offset{
+    top:2em;
+    left:2em;
+}
 .caption_stage.top-right{
     top:0;
     right:0;
+}
+.caption_stage.top-right.offset{
+    top:2em;
+    right:2em;
 }
 
 .caption_stage .fls_caption{
     background-color:#fff;
 }
 
+/* Given Caption Layouts */
+.caption_stage .layout01{
+    
+}
