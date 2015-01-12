@@ -63,7 +63,11 @@
                 tal:condition="view/showCaption"
                 u="caption" t="0" t2="0"
                 tal:attributes="class view/CaptionCSSClass"
-                tal:define="layout view/CaptionDataLayout">
+                tal:define="layout view/CaptionDataLayout;
+                            bath_val listing/rooms_baths/value|nothing;
+                            bath python: True if bath_val is not None else False;
+                            bed_val listing/rooms_beds/value|nothing;
+                            bed python: True if bed_val is not None else False;">
                 <div class="fls_caption">
                   <div 
                     tal:attributes="class layout"
@@ -72,9 +76,10 @@
                     <div class="title" tal:content="listing/title/value"/>
                     <div class="location" tal:content="listing/location/value"/>
                     <div class="bedbath">
-                      <a class="baths"><span tal:content="listing/rooms_baths/value|nothing"/></a>
-                      <a class="beds"><span tal:content="listing/rooms_beds/value|nothing"/></a>
+                      <a class="baths icons-on" tal:condition="bath"><span tal:content="bath_val"/></a>
+                      <a class="beds icons-on"  tal:condition="bed"><span tal:content="bed_val"/></a>
                     </div>
+
                   </div>
                   <div 
                     tal:attributes="class layout"

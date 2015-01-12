@@ -611,7 +611,18 @@
 }
 
 .caption_stage .fls_caption{
-    background-color:#fff;
+    background-color:transparent;
+}
+
+.caption_stage .baths.icons-on{
+  display:block;
+  padding-left:20px;
+  background:url(bathrooms.png) no-repeat;
+}
+.caption_stage .beds.icons-on{
+  display:block;
+  padding-left:20px;
+  background:url(bedrooms.png) no-repeat;
 }
 
 /* Given Caption Layouts */
