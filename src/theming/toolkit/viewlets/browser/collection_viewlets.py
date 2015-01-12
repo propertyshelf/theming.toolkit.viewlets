@@ -525,7 +525,11 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         settings = self.Settings
         stagetype = settings.get('CS_StageType', 'Box')
         position = settings.get('CS_StagePosition', 'bottom-left')
-        return 'caption_stage '+ stagetype +' '+ position
+        base = 'caption_stage '
+        if settings.get('CS_Offset', True):
+            base = base + 'offset '
+
+        return base + stagetype +' '+ position
 
     @property
     def CaptionDataLayout(self):
@@ -1257,14 +1261,16 @@ class ICaptionSlider(Interface):
         values= ['layout01', 'layout02', 'layout03', 'layout04', 'layout05']
     )
 
-    CS_StageMargin =schema.TextLine(
-        default=u'0',
+    CS_Offset = schema.Bool(
+        default=True,
         required=False,
         title=_(
-            u"label_CS_StageMargin",
-            default=u"Caption Offset",
-        ) ,
-        description=_(u"Offset Space from the border in PX. Default: 0")     
+            u"label_CaptionOffset",
+            default=u"Enable Captions Offset?",
+        ),
+        description=_(
+            u'Spacing from the Slider borders?'
+        ),
     )
 
     FLS_CaptionSlider = schema.Bool(
@@ -1272,7 +1278,7 @@ class ICaptionSlider(Interface):
         required=False,
         title=_(
             u"label_CaptionSlider",
-            default=u"Activate Caption Slider",
+            default=u"Activate Caption Transitions?",
         ),
         description=_(
             u'Use transitions for the text'
