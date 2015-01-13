@@ -67,7 +67,11 @@
                             bath_val listing/rooms_baths/value|nothing;
                             bath python: True if bath_val is not None else False;
                             bed_val listing/rooms_beds/value|nothing;
-                            bed python: True if bed_val is not None else False;">
+                            bed python: True if bed_val is not None else False;
+                            location_raw listing/location/value;
+                            location_list python:location_raw.split(',');
+                            location_length python:len(location_list)-1;
+                            location python:location_list[0]+', '+location_list[location_length-1]+', '+location_list[location_length];">
                 <div class="fls_caption">
                   <div 
                     tal:attributes="class layout"
@@ -75,7 +79,7 @@
                     
                     <h3 class="highlight price" tal:content="listing/price/value"/>
                     <div class="title" tal:content="listing/title/value"/>
-                    <div class="location" tal:content="listing/location/value"/>
+                    <div class="location" tal:content="location"/>
                     <div class="bedbath">
                       <a class="baths icons-on" tal:condition="bath"><span tal:content="bath_val"/></a>
                       <a class="beds icons-on"  tal:condition="bed"><span tal:content="bed_val"/></a>
@@ -92,7 +96,7 @@
                       <span class="baths icons-on" tal:condition="bath"><span tal:content="bath_val"/></span>
                       <span class="beds icons-on"  tal:condition="bed"><span tal:content="bed_val"/></span>
                       <span class="v_devider"/>
-                      <span class="location" tal:content="listing/location/value"/>
+                      <span class="location" tal:content="location"/>
                       <span class="highlight price" tal:content="listing/price/value"/>
                     </div>
                   </div>
