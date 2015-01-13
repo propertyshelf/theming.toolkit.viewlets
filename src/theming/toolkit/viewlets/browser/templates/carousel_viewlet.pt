@@ -85,12 +85,13 @@
                   <div 
                     tal:attributes="class layout"
                     tal:condition="python: layout=='layout02'">
-                    <h5>Layout 02</h5>
-                    <div class="row01"><div class="title" tal:content="listing/title/value"/></div>
+                    <div class="row01">
+                      <div class="title" tal:content="listing/title/value"/>
+                    </div>
                     <div class="row02">
-                      <span class="baths" tal:condition="listing/rooms_baths"><span tal:content="listing/rooms_baths/value"/></span>
-                      <span class="beds" tal:condition="listing/rooms_beds/value">
-                        <span tal:content="listing/rooms_beds/value|nothing"/></span>
+                      <span class="baths icons-on" tal:condition="bath"><span tal:content="bath_val"/></span>
+                      <span class="beds icons-on"  tal:condition="bed"><span tal:content="bed_val"/></span>
+                      <span class="v_devider"/>
                       <span class="location" tal:content="listing/location/value"/>
                       <span class="highlight price" tal:content="listing/price/value"/>
                     </div>

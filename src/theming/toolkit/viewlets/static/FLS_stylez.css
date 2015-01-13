@@ -1,3 +1,11 @@
+/* Mixin */
+.vertical_align{
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
 /* Slider appearance */
 .fls-wrapper{
     border:1px solid #ccc;
@@ -563,6 +571,12 @@
     height:auto;
     background-color:transparent;
 }
+.caption_stage .v_devider{
+    width:2px;
+    height:1em;
+    border-right:2px dotted;
+    margin-top:0.25em;
+}
 .caption_stage.Box{
     width:30%;
     min-width:100px;
@@ -668,7 +682,9 @@
     width:84%;
 }
 
-.fls_caption > div {
+.fls_caption > div,
+.fls_caption .row01,
+.fls_caption .row02 {
     background:rgb(4,19,48);
     background: transparent\9;
     background:rgba(4,19,48,0.8);
@@ -708,5 +724,44 @@
 .caption_stage.Column.offset.top-left{
     height:95%;
 
+}
+/* Layout 02 */
+.fls_caption .layout02{
+    background:none;
+}
+.caption_stage .layout02 .baths.icons-on,
+.caption_stage .layout02 .beds.icons-on{
+    width:30px;
+    float:left;
+
+}
+.fls_caption .layout02 .row02 span{
+    float:left;
+}
+.caption_stage .layout02 .v_devider{
+    margin-right:1em;
+}
+.caption_stage.Column .layout02 .price{
+    position:absolute;
+    top:-0.25em;
+    right:0;
+    padding:0.6em 1em 0.4em;
+    
+}
+
+.caption_stage .highlight{
+    background-color: #758f00;
+    color:#fff;
+    font-size:1.5em;
+}
+
+.fls_caption .row01,
+.fls_caption .row02{
+    margin-bottom:10px;
+    padding-bottom:0;
+    overflow:auto;
+    min-height:2em;
+    padding: 0.5em 1em 0;
+    position:relative;
 }
 
