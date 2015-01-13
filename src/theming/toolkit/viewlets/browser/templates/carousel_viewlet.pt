@@ -23,7 +23,7 @@
 
 <div class="fls-wrapper" id="fls-top-wrapper"
     tal:define="stageCSS view/StageCss;
-                slidesCSS view/SlidesCss">
+                slidesCSS view/StageCss">
   <div class="featured_listing_collection" id="slider1_container" 
     tal:attributes="style string:${stageCSS};">
       <tal:results
