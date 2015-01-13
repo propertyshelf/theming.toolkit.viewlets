@@ -580,7 +580,11 @@
 .caption_stage.Row{
     width:100%;
 }
-
+.caption_stage.Row.offset{
+    width:90%;
+    left:5%;
+    right:5%;
+}
 .caption_stage.bottom-left{
     bottom:0;
     left:0;
@@ -594,7 +598,6 @@
     bottom:0;
 }
 
-.caption_stage.bottom-left.offset.Row,
 .caption_stage.bottom-left.offset.Column{
     left:0;
 }
@@ -619,7 +622,6 @@
     top:5%;
     left:5%;
 }
-.caption_stage.top-left.offset.Row,
 .caption_stage.top-left.offset.Column{
     left:0;
 }
@@ -666,7 +668,7 @@
     width:84%;
 }
 
-.caption_stage .layout01{
+.fls_caption > div {
     background:rgb(4,19,48);
     background: transparent\9;
     background:rgba(4,19,48,0.8);
@@ -679,7 +681,7 @@
 }
 .caption_stage .layout01 h3,
 .caption_stage .layout01 a{
-  color:#b5b5b5;
+  color:#fff;
   margin-top:0;
 }
 
