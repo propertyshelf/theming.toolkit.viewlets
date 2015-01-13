@@ -684,7 +684,8 @@
 
 .fls_caption > div,
 .fls_caption .row01,
-.fls_caption .row02 {
+.fls_caption .row02,
+.caption_stage.Column .layout02 {
     background:rgb(4,19,48);
     background: transparent\9;
     background:rgba(4,19,48,0.8);
@@ -693,7 +694,7 @@
 
     color:#b5b5b5;
     min-height:100%;
-    padding-bottom:1em;
+    
 }
 .caption_stage .layout01 h3,
 .caption_stage .layout01 a{
@@ -726,7 +727,9 @@
 
 }
 /* Layout 02 */
-.fls_caption .layout02{
+.fls_caption .layout02,
+.caption_stage.Column .layout02 .row01,
+.caption_stage.Column .layout02 .row02{
     background:none;
 }
 .caption_stage .layout02 .baths.icons-on,
@@ -741,9 +744,14 @@
 .caption_stage .layout02 .v_devider{
     margin-right:1em;
 }
+
+.caption_stage.Column .layout02 .row02{
+    padding-top:4em;
+
+}
 .caption_stage.Column .layout02 .price{
     position:absolute;
-    top:-0.25em;
+    top:0;
     right:0;
     padding:0.6em 1em 0.4em;
     
@@ -755,13 +763,47 @@
     font-size:1.5em;
 }
 
+.caption_stage.Box .layout02 .row02{
+    padding-bottom: 3.5em
+}
+.caption_stage.Box .layout02 .highlight{
+    position:absolute; 
+    left:0;
+    right:0;
+    bottom:0;
+    padding: 0.5em 1em;
+}
+.caption_stage.Row .layout02 .highlight{
+    position:absolute;
+    right:0;
+    bottom:0;
+    padding: 0.5em 1em;
+    top:-1px;
+}
+
+.caption_stage.Box .layout02 .row02 .v_devider,
+.caption_stage.Column .layout02 .row02 .v_devider{
+    clear:both;
+    float:none;
+    display:block;
+    border:none;
+    width:100%;
+    height:0.8em;
+    margin-bottom:0.5em;
+    border-bottom:2px dotted;
+}
+
+
 .fls_caption .row01,
 .fls_caption .row02{
     margin-bottom:10px;
-    padding-bottom:0;
     overflow:auto;
     min-height:2em;
-    padding: 0.5em 1em 0;
+    padding: 0.5em 1em;
     position:relative;
 }
+.fls_caption .row02{
+    overflow:hidden;
+}
+
 
