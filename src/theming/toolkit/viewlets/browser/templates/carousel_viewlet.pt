@@ -71,7 +71,8 @@
                             location_raw listing/location/value;
                             location_list python:location_raw.split(',');
                             location_length python:len(location_list)-1;
-                            location python:location_list[0]+', '+location_list[location_length-1]+', '+location_list[location_length];">
+                            location python:location_list[0]+', '+location_list[location_length-1]+', '+location_list[location_length];
+                            isLongCaption view/isLongCaption;">
                 <div class="fls_caption">
                   <div 
                     tal:attributes="class layout"
@@ -81,8 +82,8 @@
                     <div class="title" tal:content="listing/title/value"/>
                     <div class="location" tal:content="location"/>
                     <div class="bedbath">
-                      <a class="baths icons-on" tal:condition="bath"><span tal:content="bath_val"/></a>
-                      <a class="beds icons-on"  tal:condition="bed"><span tal:content="bed_val"/></a>
+                      <span class="baths icons-on" tal:condition="bath"><span tal:content="bath_val"/></span>
+                      <span class="beds icons-on"  tal:condition="bed"><span tal:content="bed_val"/></span>
                     </div>
 
                   </div>
@@ -100,9 +101,20 @@
                       <span class="highlight price" tal:content="listing/price/value"/>
                     </div>
                   </div>
-                  <div tal:condition="python: layout=='layout03'"><h5>Layout 03</h5></div>
-                  <div tal:condition="python: layout=='layout04'"><h5>Layout 04</h5></div>
-                  <div tal:condition="python: layout=='layout05'"><h5>Layout 05</h5></div>
+                  <div 
+                    tal:attributes="class layout"
+                    tal:condition="python: layout=='layout03'">
+                    <div class="short" tal:condition="not:isLongCaption">
+                      <span class="title icons-on" tal:content="listing/title/value" />
+                      <span class="type icons-on" tal:content="listing/object_type/value"/>
+                      <span class="beds icons-on"  tal:condition="bed" tal:content="bed_val" />
+                      <span class="baths icons-on" tal:condition="bath" tal:content="bath_val"/>
+                      <span class="price" tal:content="listing/price/value"/>
+                     
+                    </div>
+                   <div class="long" tal:condition="isLongCaption">[Long Caption]</div>
+                   
+                  </div>
                 </div>
               </div>
 

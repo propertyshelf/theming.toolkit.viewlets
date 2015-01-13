@@ -663,14 +663,24 @@
 }
 
 .caption_stage .baths.icons-on{
-  display:block;
-  padding-left:20px;
+  display:inline-block;
+  padding-left:2em;
+  padding-right:2em;
+
   background:url(bathrooms.png) no-repeat;
 }
 .caption_stage .beds.icons-on{
-  display:block;
-  padding-left:20px;
+  display:inline-block;
+  padding-left:2em;
+  padding-right:2em;
   background:url(bedrooms.png) no-repeat;
+  background-position: 0 4px;
+}
+.caption_stage .type.icons-on{
+    display:inline-block;
+    padding-left:2em;
+    padding-right:2em;
+    background:url(house.png) no-repeat;
 }
 
 
@@ -695,6 +705,10 @@
     color:#b5b5b5;
     min-height:100%;
     
+}
+/* Layout 01*/
+.layout01{
+    padding-bottom:1em;
 }
 .caption_stage .layout01 h3,
 .caption_stage .layout01 a{
@@ -806,4 +820,26 @@
     overflow:hidden;
 }
 
+/* Caption Layout 03 */
+.caption_stage.Box .layout03{
+    padding:4% 6%;
+    
+}
+
+.caption_stage .layout03 .title{
+    display:block;
+    color:#758f00;
+    font-size:1.3em;
+}
+
+.caption_stage.Box .layout03 .price{
+    position:absolute;
+    font-size:1.4em;
+    right:8%;
+    bottom:10%;
+}
+.caption_stage.Box .layout03 .type.icons-on{
+  display:block;
+  margin: 0.3em 0;
+}
 

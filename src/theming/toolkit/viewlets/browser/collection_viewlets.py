@@ -535,6 +535,16 @@ class FeaturedListingCollectionViewlet(ViewletBase):
     def CaptionDataLayout(self):
         return self.Settings.get('CS_DataType', 'layout01')
 
+    @property
+    def isLongCaption(self):
+        """decide if we show extended data"""
+        stagetype = self.Settings.get('CS_StageType', 'Box')
+        if (stagetype=='Column'):
+            return True
+        else:
+            return False
+
+
 
 class ICollectionViewletConfiguration(Interface):
     """FLS Configuration Form."""
@@ -1258,7 +1268,7 @@ class ICaptionSlider(Interface):
             u"label_CS_DataType",
             default=u"Caption Data Layout",
         ),
-        values= ['layout01', 'layout02', 'layout03', 'layout04', 'layout05']
+        values= ['layout01', 'layout02', 'layout03']
     )
 
     CS_Offset = schema.Bool(
