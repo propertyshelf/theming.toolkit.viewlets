@@ -586,8 +586,8 @@
     left:0;
 }
 .caption_stage.bottom-left.offset{
-    bottom:8%;
-    left:8%;
+    bottom:5%;
+    left:5%;
 }
 .caption_stage.bottom-left.offset.Column,
 .caption_stage.bottom-right.offset.Column{
@@ -604,8 +604,8 @@
     right:0;
 }
 .caption_stage.bottom-right.offset{
-    bottom:8%;
-    right:8%;
+    bottom:5%;
+    right:5%;
 }
 .caption_stage.bottom-right.offset.Row,
 .caption_stage.bottom-right.offset.Column{
@@ -616,8 +616,8 @@
     left:0;
 }
 .caption_stage.top-left.offset{
-    top:8%;
-    left:8%;
+    top:5%;
+    left:5%;
 }
 .caption_stage.top-left.offset.Row,
 .caption_stage.top-left.offset.Column{
@@ -629,8 +629,8 @@
     right:0;
 }
 .caption_stage.top-right.offset{
-    top:8%;
-    right:8%;
+    top:5%;
+    right:5%;
 }
 .caption_stage.top-right.offset.Row,
 .caption_stage.top-right.offset.Column{
@@ -704,7 +704,7 @@
 .caption_stage.Column.offset.bottom-right,
 .caption_stage.Column.offset.top-right,
 .caption_stage.Column.offset.top-left{
-    height:92%;
+    height:95%;
 
 }
 
