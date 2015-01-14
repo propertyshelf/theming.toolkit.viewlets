@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.2.a (2014-01-14)
+------------------
+- preparing Featured Listing Slider Release for testserver
+
 0.1 (2014-01-30)
 ----------------
 

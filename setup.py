@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = 'fls_0.1'
+version = '0.2.a'
 
 setup(name='theming.toolkit.viewlets',
       version=version,
