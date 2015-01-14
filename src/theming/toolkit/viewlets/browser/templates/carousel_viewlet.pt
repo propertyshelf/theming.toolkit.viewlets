@@ -68,6 +68,8 @@
                             bath python: True if bath_val is not None else False;
                             bed_val listing/rooms_beds/value|nothing;
                             bed python: True if bed_val is not None else False;
+                            bedbath_val listing/beds_baths/value|nothing;
+                            bedbath python: True if bedbath_val is not None else False;
                             location_raw listing/location/value;
                             location_list python:location_raw.split(',');
                             location_length python:len(location_list)-1;
@@ -105,14 +107,35 @@
                     tal:attributes="class layout"
                     tal:condition="python: layout=='layout03'">
                     <div class="short" tal:condition="not:isLongCaption">
-                      <span class="title icons-on" tal:content="listing/title/value" />
+                      <span class="title" tal:content="listing/title/value" />
                       <span class="type icons-on" tal:content="listing/object_type/value"/>
                       <span class="beds icons-on"  tal:condition="bed" tal:content="bed_val" />
                       <span class="baths icons-on" tal:condition="bath" tal:content="bath_val"/>
                       <span class="price" tal:content="listing/price/value"/>
                      
                     </div>
-                   <div class="long" tal:condition="isLongCaption">[Long Caption]</div>
+                  <div class="long" tal:condition="isLongCaption">
+                    <h3 class="title" tal:content="listing/title/value" />
+                    <span class="location" tal:content="location"/>
+                    <div class="top-info">
+                      <div class="object_type"><span class="label" tal:content="listing/object_type/label" /> - <span class="value" tal:content="listing/object_type/value"/></div>
+                      <div class="beds_baths" tal:condition="bedbath"><span class="label" tal:content="listing/beds_baths/label" /> - <span class="value" tal:content="listing/beds_baths/value"/></div>
+                    </div>
+                    <div class="bottom-info">
+                      <div class="location_type">
+                        <span class="label" tal:content="listing/location_type/label" /> - 
+                        <span class="value" tal:content="listing/location_type/value"/>
+                      </div>
+                      <div class="view_type">
+                        <span class="label" tal:content="listing/view_type/label" /> - 
+                        <span class="value" tal:content="listing/view_type/value"/>
+                      </div>
+                      <div class="lot_size">
+                        <span class="label" tal:content="listing/lot_size/label" /> - 
+                        <span class="value" tal:content="listing/lot_size/value"/>
+                      </div>
+                    </div>
+                  </div>
                    
                   </div>
                 </div>

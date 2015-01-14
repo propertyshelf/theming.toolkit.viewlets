@@ -832,6 +832,7 @@
     display:block;
     color:#758f00;
     font-size:1.3em;
+    line-height:1.15em;
 }
 /* Box */
 .caption_stage.Box .layout03 .price{
@@ -859,4 +860,26 @@
 .caption_stage.Row .layout03 .title{
     display:inline-block;
     width:65%;
+}
+
+.caption_stage.Column .layout03 {
+    padding:0.8em 1em;
+}
+.caption_stage .label{
+    background-color:transparent;
+    font-weight: normal;
+    color:inherit;
+    font-size:1em;
+}
+.caption_stage .layout03 .value{
+    color:#fff;
+    font-weight:bold;
+}
+.caption_stage.Column .layout03 .location{
+    font-style:italic;
+    font-size: 0.86em;
+}
+.caption_stage .layout03 .top-info,
+.caption_stage .layout03 .bottom-info{
+    margin-top:1.5em;
 }
