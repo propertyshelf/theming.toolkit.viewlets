@@ -626,16 +626,33 @@ class IItemProvider(Interface):
 class IPlayerOptions(Interface):
     """Set the Options for the player behavior"""
 
-    FLS_SlideDuration = schema.TextLine(
-        default=u"500",
+    FLS_responsiveSlider = schema.Bool(
+        default=True,
         required=False,
         title=_(
-            u"label_FLS_SlideDuration",
-            default=u"Slide Duration",
-        )    ,
-        description=_(
-            u'Specifies default duration for right to left animation in milliseconds'
-        ),  
+            u"label_FLS_responsiveSlider",
+            default=u"Make the Slider responsive (mobile-ready)?",
+        ),
+    )
+
+    FLS_loader = schema.Bool(
+        default=True,
+        required=False,
+        title=_(
+            u"label_FLS_loader",
+            default=u"Show a load-indicator while loading the Slider images?",
+        ),
+    )
+
+    FLS_FillMode = schema.Choice(
+        default=u"1",
+        description=_(u'The way to fill image in slide, (0): stretch, (1): contain (keep aspect ratio and put all inside slide), (2): cover (keep aspect ratio and cover whole slide), (4): actual size, (5): contain for large image, actual size for small image'),  
+        required=False,
+        title=_(
+            u"label_FLS_FillMode",
+            default=u"How to scale Slider images?",
+        ),
+        values= ["0", "1", "2", "4", "5"]
     )
 
     FLS_autoplay = schema.Bool(
@@ -666,6 +683,18 @@ class IPlayerOptions(Interface):
             default=u"Auto Play Steps",
         ),
         values= SLIDER_STEPS
+    )
+
+    FLS_SlideDuration = schema.TextLine(
+        default=u"500",
+        required=False,
+        title=_(
+            u"label_FLS_SlideDuration",
+            default=u"Slide Duration",
+        )    ,
+        description=_(
+            u'Specifies default duration for right to left animation in milliseconds'
+        ),  
     )
 
     FLS_SlideShow = schema.Bool(
@@ -721,17 +750,6 @@ class IPlayerOptions(Interface):
             default=u"Pause on Hover",
         ),
         values= ["0", "1", "2","3"]
-    )
-
-    FLS_FillMode = schema.Choice(
-        default=u"2",
-        description=_(u'The way to fill image in slide, (0): stretch, (1): contain (keep aspect ratio and put all inside slide), (2): cover (keep aspect ratio and cover whole slide), (4): actual size, (5): contain for large image, actual size for small image'),  
-        required=False,
-        title=_(
-            u"label_FLS_FillMode",
-            default=u"Image filling Mode",
-        ),
-        values= ["0", "1", "2", "4", "5"]
     )
 
     FLS_Loop =schema.Choice(
