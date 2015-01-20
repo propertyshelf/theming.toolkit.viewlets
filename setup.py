@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.2.a'
+version = '0.2.a2'
 
 setup(name='theming.toolkit.viewlets',
       version=version,

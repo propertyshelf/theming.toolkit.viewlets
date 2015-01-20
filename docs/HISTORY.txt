@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.a2 (2014-01-20)
+------------------
+- load indicator
+- clean form field clean ups
+
 0.2.a (2014-01-14)
 ------------------
 - preparing Featured Listing Slider Release for testserver
