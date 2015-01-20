@@ -520,6 +520,11 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         return self.Settings.get('FLS_Captions', False)
 
     @property
+    def haveLoader(self):
+        """Do we want the load indicator image"""
+        return self.Settings.get('FLS_loader ', False)
+
+    @property
     def CaptionCSSClass(self):
         """uses current settings to generate the correct caption classes"""
         settings = self.Settings
