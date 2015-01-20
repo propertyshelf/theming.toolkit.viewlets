@@ -24,14 +24,21 @@
 <div class="fls-wrapper" id="fls-top-wrapper"
     tal:define="stageCSS view/StageCss;
                 slidesCSS view/StageCss">
-  <div class="featured_listing_collection" id="slider1_container" 
+  <div class="slider_collection" id="slider1_container" 
     tal:attributes="style string:${stageCSS};">
       <tal:results
           tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;
                       wraplink python:True;">
         <div tal:condition="not:results">
-          <p i18n:translate="">The collection doesn't have any results.</p>
+          <p i18n:translate="">Please check the Content Provider Settings of this Slideshow. The given path don't connect to a collection with results, so please ensure your settings are correct.</p>
         </div>
+      <tal:loader tal:condition="view/haveLoader">
+        <!-- Loading Screen -->
+        <div u="loading" style="position:absolute;top:0px;left:0px;">
+          <div class="loader_background" />
+          <div class="loader_image" />
+        </div>
+      </tal:loader>
       <div u="slides" class="fls-slides"
         tal:attributes="style string:${slidesCSS};">
         <div class="collection-item visualIEFloatFix"
