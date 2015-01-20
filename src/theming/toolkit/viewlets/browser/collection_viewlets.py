@@ -1263,7 +1263,7 @@ class ICaptionSlider(Interface):
         required=True,
         title=_(
             u"label_CS_StageType",
-            default=u"Caption Stage Type",
+            default=u"Caption stage type",
         ),
         values= ["Box", "Column", "Row"]
     )
@@ -1273,7 +1273,7 @@ class ICaptionSlider(Interface):
         required=True,
         title=_(
             u"label_CS_StageType",
-            default=u"Caption Stage Type",
+            default=u"Caption stage position",
         ),
         values= ["top-left", "top-right", "bottom-left", "bottom-right"]
     )
