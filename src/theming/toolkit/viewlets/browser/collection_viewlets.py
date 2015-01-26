@@ -293,15 +293,14 @@ class FeaturedListingCollectionViewlet(ViewletBase):
     @property
     def getConfigurationKey(self):
         """get Config depending on viewlet.manager"""
-
         manager_name = self.manager.__name__
         if manager_name == u'plone.abovecontent':
             return CONFIGURATION_KEY_ABOVE
         elif manager_name == u'plone.belowcontent':
             return CONFIGURATION_KEY_BELOW
         else:
-            return CONFIGURATION_KEY
-
+            return CONFIGURATION_KEY_ABOVE
+        
     @property
     def ItemProvider(self):
         """the object providing Items to show & slide"""
@@ -1966,9 +1965,8 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
 
             annotations = IAnnotations(self.context)
             key = self.getConfigurationKey
-           
-            for k in data:
-                annotations[key][k]=data[k]
+
+            annotations[key]=data
 
             self.request.response.redirect(absoluteURL(self.context,
                                                        self.request))
