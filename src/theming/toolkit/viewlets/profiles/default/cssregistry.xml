@@ -4,7 +4,7 @@
 <object name="portal_css">
     <stylesheet
         id="++resource++theming.toolkit.viewlets/FLS_stylez.css"
-        cacheable="True"
+        cacheable="False"
         compression="safe"
         cookable="False"
         enabled="1"

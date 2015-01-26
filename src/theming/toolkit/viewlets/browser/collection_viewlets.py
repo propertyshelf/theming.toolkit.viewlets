@@ -651,7 +651,7 @@ class IPlayerOptions(Interface):
     )
 
     FLS_FillMode = schema.Choice(
-        default=u"1",
+        default=u"4",
         description=_(u'The way to fill image in slide, (0): stretch, (1): contain (keep aspect ratio and put all inside slide), (2): cover (keep aspect ratio and cover whole slide), (4): actual size, (5): contain for large image, actual size for small image'),  
         required=False,
         title=_(
@@ -1083,6 +1083,7 @@ class IThumbnailNavigator(Interface):
         description=_(
             u'The activated Navigator adds a Thumbnail Navigation to the Slider'
         ),
+        readonly=True,
     )
 
     TNO_ThumbnailStyle = schema.Choice(
@@ -1527,7 +1528,7 @@ class ArrowNavigatorGroup(FormBaseGroup):
 
 class ThumbnailNavigatorGroup(FormBaseGroup):
     """ThumbnailNavigator Form Group"""
-    label = u'Thumbnails'
+    label = u'Thumbnails (temporary disabled)'
     fields = field.Fields(IThumbnailNavigator)
 
 
@@ -1879,7 +1880,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             autoplay="$AutoPlay: false, "
         #general Slider behavior
         sliderbehavior  = "$SlideDuration: %s, "%(data.get('FLS_SlideDuration', u'500'))
-        sliderbehavior += "$FillMode: %s, "%(data.get('FLS_FillMode', u'5'))
+        sliderbehavior += "$FillMode: %s, "%(data.get('FLS_FillMode', u'4'))
         sliderbehavior += "$Loop: %s, "%(data.get('FLS_Loop', u'1'))
         sliderbehavior += "$DisplayPieces: %s, "%(data.get('FLS_DisplayPieces', u'1'))
         # "translate" python bool to JS code
@@ -1959,7 +1960,10 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
 
             # generic script
             try:
-                data['genericJS']= self.generatedSliderScript(data)           
+                data['genericJS']= self.generatedSliderScript(data)
+                data['AN_genericTemplate']= self.__generateANTemplate(data)
+                data['BNO_genericTemplate']= self.__generateBNTemplate(data)
+
             except(Exception):
                 self.context.plone_utils.addPortalMessage("There was a problem with the script generation. Please check the Slider Settings if a text field contains invalid content. ", 'error')
 
