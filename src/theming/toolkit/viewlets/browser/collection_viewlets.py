@@ -43,7 +43,7 @@ except ImportError:
     class ICollection(Interface):
         pass
 
-CONFIGURATION_KEY       = 'theming.toolkit.viewlets.collection'
+CONFIGURATION_KEY = 'theming.toolkit.viewlets.collection'
 CONFIGURATION_KEY_ABOVE = 'theming.toolkit.viewlets.featuredlisting.above'
 CONFIGURATION_KEY_BELOW = 'theming.toolkit.viewlets.featuredlisting.below'
 
@@ -315,6 +315,7 @@ class FeaturedListingCollectionViewlet(ViewletBase):
             return portal.restrictedTraverse(provider_url.encode('ascii','ignore'))
 
         except Exception:
+            self.context.plone_utils.addPortalMessage("The URL of the itemProvider seems to fail. Please check the configuration tab.", 'error')
             return None
 
     @property
@@ -323,6 +324,7 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         try:
             return self.ItemProvider.absolute_url()
         except Exception:
+            self.context.plone_utils.addPortalMessage("Problem with the Item Provider URL", 'warning')
             return False
 
     def getProviders(self):
@@ -1955,10 +1957,6 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         data, errors = self.extractData()
         if not errors:
             # process data for setting templates
-            try:
-                data = self.LayoutWizzard(data)
-            except(Exception):
-                self.context.plone_utils.addPortalMessage("There was a problem with the Layout Settings. ", 'error')
 
             # generic script
             try:
@@ -1974,6 +1972,8 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
 
             self.request.response.redirect(absoluteURL(self.context,
                                                        self.request))
+        else:
+            self.context.plone_utils.addPortalMessage("Errors found!", 'warning')
 
     @button.buttonAndHandler(_(u'Cancel'))
     def handle_cancel(self, action):
