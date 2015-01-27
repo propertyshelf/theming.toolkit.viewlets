@@ -1293,7 +1293,7 @@ class ICaptionSlider(Interface):
             u"label_CS_DataType",
             default=u"Caption Data Layout",
         ),
-        values= ['layout01', 'layout02', 'layout03']
+        values= ['layout01', 'layout02', 'layout03', 'layout04']
     )
 
     CS_Offset = schema.Bool(

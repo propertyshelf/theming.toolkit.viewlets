@@ -145,6 +145,19 @@
                   </div>
                    
                   </div>
+                  <div 
+                    tal:attributes="class layout"
+                    tal:condition="python: layout=='layout04'">
+                    <div class="location" tal:content="location"/>
+                    <div class="type icons-on" tal:content="listing/object_type/value"/>
+                    <div class="price" tal:content="listing/price/value"/>
+                    <p class="title" tal:condition="isLongCaption" tal:content="listing/title/value" />
+                    <p class="bed_bath" tal:condition="isLongCaption" >
+                      <span class="beds icons-on"  tal:condition="bed" tal:content="bed_val" />
+                      <span class="baths icons-on" tal:condition="bath" tal:content="bath_val"/>
+                    </p>
+                      
+                  </div>
                 </div>
               </div>
 

@@ -823,7 +823,8 @@
 
 
 /* Caption Layout 03 */
-.caption_stage.Box .layout03{
+.caption_stage.Box .layout03,
+.caption_stage.Box .layout04{
     padding:4% 6%;
     
 }
@@ -883,6 +884,27 @@
 .caption_stage .layout03 .bottom-info{
     margin-top:1.5em;
 }
+
+/* layout04 */
+.caption_stage .layout04{
+    padding:1em;
+}
+.caption_stage .layout04 .location,
+.caption_stage.Column .layout04 .price{
+    font-style:italic;
+    border-bottom: 1px dotted #fff;
+    padding-bottom:0.5em;
+    margin-bottom:0.5em;
+}
+.caption_stage .layout04 .type{
+    padding-bottom:0.5em;
+}
+
+.caption_stage .layout04 .title,
+.caption_stage .layout04 p{
+    color:#ccc;
+}
+
 
 /* Slider Loading Screen */
 .loader_image{
