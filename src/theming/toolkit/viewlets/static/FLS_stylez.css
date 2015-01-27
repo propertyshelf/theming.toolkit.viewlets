@@ -905,6 +905,11 @@
     color:#ccc;
 }
 
+.caption_stage.Row .layout04 .price{
+    position:absolute;
+    right:1em;
+    top:1em;
+}
 
 /* Slider Loading Screen */
 .loader_image{
