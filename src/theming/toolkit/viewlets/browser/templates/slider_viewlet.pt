@@ -20,7 +20,6 @@
    
       <div class="sliderscript" tal:content="structure view/get_code|nothing"/>
       </div>
-
 <div class="fls-wrapper" id="fls-top-wrapper"
     tal:define="stageCSS view/StageCss;
                 slidesCSS view/StageCss">
