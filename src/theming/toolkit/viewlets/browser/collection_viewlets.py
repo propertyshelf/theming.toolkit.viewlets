@@ -526,6 +526,11 @@ class FeaturedListingCollectionViewlet(ViewletBase):
         return self.Settings.get('FLS_loader', False)
 
     @property
+    def isResponsive(self):
+        """responsive slider?"""
+        return self.Settings.get('FLS_responsiveSlider', False)
+
+    @property
     def CaptionCSSClass(self):
         """uses current settings to generate the correct caption classes"""
         settings = self.Settings
@@ -1584,7 +1589,7 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
         elif name == 'featuredlisting-collection-config-below':
             return CONFIGURATION_KEY_BELOW
         else:
-            return CONFIGURATION_KEY
+            return CONFIGURATION_KEY_ABOVE
     
     @property
     def getGlobalDefaults(self):
@@ -1948,8 +1953,11 @@ class CollectionViewletConfiguration(group.GroupForm, form.Form):
             script += " var %s = new $JssorSlider$('%s', options);"%(stage_dict['js_name'], stage_dict['id'])
             #catch JS Errors
             script +=" } catch(error){console.log(err);}"
-
-            return script
+            #responsive script
+            r_script  ='$(window).bind("resize", PSScaleSlider(%s));'%(stage_dict['js_name'])
+            r_script +='$(window).bind("orientationchange", PSScaleSlider(%s));'%(stage_dict['js_name'])
+            
+            return script + r_script
 
 
     @button.buttonAndHandler(_(u'Save'))
